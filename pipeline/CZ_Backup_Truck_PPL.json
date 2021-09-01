@@ -1,0 +1,179 @@
+{
+	"name": "CZ_Backup_Truck_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PLANIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Commercial/Truck/Planil",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PPEDCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Commercial/Truck/Ppedcb",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PPEDLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Commercial/Truck/Ppedln",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCLMOV",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Commercial/Truck/Pclmov",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PSTMLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Commercial/Truck/Pstmln",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "ORETCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Commercial/Truck/Oretcb",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "ORETLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Commercial/Truck/Oretln",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Rch000",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Commercial/Truck/Rch000",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"zone": {
+				"type": "string",
+				"defaultValue": "consumezone"
+			}
+		},
+		"folder": {
+			"name": "LAS/Backup"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

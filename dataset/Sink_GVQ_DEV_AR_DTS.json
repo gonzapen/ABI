@@ -1,0 +1,35 @@
+{
+	"name": "Sink_GVQ_DEV_AR_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			}
+		},
+		"folder": {
+			"name": "Argentina/GVQ/DEV"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat('/Argentina/GVQ/',dataset().table,'/',string(formatDateTime(utcnow(), 'yyyy')),'/',string(formatDateTime(utcnow(), 'MM')),'/',formatDateTime(utcnow(), 'dd'),'/',dataset().table)",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

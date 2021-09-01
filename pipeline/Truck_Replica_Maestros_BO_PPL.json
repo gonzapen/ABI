@@ -1,0 +1,177 @@
+{
+	"name": "Truck_Replica_Maestros_BO_PPL",
+	"properties": {
+		"description": "Extracción general desde truck de las tablas de maestros para Bolivia",
+		"activities": [
+			{
+				"name": "MAESTROS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Truck_Maestros_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "TRKNULLCBN",
+						"country": "Bolivia",
+						"context": "Public",
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"pathDBPZHZ": "/Shared/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Bolivia"
+					}
+				}
+			},
+			{
+				"name": "MAESTROS2",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MAESTROS",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_Truck_Maestros_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "TRKNULLCBN",
+						"country": "Bolivia",
+						"context": "Public",
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"pathDBPZHZ": "/Shared/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "MAESTROS3",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MAESTROS2",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Maestros_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "TRKNULLCBN",
+						"country": "Bolivia",
+						"context": "Commercial",
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"pathDBPZHZ": "/Shared/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "MAESTROS4",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MAESTROS3",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_Truck_Maestros_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "TRKNULLCBN",
+						"country": "Bolivia",
+						"context": "Commercial",
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"pathDBPZHZ": "/Shared/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "MAESTROS5",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MAESTROS4",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "05_Truck_Maestros_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "TRKNULLCBN",
+						"country": "Bolivia",
+						"context": "Public",
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"pathDBPZHZ": "/Shared/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/Truck/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

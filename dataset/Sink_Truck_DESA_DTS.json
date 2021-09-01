@@ -1,0 +1,31 @@
+{
+	"name": "Sink_Truck_DESA_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Truck/DESA"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat('/Argentina/Truck/',dataset().table,'/',string(formatDateTime(utcnow(), 'yyyy')),'/',string(formatDateTime(utcnow(), 'MM')),'/',formatDateTime(utcnow(), 'dd'),'/',dataset().table)",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

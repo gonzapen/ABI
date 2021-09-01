@@ -1,0 +1,617 @@
+{
+	"name": "00_PBI_ACTIVITYLOG_API_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DaysToExtract",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@range(1,int(pipeline().parameters.daysToExtract))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "JsonTemp",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "RestSource",
+									"httpRequestTimeout": "00:01:40",
+									"requestInterval": "00.00:00:00.010",
+									"requestMethod": "GET",
+									"paginationRules": {
+										"AbsoluteUrl": "$.continuationUri"
+									}
+								},
+								"sink": {
+									"type": "JsonSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "JsonWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "PBI_REST_API_DS",
+									"type": "DatasetReference",
+									"parameters": {
+										"adminApi": {
+											"value": "activityevents?startDateTime='@{formatDateTime(getPastTime(int(item()), 'Day'), 'yyyy-MM-dd')}T00:00:00.000Z'&endDateTime='@{formatDateTime(getPastTime(int(item()), 'Day'), 'yyyy-MM-dd')}T23:59:59.999Z'",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Output_Activity_Events_PBI",
+									"type": "DatasetReference"
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "PZ",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "DaysToExtract",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"path": "['Id']"
+								},
+								"sink": {
+									"name": "Id",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['RecordType']"
+								},
+								"sink": {
+									"name": "RecordType",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['CreationTime']"
+								},
+								"sink": {
+									"name": "CreationTime",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['Operation']"
+								},
+								"sink": {
+									"name": "Operation",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['OrganizationId']"
+								},
+								"sink": {
+									"name": "OrganizationId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['UserType']"
+								},
+								"sink": {
+									"name": "UserType",
+									"type": "Int64"
+								}
+							},
+							{
+								"source": {
+									"path": "['UserKey']"
+								},
+								"sink": {
+									"name": "UserKey",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['Workload']"
+								},
+								"sink": {
+									"name": "Workload",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['UserId']"
+								},
+								"sink": {
+									"name": "UserId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ClientIP']"
+								},
+								"sink": {
+									"name": "ClientIP",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['UserAgent']"
+								},
+								"sink": {
+									"name": "UserAgent",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['Activity']"
+								},
+								"sink": {
+									"name": "Activity",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ItemName']"
+								},
+								"sink": {
+									"name": "ItemName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['WorkSpaceName']"
+								},
+								"sink": {
+									"name": "WorkSpaceName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['DatasetName']"
+								},
+								"sink": {
+									"name": "DatasetName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ReportName']"
+								},
+								"sink": {
+									"name": "ReportName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['CapacityId']"
+								},
+								"sink": {
+									"name": "CapacityId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['CapacityName']"
+								},
+								"sink": {
+									"name": "CapacityName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['WorkspaceId']"
+								},
+								"sink": {
+									"name": "WorkspaceId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['AppName']"
+								},
+								"sink": {
+									"name": "AppName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ObjectId']"
+								},
+								"sink": {
+									"name": "ObjectId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['DatasetId']"
+								},
+								"sink": {
+									"name": "DatasetId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ReportId']"
+								},
+								"sink": {
+									"name": "ReportId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['IsSuccess']"
+								},
+								"sink": {
+									"name": "IsSuccess",
+									"type": "Boolean"
+								}
+							},
+							{
+								"source": {
+									"path": "['ReportType']"
+								},
+								"sink": {
+									"name": "ReportType",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['RequestId']"
+								},
+								"sink": {
+									"name": "RequestId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ActivityId']"
+								},
+								"sink": {
+									"name": "ActivityId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['AppReportId']"
+								},
+								"sink": {
+									"name": "AppReportId",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['DistributionMethod']"
+								},
+								"sink": {
+									"name": "DistributionMethod",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "['ConsumptionMethod']"
+								},
+								"sink": {
+									"name": "ConsumptionMethod",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['continuationUri']"
+								},
+								"sink": {
+									"name": "continuationUri",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['continuationToken']"
+								},
+								"sink": {
+									"name": "continuationToken",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"path": "$['lastResultSet']"
+								},
+								"sink": {
+									"name": "lastResultSet",
+									"type": "Boolean"
+								}
+							}
+						],
+						"collectionReference": "$['activityEventEntities']",
+						"mapComplexValuesToString": false
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Output_Activity_Events_PBI",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_PBI_Activity_Logs",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"origenSystem": {
+								"value": "@pipeline().parameters.origenSystem",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "PZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(concat(activity('PZ').output.rowsCopied),'0')",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "PZ_CZ",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "01_PZ_CZ_PBI_ACTIVITYLOG_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"runId": {
+										"value": "@pipeline().parameters.runId",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tablePrelanding": {
+										"value": "@pipeline().parameters.prelandingName",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"partitionByField": {
+										"value": "@pipeline().parameters.partitionByField",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "PZ_HZ",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "PZ_CZ",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "02_PZ_HZ_PBI_ACTIVITYLOG_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"runId": {
+										"value": "@pipeline().parameters.runId",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"partitionByField": {
+										"value": "@pipeline().parameters.partitionByField",
+										"type": "Expression"
+									},
+									"outPutTableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"descripcion": {
+				"type": "string"
+			},
+			"runId": {
+				"type": "string"
+			},
+			"prelandingName": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string"
+			},
+			"daysToExtract": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Power BI/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

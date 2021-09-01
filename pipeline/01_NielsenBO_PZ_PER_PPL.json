@@ -1,0 +1,169 @@
+{
+	"name": "01_NielsenBO_PZ_PER_PPL",
+	"properties": {
+		"description": "Pipeline encargada de copiar el CSV de Nielsen BO a Prelanding Zone.",
+		"activities": [
+			{
+				"name": "Copy data PZ",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Bolivia/Nielsen/NielsenZip/B082TXT2.zip",
+							"wildcardFileName": {
+								"value": "@concat('*',toUpper(pipeline().parameters.tableName),'.csv')",
+								"type": "Expression"
+							}
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "TAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TAG"
+								}
+							},
+							{
+								"source": {
+									"name": "SHORT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SHORT"
+								}
+							},
+							{
+								"source": {
+									"name": "LONG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LONG"
+								}
+							},
+							{
+								"source": {
+									"name": "DISPLAY_ORDER",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DISPLAY_ORDER"
+								}
+							},
+							{
+								"source": {
+									"name": "PARENT_TAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PARENT_TAG"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_NUM",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HIER_NUM"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_NAME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HIER_NAME"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_LEVEL_NUM",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HIER_LEVEL_NUM"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_LEVEL_NAME",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HIER_LEVEL_NAME"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_NielsenBO_CSV_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_NielsenBO_DL_Avro_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string",
+				"defaultValue": "Per"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/Nielsen/PER"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

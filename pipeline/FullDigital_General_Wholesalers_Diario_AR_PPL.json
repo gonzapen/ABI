@@ -1,0 +1,39 @@
+{
+	"name": "FullDigital_General_Wholesalers_Diario_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "CUSTOMER WHOLESALERS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_CustomerWholesalers_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "INVOICE WHOLESALERS DIARIO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_InvoiceWholesalers_Diario_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/FullDigital"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

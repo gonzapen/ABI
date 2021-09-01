@@ -1,0 +1,180 @@
+{
+	"name": "00_COMMERCIAL_SOM_ORQUESTADOR_GRL_AR_PPL",
+	"properties": {
+		"description": "PPL orquestador para las distintas fuentes y paises que cargan al DW de SOM",
+		"activities": [
+			{
+				"name": "CZ_DW_Replica_SOM",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga Modelo Dimensional al DW",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_CZ_DW_Replica_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Argentina",
+						"origenSystem": "SOM",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL REPLICA DW SQL",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ_DW_Replica_SOM",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"pais": "LAS",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": "Replica",
+						"subTema": "Carga a DW SQL"
+					}
+				}
+			},
+			{
+				"name": "Replicas Bases",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SOM_ORQUESTADOR_MAESTROS_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Replicas DE-PARA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga Modelo Dimensional al DW",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_SOM_ORQUESTADOR_DE_PARA_AR_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Carga Modelo Dimensional al DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Replicas Bases",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_CZ_DW_ORQUESTADOR_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"equipo": {
+				"type": "string",
+				"defaultValue": "Som"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			}
+		},
+		"folder": {
+			"name": "Argentina/SOM"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T21:20:09Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

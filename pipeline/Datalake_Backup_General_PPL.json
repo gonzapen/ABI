@@ -1,0 +1,89 @@
+{
+	"name": "Datalake_Backup_General_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "CZ_Backup_Dim_Fact_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_Backup_Dim_Fact_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CZ_Backup_Truck_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ_Backup_FullDigital_AAI",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_Backup_Truck_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "HZ_Backup_Truck_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ_Backup_Truck_PPL",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "HZ_Backup_Truck_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CZ_Backup_FullDigital_AAI",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ_Backup_Dim_Fact_PPL",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_Backup_FullDigital_AAI",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"zone": "consumezone"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "LAS/Backup"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

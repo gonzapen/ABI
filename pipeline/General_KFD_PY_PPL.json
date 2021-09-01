@@ -1,0 +1,37 @@
+{
+	"name": "General_KFD_PY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "VmMacoBgt",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "General_KFD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VmMacoBgt",
+						"country": "Paraguay",
+						"keys": "SKU, ID_Pais, ID_Sociedad, Anio_Mes, ID_Region, ID_Sub_Region, ID_Segmento_VTA, ID_Segmento_MKT",
+						"subscriptos": "federico.quinoy@datalytics.com, santiago.balay@datalytics.com, rocio.klan@datalytics.com",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"viewName": "VM_MACO_BGT"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Paraguay/KFD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

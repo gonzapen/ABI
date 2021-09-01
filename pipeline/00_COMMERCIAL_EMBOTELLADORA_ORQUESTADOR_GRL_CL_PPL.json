@@ -1,0 +1,238 @@
+{
+	"name": "00_COMMERCIAL_EMBOTELLADORA_ORQUESTADOR_GRL_CL_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Replicas de Maestros",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_EMBOTELLADORA_ORQUESTADOR_MAESTROS_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Replicas de DEPARA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_EMBOTELLADORA_ORQUESTADOR_DEPARA_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Replica DW",
+				"description": "Replica: \n-FT\n-Dim\n-DePara",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga al DW Facts",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Carga al DW DEPARA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_COMMERCIAL_EMBOTELLADORA_REPLICA_DW_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Carga al DW Dimensiones",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Replicas de Maestros",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_CZ_CZ_COMMERCIAL_EMBOTELLADORA_ORQUESTADOR_DIM_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Carga al DW Facts",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga al DW Dimensiones",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_CZ_CZ_COMMERCIAL_EMBOTELLADORA_ORQUESTADOR_FT_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Carga al DW DEPARA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Replicas de DEPARA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Carga al DW Dimensiones",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_CZ_CZ_COMMERCIAL_EMBOTELLADORA_ORQUESTADOR_DEPARA_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"ambiente": {
+				"type": "string",
+				"defaultValue": "Desarrollo"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Chile"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Embotelladora"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			}
+		},
+		"folder": {
+			"name": "Chile/Embotelladora"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

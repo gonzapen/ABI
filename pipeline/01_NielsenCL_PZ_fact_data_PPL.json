@@ -1,0 +1,336 @@
+{
+	"name": "01_NielsenCL_PZ_fact_data_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data PZ",
+				"description": "Falta modificar source y sink",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Chile/Nielsen/zip",
+							"wildcardFileName": {
+								"value": "@concat('*','fact_data','*','.csv')",
+								"type": "Expression"
+							},
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "MKT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MKT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PROD_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PROD_TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PER_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PER_TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "U",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "U",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "E",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "E",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "V",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "V",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SH.U",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SH_U",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SH.E",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SH_E",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SH.V",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SH_V",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "P",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "P",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PU",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PU",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SHL.DW",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SHL_DW"
+								}
+							},
+							{
+								"source": {
+									"name": "E.PURCH",
+									"type": "String"
+								},
+								"sink": {
+									"name": "E_PURCH"
+								}
+							},
+							{
+								"source": {
+									"name": "DW.PU",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DW_PU"
+								}
+							},
+							{
+								"source": {
+									"name": "DW.OOS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DW_OOS"
+								}
+							},
+							{
+								"source": {
+									"name": "DW",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DW"
+								}
+							},
+							{
+								"source": {
+									"name": "E.PURD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "E_PURD"
+								}
+							},
+							{
+								"source": {
+									"name": "AVE.CAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AVE_CAL"
+								}
+							},
+							{
+								"source": {
+									"name": "NDH.CAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NDH_CAL"
+								}
+							},
+							{
+								"source": {
+									"name": "DN.OOS.CAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DN_OOS_CAL"
+								}
+							},
+							{
+								"source": {
+									"name": "DN.CAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DN_CAL"
+								}
+							},
+							{
+								"source": {
+									"name": "DN.PUR.CAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DN_PUR_CAL"
+								}
+							},
+							{
+								"source": {
+									"name": "DN.STO.PURD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DN_STO_PURD"
+								}
+							},
+							{
+								"source": {
+									"name": "A.ST.E",
+									"type": "String"
+								},
+								"sink": {
+									"name": "A_ST_E"
+								}
+							},
+							{
+								"source": {
+									"name": "DW.SGV.SDP",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DW_SGV_SDP"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_NielsenCL_CSV_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_NielsenCL_DL_Avro_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": "@pipeline().parameters.tableName"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string",
+				"defaultValue": "fact_data"
+			}
+		},
+		"folder": {
+			"name": "Chile/Nielsen/fact_data"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

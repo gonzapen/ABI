@@ -1,0 +1,79 @@
+{
+	"name": "02_NielsenAR_HZ_MKT_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PZ_HZ_MKT",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Nielsen/Shared/Template/PZ_HZ_TEMPLATE_DB",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"runId": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Nielsen/MKT"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

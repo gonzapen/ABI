@@ -1,0 +1,71 @@
+{
+	"name": "Truck_General_Fact_Pedidos_PY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_PEDIDOS_PY_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FT_PEDIDOS_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "FT_PEDIDOS_PY_CZ_DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "FT_PEDIDOS_PY_PPL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FT_PEDIDOS_PY_CZ_DW_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Paraguay"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Paraguay/DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

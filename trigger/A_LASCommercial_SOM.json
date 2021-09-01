@@ -1,0 +1,54 @@
+{
+	"name": "A_LASCommercial_SOM",
+	"properties": {
+		"description": "Se ejecuta desde el 15 de cada mes a las 9",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "SOM_GENERAL_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"scope": "KeyVault",
+					"entorno": "01-Produccion"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Month",
+				"interval": 1,
+				"startTime": "2020-08-20T06:00:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"hours": [
+						9
+					],
+					"monthDays": [
+						-1,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27,
+						28,
+						29,
+						30,
+						31,
+						20,
+						15,
+						16,
+						17,
+						18,
+						19
+					]
+				}
+			}
+		}
+	}
+}

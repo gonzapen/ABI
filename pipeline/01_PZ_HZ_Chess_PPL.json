@@ -1,0 +1,93 @@
+{
+	"name": "01_PZ_HZ_Chess_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PZ_HZ_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Chess/Shared/Template/PZ_HZ_TEMPLATE_INCREMENTALES_DB_CHESS",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"outPutTableName": {
+							"value": "@pipeline().parameters.outPutTableName",
+							"type": "Expression"
+						},
+						"partitionByField": {
+							"value": "@pipeline().parameters.partitionByField",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"context": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"outPutTableName": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string"
+			},
+			"runId": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Chess/Carga_Incremental"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

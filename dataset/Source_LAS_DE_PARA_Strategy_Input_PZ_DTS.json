@@ -1,0 +1,38 @@
+{
+	"name": "Source_LAS_DE_PARA_Strategy_Input_PZ_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			},
+			"pais": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA_Strategy"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat(dataset().tableName,'.avro')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat(dataset().pais,'/Manual/DePara/',dataset().tableName,'/',string(formatDateTime(utcnow(), 'yyyy')),'/',string(formatDateTime(utcnow(), 'MM')),'/',formatDateTime(utcnow(), 'dd'),'/',dataset().tableName)",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

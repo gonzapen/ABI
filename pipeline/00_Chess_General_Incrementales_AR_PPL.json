@@ -1,0 +1,588 @@
+{
+	"name": "00_Chess_General_Incrementales_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FactComprobantesVentas",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "FactComprobantesVentas",
+						"keys": "Cod_Compania, Cod_Empresa, Cod_Empresa_Factura, Cod_Tipo_Docs, Letra, Serie, Nro_Documento, Cod_Linea",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "FACT_COMPROBANTES_VENTAS",
+						"partitionByField": "part_fechafactura_mes"
+					}
+				}
+			},
+			{
+				"name": "FactTradeSpendPtr",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "FactTradeSpendPtr",
+						"keys": "Fecha_Factura, Cod_Empresa, Cod_Tipo_Linea, Cod_Promocion, Cod_Tipo_Accion, SK_Cliente, SK_Producto, Cod_Tipo_Descuento, Tipo_Analisis, Fuente, Cod_Supera_Tope, Cod_Modo_Atencion",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "FACT_TRADE_SPEND_PTR",
+						"partitionByField": "part_fechafactura_mes"
+					}
+				}
+			},
+			{
+				"name": "ResuFactClientesCompraMensual",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "ResuFactClientesCompraMensual",
+						"keys": "Fecha, Cod_Compania, Cod_Empresa, Cod_Modo_Atencion, Fuente, Cod_Cliente, Cod_Producto",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "RESU_FACT_CLIENTES_COMPRA_MENSUAL",
+						"partitionByField": "part_fecha_mes"
+					}
+				}
+			},
+			{
+				"name": "DimModoAtencion",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimModoAtencion",
+						"keys": "SK_Modo_Atencion",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_MODO_ATENCION",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimTiempo",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimTiempo",
+						"keys": "Fecha",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_TIEMPO",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimPersonalComercial",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimPersonalComercial",
+						"keys": "SK_Personal_Comercial",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_PERSONAL_COMERCIAL",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimProductos",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimProductos",
+						"keys": "SK_Producto",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_PRODUCTOS",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimFuentes",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimFuentes",
+						"keys": "Cod_Compania, Cod_Empresa, Fuente",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_FUENTES",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimTiposAnalisis",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimTiposAnalisis",
+						"keys": "Cod_Compania, Cod_Empresa, Tipo_Analisis",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_TIPOS_ANALISIS",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimSuperaTope",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimSuperaTope",
+						"keys": "Cod_Supera_Tope",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_SUPERA_TOPE",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimTiposDescuentos",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimTiposDescuentos",
+						"keys": "Cod_Tipo_Descuento",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_TIPOS_DESCUENTOS",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimClientesRutas",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimClientesRutas",
+						"keys": "SK_Clientes_Rutas",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_CLIENTES_RUTAS",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimProductosGrupos",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimProductosGrupos",
+						"keys": "Cod_Compania, Cod_Grupo_Productos, Cod_Producto",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_PRODUCTOS_GRUPOS",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "ResuFactClientesActivos",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "ResuFactClientesActivos",
+						"keys": "Fecha, Cod_Compania, Cod_Empresa, Cod_Sucursal, Cod_Modo_Atencion, SK_Personal_Comercial, SK_Clientes",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "RESU_FACT_CLIENTES_ACTIVOS",
+						"partitionByField": "part_fecha_mes"
+					}
+				}
+			},
+			{
+				"name": "ResuFactCantidadPedidos",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "ResuFactCantidadPedidos",
+						"keys": "Fecha_Factura, SK_Distribuidor, SK_Cliente, Fecha_Pedido, Cod_Modo_Atencion, Fuente",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "RESU_FACT_CANTIDAD_PEDIDOS",
+						"partitionByField": "part_fechafactura_mes"
+					}
+				}
+			},
+			{
+				"name": "DimClientes",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimClientes",
+						"keys": "SK_Clientes",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_CLIENTES",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "ResuFactClientesRecompradores",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "ResuFactClientesRecompradores",
+						"keys": "Fecha, Cod_Compania, Cod_Empresa, Cod_Modo_Atencion, Cod_Cliente, Cod_Producto",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "RESU_FACT_CLIENTES_RECOMPRADORES",
+						"partitionByField": "part_fecha_mes"
+					}
+				}
+			},
+			{
+				"name": "ResuFactKpiPopUn",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "ResuFactKpiPopUn",
+						"keys": "Fecha, Cod_Empresa, Cod_Distribuidor, Cod_Agrupa_12, Cod_Agrupa_4, Cod_Segmento_POP",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "RESU_FACT_KPI_POP_UN",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "ResuFactKpiPopChopp",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "ResuFactKpiPopChopp",
+						"keys": "Fecha, Cod_Empresa, Cod_Distribuidor, Cod_Agrupa_12, Cod_Agrupa_2, Cod_Agrupa_4",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "RESU_FACT_KPI_POP_CHOPP",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimDistribuidores",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimDistribuidores",
+						"keys": "SK_Distribuidor",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_DISTRIBUIDORES",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimAccionesTs",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimAccionesTs",
+						"keys": "Sk_Accion, Cod_Empresa, Cod_Tipo_Linea, Cod_Promocion",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_ACCIONES_TS",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimDetrela",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimDetrela",
+						"keys": "Cod_Compania, Cod_Empresa, Cod_Empresa_Factura, Cod_Tipo_Docs, Letra, Serie, Nro_Documento, cod_linea, rCod_Tipo_Docs, rLetra, rSerie, rNro_Documento, rCod_Linea",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_DETRELA",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimLocalidades",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimLocalidades",
+						"keys": "COD_LOCALIDAD, COD_COMPANIA",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_LOCALIDADES",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimDimensionesSmall",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimDimensionesSmall",
+						"keys": "SK_Distribuidor, SK_Personal_Comercial, SK_Cliente, SK_Personal_Comercial_TS",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_DIMENSIONES_SMALL",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DimActivosFijos",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Chess_PZ_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DimActivosFijos",
+						"keys": "Fecha_Actualizacion, Cod_Compania, Cod_Empresa, Cod_Producto, Nro_Serie, Fecha_Foto",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "DIM_ACTIVOS_FIJOS",
+						"partitionByField": "-"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Chess"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

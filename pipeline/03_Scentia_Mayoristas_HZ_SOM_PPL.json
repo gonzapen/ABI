@@ -1,0 +1,93 @@
+{
+	"name": "03_Scentia_Mayoristas_HZ_SOM_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PZ_HZ_SOM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Scentia/Template_Scentia/PZ_HZ_TEMPLATE_DB",
+					"baseParameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string",
+				"defaultValue": "3"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "Mayoristas"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Scentia"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "Periodo, CANAL, KEY_ACCOUNT, REGION, AREA, FORMATO, Ean, SOURCE_FILE"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Public"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Scentia/Mayoristas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

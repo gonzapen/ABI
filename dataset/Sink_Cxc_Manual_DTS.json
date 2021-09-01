@@ -1,0 +1,34 @@
+{
+	"name": "Sink_Cxc_Manual_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"path": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Teleperformance/Manual"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat('Argentina/Manual/',dataset().path,'/',string(formatDateTime(utcnow(), 'yyyy')),'/',string(formatDateTime(utcnow(), 'MM')),'/',formatDateTime(utcnow(), 'dd'),'/',dataset().path)",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "prelandingzone",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

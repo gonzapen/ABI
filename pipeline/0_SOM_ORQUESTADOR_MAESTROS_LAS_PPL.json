@@ -1,0 +1,39 @@
+{
+	"name": "0_SOM_ORQUESTADOR_MAESTROS_LAS_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Scentia Argentina",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Scentia_Bases_AR_PPL_copy1",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Nielsen Argentina",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Nielsen_Bases_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "LAS/SOM/Replica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

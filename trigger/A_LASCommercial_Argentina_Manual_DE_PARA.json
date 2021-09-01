@@ -1,0 +1,42 @@
+{
+	"name": "A_LASCommercial_Argentina_Manual_DE_PARA",
+	"properties": {
+		"description": "DE-PARA PRODUCTOS Y ESTRUCTURA COMERCIAL",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "General_DE_PARA_AR_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"country": "Argentina",
+					"contexto": "Public",
+					"entorno": "01-Produccion",
+					"origenSystem": "Manual",
+					"scope": "KeyVault",
+					"equipo": "Sales RDLP",
+					"tema": "Depara"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2020-12-16T18:56:00",
+				"timeZone": "E. South America Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						9
+					]
+				}
+			}
+		}
+	}
+}

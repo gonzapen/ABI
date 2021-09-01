@@ -1,0 +1,28 @@
+{
+	"name": "Source_Nielsen_CSV_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Argentina/Nielsen"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Argentina/Nielsen/M82ABI2T/M82ABI2T.zip",
+				"fileSystem": "prelandingzone"
+			},
+			"columnDelimiter": "|",
+			"encodingName": "WINDOWS-1252",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

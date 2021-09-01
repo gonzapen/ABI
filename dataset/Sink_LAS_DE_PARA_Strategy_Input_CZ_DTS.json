@@ -1,0 +1,84 @@
+{
+	"name": "Sink_LAS_DE_PARA_Strategy_Input_CZ_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			},
+			"pais": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA_Strategy"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat(dataset().tableName,'.parquet')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat(dataset().pais,'/Commercial/Manual/DePara/',dataset().tableName)",
+					"type": "Expression"
+				},
+				"fileSystem": "consumezone"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "PAIS_DESC",
+				"type": "UTF8"
+			},
+			{
+				"name": "FUENTE_DESC",
+				"type": "UTF8"
+			},
+			{
+				"name": "PRODUCTO_ID",
+				"type": "UTF8"
+			},
+			{
+				"name": "FABRICANTE_DESC_DP",
+				"type": "UTF8"
+			},
+			{
+				"name": "MARCA_DESC_DP",
+				"type": "UTF8"
+			},
+			{
+				"name": "SUBMARCA_DESC_DP",
+				"type": "UTF8"
+			},
+			{
+				"name": "MARCA_GLOBAL_FLAG_DP",
+				"type": "UTF8"
+			},
+			{
+				"name": "ALTA_GAMA_FLAG_DP",
+				"type": "UTF8"
+			},
+			{
+				"name": "ENVASE_DESC_DP",
+				"type": "UTF8"
+			},
+			{
+				"name": "TAMANIO_ENVASE_DESC_DP",
+				"type": "UTF8"
+			},
+			{
+				"name": "TIPO_ENVASE_DESC_DP",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

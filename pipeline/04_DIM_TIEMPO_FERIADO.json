@@ -1,0 +1,93 @@
+{
+	"name": "04_DIM_TIEMPO_FERIADO",
+	"properties": {
+		"activities": [
+			{
+				"name": "Http_to_prelanding",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_feriado_http",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_feriados_PZ",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "PZ_CZ",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Http_to_prelanding",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/LASCOMMERCIAL/DIM_TIEMPO/DIM_TIEMPO_FERIADO",
+					"baseParameters": {
+						"Anio": {
+							"value": "@string(formatDateTime(utcnow(), 'yyyy'))",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/DIM_TIEMPO"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-24T20:29:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

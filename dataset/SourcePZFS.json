@@ -1,0 +1,169 @@
+{
+	"name": "SourcePZFS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"path": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/AlgoSelling"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(dataset().path)",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {
+			"type": "record",
+			"name": "HybridDelivery.ClientLibraryJob",
+			"fields": [
+				{
+					"name": "poc_code",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "preferred_pid",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "recommendation_id_type",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "rating",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "type",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "quantity",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "recommendation_ts",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "HIGH_pid",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "group_id",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "group_name",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "business_rule",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "experiment_id",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "score",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "trigger_ratio_based_on_sku_value",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "descriptions",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "exclusiveTriggers",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "images",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "combo",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				{
+					"name": "is_combo",
+					"type": [
+						"string",
+						"null"
+					]
+				}
+			]
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

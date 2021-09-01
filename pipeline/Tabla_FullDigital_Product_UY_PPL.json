@@ -1,0 +1,45 @@
+{
+	"name": "Tabla_FullDigital_Product_UY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PRODUCT",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Uruguay/LakeHouse/FullDigital/Tablas/CZ_CZ_Product_FullDigital_UY",
+					"baseParameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			}
+		},
+		"folder": {
+			"name": "Uruguay/FullDigital/Tablas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,29 @@
+{
+	"name": "A_LASCommercial_SapBajadaArchivosOrigenSabado",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "General_SAP_AR_PPL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Week",
+				"interval": 1,
+				"startTime": "2021-02-19T08:15:00",
+				"timeZone": "E. South America Standard Time",
+				"schedule": {
+					"weekDays": [
+						"Saturday"
+					]
+				}
+			}
+		}
+	}
+}

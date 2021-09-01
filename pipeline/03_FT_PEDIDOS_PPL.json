@@ -1,0 +1,70 @@
+{
+	"name": "03_FT_PEDIDOS_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_PEDIDOS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_FT_TRUCK_PEDIDOS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "KEY"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Truck"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Public"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DW_orig/Facts"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

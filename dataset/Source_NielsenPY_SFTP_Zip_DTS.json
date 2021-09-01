@@ -1,0 +1,22 @@
+{
+	"name": "Source_NielsenPY_SFTP_Zip_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_Nielsen",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Paraguay/Nielsen"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "SftpLocation",
+				"fileName": "PY082TXT.zip",
+				"folderPath": "/ABI"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

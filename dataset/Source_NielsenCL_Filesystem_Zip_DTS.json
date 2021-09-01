@@ -1,0 +1,27 @@
+{
+	"name": "Source_NielsenCL_Filesystem_Zip_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_FileSystem",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"folderPath": {
+					"value": "@concat('02-LASCommercial/', dataset().entorno, '/06-CommAn/02-Bases/Chile')",
+					"type": "Expression"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

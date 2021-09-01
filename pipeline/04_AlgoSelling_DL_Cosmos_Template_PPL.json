@@ -1,0 +1,104 @@
+{
+	"name": "04_AlgoSelling_DL_Cosmos_Template_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DL COSMOS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat(pipeline().parameters.country,'/',pipeline().parameters.context,'/',pipeline().parameters.origenSystem,'/',pipeline().parameters.tableFinal,'/part_created_date=',formatDateTime(utcnow(),'yyyyMMdd'),'/')",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "CosmosDbSqlApiSink",
+						"writeBehavior": "insert"
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_AlgoSellingDL_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"context": {
+								"value": "@pipeline().parameters.context",
+								"type": "Expression"
+							},
+							"origenSystem": {
+								"value": "@pipeline().parameters.origenSystem",
+								"type": "Expression"
+							},
+							"tableFinal": {
+								"value": "@pipeline().parameters.tableFinal",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_AlgoSellingCosmos_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"collection": {
+								"value": "@pipeline().parameters.collection",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "UpsellAPI"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "FullDigital/AlgoSelling"
+			},
+			"collection": {
+				"type": "string",
+				"defaultValue": "upsell"
+			}
+		},
+		"folder": {
+			"name": "Argentina/ALGOSellingAPI/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

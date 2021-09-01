@@ -1,0 +1,71 @@
+{
+	"name": "01_SOM_CLEAN_ROOM_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Clean Room",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_CZ_DW_CleanRoom__PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Argentina",
+						"origenSystem": "CleanRoom",
+						"scope": "KeyVault",
+						"tableFinal": "FtSomCleanRoom",
+						"tableName": "FT_SOM_CLEAN_ROOM",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Clean Room",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_FS_CZ_CleanRoom__PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tableName": "CleanRoom"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			}
+		},
+		"folder": {
+			"name": "Argentina/SOM"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,99 @@
+{
+	"name": "02_Scentia_HZ_CZ_Template_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "HZ_CZ_Template_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Scentia/Template_Scentia/HZ_CZ_TEMPLATE_DB",
+					"baseParameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"partitionByField": {
+							"value": "@pipeline().parameters.partitionByField",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Scentia/Template"
+		},
+		"annotations": [
+			"02_TRUCK_HZ_CZ_Template_PPL",
+			"History",
+			"Consume",
+			"Truck",
+			"Argentina"
+		],
+		"lastPublishTime": "2021-08-19T17:51:10Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

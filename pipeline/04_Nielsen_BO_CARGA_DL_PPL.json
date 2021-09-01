@@ -1,0 +1,115 @@
+{
+	"name": "04_Nielsen_BO_CARGA_DL_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Mkt",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Per",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_NielsenBO_MKT_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Prod",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Per",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_NielsenBO_PROD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "FactData",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Per",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_NielsenBO_fact_data_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Per",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_NielsenBO_PER_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/Nielsen"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

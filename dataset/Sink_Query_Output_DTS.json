@@ -1,0 +1,33 @@
+{
+	"name": "Sink_Query_Output_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_FileSystem",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Argentina/Bees"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": {
+					"value": "Query_Algo_Influence.csv",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "02-LASCommercial/02-Desarrollo/05-FullDigital/07-QueryBees",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

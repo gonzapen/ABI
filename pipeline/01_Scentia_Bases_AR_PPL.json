@@ -1,0 +1,265 @@
+{
+	"name": "01_Scentia_Bases_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PPL Replica Self Service",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Scentia_SelfService_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "SOM",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "Periodo, CANAL, KEY_ACCOUNT, REGION, AREA, FORMATO, Ean, SOURCE_FILE",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Base SelfService Argentina",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PPL Replica Ecommerce",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_Scentia_Ecommerce_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "Ecommerce",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "Periodo, CANAL, KEY_ACCOUNT, REGION, AREA, FORMATO, Ean, SOURCE_FILE",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Base Ecommerce ARG",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "Tablas Externas Ecommerce",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "PPL Replica Ecommerce",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Scentia/Tablas_Externas/TABLAS_EXTERNAS_SCENTIA_ECOMMERCE"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Tablas Externas Self Service",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "PPL Replica Self Service",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Scentia/Tablas_Externas/TABLAS_EXTERNAS_SCENTIA"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Replica DIM CZ DW",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Tablas Externas Self Service",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/SOM/DW/Dimension/Replica/CZ_DW_Replica_Dimensional",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Replica FACT CZ DW",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Tablas Externas Self Service",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/SOM/DW/Fact/Replica/CZ_DW_Replica_Fact_SOM",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Scentia"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "-"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Scentia/Replica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,33 @@
+{
+	"name": "A_LASCommercial_ArgentinaChessCargaIncremental",
+	"properties": {
+		"description": "Ejecuta la replica de carga incremental de todas las tablas del sistema Chess al datalake",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "00_Chess_General_Incrementales_AR_PPL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-05-04T09:31:00",
+				"timeZone": "E. South America Standard Time",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						8
+					]
+				}
+			}
+		}
+	}
+}

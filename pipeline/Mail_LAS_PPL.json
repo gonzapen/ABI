@@ -1,0 +1,82 @@
+{
+	"name": "Mail_LAS_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Envio Email",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/Template_EnvioMailConId",
+					"baseParameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.pais",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "@pipeline().parameters.subTema",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string"
+			},
+			"equipo": {
+				"type": "string"
+			},
+			"pais": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string"
+			},
+			"tema": {
+				"type": "string"
+			},
+			"subTema": {
+				"type": "string"
+			},
+			"destinatario": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/MAIL"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:10Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

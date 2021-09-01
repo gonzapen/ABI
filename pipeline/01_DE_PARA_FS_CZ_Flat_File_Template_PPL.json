@@ -1,0 +1,370 @@
+{
+	"name": "01_DE_PARA_FS_CZ_Flat_File_Template_PPL",
+	"properties": {
+		"description": "Replicador Universal DE-PARA de FS a CZ donde el origen es un archivo plano.",
+		"activities": [
+			{
+				"name": "Validation DE_PARA en File Server",
+				"type": "Validation",
+				"dependsOn": [
+					{
+						"activity": "SELECT_PIVOT_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_LAS_DE_PARA_Strategy_Input_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"pais": "Argentina",
+							"equipoFS": "DePara"
+						}
+					},
+					"timeout": "0.00:03:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "SELECT_PIVOT_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "IF si existe el DE_PARA en FS",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Validation DE_PARA en File Server",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Validation DE_PARA en File Server').output.exists",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Copy data PZ",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "FileServerReadSettings",
+										"recursive": true
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_LAS_DE_PARA_Strategy_Input_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										},
+										"entorno": {
+											"value": "@pipeline().parameters.entorno",
+											"type": "Expression"
+										},
+										"pais": "Argentina",
+										"equipoFS": "DePara"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_LAS_DE_PARA_Strategy_Input_PZ_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										},
+										"pais": "Argentina"
+									}
+								}
+							]
+						},
+						{
+							"name": "Delete DE_PARA en File Server",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "INSERT_PIVOT_DB",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Delete_LAS_DE_PARA_Strategy_Input",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										},
+										"entorno": {
+											"value": "@pipeline().parameters.entorno",
+											"type": "Expression"
+										},
+										"pais": "Argentina",
+										"equipoFS": "DePara"
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true
+								}
+							}
+						},
+						{
+							"name": "PZ to CZ - Copy Data",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "Delete DE_PARA en File Server",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/LAS/Template/PZ_CZ_TEMPLATE_DB",
+								"baseParameters": {
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"context": "Public",
+									"country": "LAS",
+									"keys": "ID",
+									"origenSystem": "DE_PARA",
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"scope": "KeyVault"
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "INSERT_PIVOT_DB",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "Copy data PZ",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+								"baseParameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"descripcion": {
+										"value": "@pipeline().parameters.descripcion",
+										"type": "Expression"
+									},
+									"cantidadLeido": {
+										"value": "@concat(activity('Copy Data PZ').output.rowsRead)",
+										"type": "Expression"
+									},
+									"cantidadEscrito": {
+										"value": "@concat(activity('Copy Data PZ').output.rowsCopied)",
+										"type": "Expression"
+									},
+									"duracionCD": {
+										"value": "@concat(activity('Copy Data PZ').output.copyDuration)",
+										"type": "Expression"
+									},
+									"fechaFin": {
+										"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+										"type": "Expression"
+									},
+									"schema": {
+										"value": "@pipeline().parameters.schema",
+										"type": "Expression"
+									},
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"bytesLeido": {
+										"value": "@concat(activity('Copy Data PZ').output.dataRead)",
+										"type": "Expression"
+									},
+									"bytesEscrito": {
+										"value": "@concat(activity('Copy Data PZ').output.dataWritten)",
+										"type": "Expression"
+									},
+									"ultimoValorPivot": {
+										"value": "@activity('SELECT_PIVOT_DB').output.runOutput.ultimovalorpivot",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string",
+				"defaultValue": "DE_PARA_AREAS_MAPA"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"schema": {
+				"type": "string"
+			},
+			"descripcion": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/DE_PARA_SOM/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

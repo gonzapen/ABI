@@ -1,0 +1,140 @@
+{
+	"name": "00_COMMERCIAL_EMBOTELLADORA_REPLICA_DW_CL_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "CZ_DW_DEPARA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_CZ_DW_COMMERCIAL_EMBOTELLADORA_REPLICA_DP_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "CZ_DW_FT",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_CZ_DW_COMMERCIAL_EMBOTELLADORA_REPLICA_FT_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "CZ_DW_DIM",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_CZ_DW_COMMERCIAL_EMBOTELLADORA_REPLICA_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Embotelladora"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Chile"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"ambiente": {
+				"type": "string",
+				"defaultValue": "Desarrollo"
+			}
+		},
+		"folder": {
+			"name": "Chile/Commercial/Embotelladora_DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:45Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

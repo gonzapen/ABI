@@ -1,0 +1,72 @@
+{
+	"name": "01_Init_DP_CANAL_Truck",
+	"properties": {
+		"activities": [
+			{
+				"name": "Init_DP_CANAL",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/Init_TEMPLATE_DB",
+					"baseParameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA/DP_CANAL"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

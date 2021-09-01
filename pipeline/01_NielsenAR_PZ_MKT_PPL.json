@@ -1,0 +1,190 @@
+{
+	"name": "01_NielsenAR_PZ_MKT_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data PZ",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Argentina/Nielsen/M82ABI2T/M82ABI2T.zip",
+							"wildcardFileName": {
+								"value": "@concat(pipeline().parameters.initFileName,'*.csv')",
+								"type": "Expression"
+							}
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TAG",
+									"physicalType": "string | null"
+								}
+							},
+							{
+								"source": {
+									"name": "SHORT",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SHORT",
+									"physicalType": "string | null"
+								}
+							},
+							{
+								"source": {
+									"name": "LONG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "LONG",
+									"physicalType": "string | null"
+								}
+							},
+							{
+								"source": {
+									"name": "DISPLAY_ORDER",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DISPLAY_ORDER",
+									"physicalType": "string | null"
+								}
+							},
+							{
+								"source": {
+									"name": "PARENT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PARENT_TAG",
+									"physicalType": "string | null"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_NUM",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_NUM",
+									"physicalType": "string | null"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_NAME",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_NAME",
+									"physicalType": "string | null"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_LEVEL_NUM",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_LEVEL_NUM",
+									"physicalType": "string | null"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_LEVEL_NAME",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_LEVEL_NAME",
+									"physicalType": "string | null"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Nielsen_CSV_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Nielsen_DL_Avro_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"initFileName": {
+				"type": "string",
+				"defaultValue": "M82ABI2T_MKT"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "MKT"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Nielsen/MKT"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

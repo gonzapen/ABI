@@ -1,0 +1,129 @@
+{
+	"name": "CZ_DL_DW_Avance_Vta_Tgt_Agg_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "AVANCE_VENTAS_TGT_AGG_CZ_DL_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "INIT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_DL_AVANCE_VENTAS_TGT_AGG_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableFinal": "AVANCE_VENTAS_TGT_AGG_BO",
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "KEY",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"tableName": "AvanceVentasTgtAggBo"
+					}
+				}
+			},
+			{
+				"name": "AVANCE_VENTAS_TGT_AGG_CZ_DW_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "AVANCE_VENTAS_TGT_AGG_CZ_DL_BO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_DW_AVANCE_VENTAS_TGT_AGG_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "KEY",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableFinal": "AVANCE_VENTAS_TGT_AGG_BO",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"tableName": "AvanceVentasTgtAggBo"
+					}
+				}
+			},
+			{
+				"name": "INIT",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"origenSystem": "Truck",
+						"country": "Bolivia"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/TGT/Storage/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

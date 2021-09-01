@@ -1,0 +1,52 @@
+{
+	"name": "Chess_Replica_Maestros_AR_PPL",
+	"properties": {
+		"description": "Extracción general desde truck de las tablas de maestros para Argentina",
+		"activities": [
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Chess",
+						"country": "Argentina"
+					}
+				}
+			},
+			{
+				"name": "MAESTROS 02",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_Chess_Maestros_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Chess/Carga_Historica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

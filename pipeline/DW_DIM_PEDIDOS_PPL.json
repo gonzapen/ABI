@@ -1,0 +1,27 @@
+{
+	"name": "DW_DIM_PEDIDOS_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "13_DIM_PEDIDOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/DW_orig"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T18:08:07Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

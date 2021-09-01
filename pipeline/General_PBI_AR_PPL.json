@@ -1,0 +1,26 @@
+{
+	"name": "General_PBI_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "REPLICAS_INCREMENTALES",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PBI_REPLICAS_INCREMENTALES",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Power BI"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

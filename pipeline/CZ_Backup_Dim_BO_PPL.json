@@ -1,0 +1,139 @@
+{
+	"name": "CZ_Backup_Dim_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM_TRUCK_CANALES_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Public/Truck/Dimensiones/DIM_TRUCK_CANALES_BO",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DIM_TRUCK_CLIENTES_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Public/Truck/Dimensiones/DIM_TRUCK_CLIENTES_BO",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DIM_TRUCK_ESTRUCTURA_COMERCIAL_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Public/Truck/Dimensiones/DIM_TRUCK_ESTRUCTURA_COMERCIAL_BO",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DIM_TRUCK_PRODUCTOS_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Public/Truck/Dimensiones/DIM_TRUCK_PRODUCTOS_BO",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DIM_TRUCK_SEGMENTOS_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Public/Truck/Dimensiones/DIM_TRUCK_SEGMENTOS_BO",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DIM_TRUCK_SOCIEDADES_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Public/Truck/Dimensiones/DIM_TRUCK_SOCIEDADES_BO",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"zone": {
+				"type": "string",
+				"defaultValue": "consumezone"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/Backup/Consume/Dimensiones"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

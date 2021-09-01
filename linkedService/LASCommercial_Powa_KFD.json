@@ -1,0 +1,22 @@
+{
+	"name": "LASCommercial_Powa_KFD",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "Oracle",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "LASCommercialPowaKFD"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTPlatform",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

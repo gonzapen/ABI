@@ -1,0 +1,122 @@
+{
+	"name": "Source_AlgoSellingDL_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"tableFinal": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/AlgoSelling"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(dataset().country, '/', dataset().context, '/', dataset().origenSystem, '/', dataset().tableFinal)",
+					"type": "Expression"
+				},
+				"fileSystem": "consumezone"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "poc_code",
+				"type": "UTF8"
+			},
+			{
+				"name": "preferred_pid",
+				"type": "UTF8"
+			},
+			{
+				"name": "recommendation_id_type",
+				"type": "UTF8"
+			},
+			{
+				"name": "rating",
+				"type": "UTF8"
+			},
+			{
+				"name": "type",
+				"type": "UTF8"
+			},
+			{
+				"name": "quantity",
+				"type": "UTF8"
+			},
+			{
+				"name": "recommendation_ts",
+				"type": "UTF8"
+			},
+			{
+				"name": "HIGH_pid",
+				"type": "UTF8"
+			},
+			{
+				"name": "group_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "group_name",
+				"type": "UTF8"
+			},
+			{
+				"name": "business_rule",
+				"type": "UTF8"
+			},
+			{
+				"name": "experiment_id",
+				"type": "UTF8"
+			},
+			{
+				"name": "score",
+				"type": "UTF8"
+			},
+			{
+				"name": "trigger_ratio_based_on_sku_value",
+				"type": "UTF8"
+			},
+			{
+				"name": "descriptions",
+				"type": "UTF8"
+			},
+			{
+				"name": "exclusiveTriggers",
+				"type": "UTF8"
+			},
+			{
+				"name": "images",
+				"type": "UTF8"
+			},
+			{
+				"name": "combo",
+				"type": "UTF8"
+			},
+			{
+				"name": "is_combo",
+				"type": "UTF8"
+			},
+			{
+				"name": "created_date",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

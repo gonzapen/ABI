@@ -1,0 +1,166 @@
+{
+	"name": "Truck_LOGISTICA_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PLAATT",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PLAATT",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Argentina",
+						"keys": "EmpId, PlaNro, UsrAttId",
+						"context": {
+							"value": "Commercial",
+							"type": "Expression"
+						},
+						"schema": "TRK35NULL",
+						"descripcion": "",
+						"partitionByField": "part_plafch_mes"
+					}
+				}
+			},
+			{
+				"name": "RCH000",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "RCH000",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Argentina",
+						"keys": "RchRelInt, ClmNroNew, PrdId, RchMot",
+						"context": {
+							"value": "Commercial",
+							"type": "Expression"
+						},
+						"schema": "TRK35NULL",
+						"descripcion": "",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			},
+			{
+				"name": "PCLAT",
+				"description": "Datos adicionales del Movimiento",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PCLAT",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Argentina",
+						"keys": "ClmNroInt, UsrAttId",
+						"context": {
+							"value": "Commercial",
+							"type": "Expression"
+						},
+						"schema": "TRK35NULL",
+						"descripcion": "Datos adicionales del Movimiento",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			},
+			{
+				"name": "PLAREF",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PLAREF",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Argentina",
+						"keys": "EmpId, PlrNro",
+						"context": {
+							"value": "Commercial",
+							"type": "Expression"
+						},
+						"schema": "TRK35NULL",
+						"descripcion": "",
+						"partitionByField": "part_plrfch_mes"
+					}
+				}
+			},
+			{
+				"name": "ORCBAT",
+				"description": "Adicionales de ordenes de retiro",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "ORCBAT",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Argentina",
+						"keys": "ORetNroInt, ORetCor, UsrAttId",
+						"context": {
+							"value": "Commercial",
+							"type": "Expression"
+						},
+						"schema": "TRK35NULL",
+						"descripcion": "Adicionales de ordenes de retiro",
+						"partitionByField": "part_oretfch_mes"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Truck/Replicas/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:59Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,29 @@
+{
+	"name": "DTS_FullDigital_PY",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_FileSystem",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"entityFS": {
+				"type": "string",
+				"defaultValue": "PathSharedResource"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"folderPath": {
+					"value": "@concat('02-LASCommercial/02-Desarrollo/05-FullDigital/',dataset().entityFS,'/')",
+					"type": "Expression"
+				}
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

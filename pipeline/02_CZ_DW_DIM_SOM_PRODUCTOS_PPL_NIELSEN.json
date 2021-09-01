@@ -1,0 +1,97 @@
+{
+	"name": "02_CZ_DW_DIM_SOM_PRODUCTOS_PPL_NIELSEN",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM_PRODUCTOS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/SOM/DW/Dimension/CZ_CZ_DIM_SOM_PRODUCTOS_NIELSEN_AR_DB",
+					"baseParameters": {
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Scentia"
+			},
+			"runId": {
+				"type": "string",
+				"defaultValue": "1"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "DimSomProductos"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			}
+		},
+		"folder": {
+			"name": "Argentina/SOM/DW/Dimensiones/NIELSEN"
+		},
+		"annotations": [
+			"02_CZ_DW_DIM_SOM_PRODUCTOS_PPL",
+			"Consume",
+			"Data_Warehouse",
+			"Scentia",
+			"Argentina"
+		],
+		"lastPublishTime": "2021-08-19T17:51:10Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

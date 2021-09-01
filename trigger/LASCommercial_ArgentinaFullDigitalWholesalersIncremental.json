@@ -1,0 +1,23 @@
+{
+	"name": "LASCommercial_ArgentinaFullDigitalWholesalersIncremental",
+	"properties": {
+		"description": "Ejecuta la carga incremental de Wholesalers que se disponibiliza a Global",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-05-08T10:00:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"hours": [
+						10
+					]
+				}
+			}
+		}
+	}
+}

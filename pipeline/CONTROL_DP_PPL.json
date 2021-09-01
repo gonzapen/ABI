@@ -1,0 +1,168 @@
+{
+	"name": "CONTROL_DP_PPL",
+	"properties": {
+		"description": "Todos los scripts que controlan los DP contra las DIMs.",
+		"activities": [
+			{
+				"name": "CONTROL_DP_PRODUCTOS_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_FS_DE_PARA_PRODUCTOS_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Bolivia",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Bolivia",
+						"countryCode": "Bo"
+					}
+				}
+			},
+			{
+				"name": "CONTROL_DP_PRODUCTOS_PY",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_FS_DE_PARA_PRODUCTOS_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Paraguay",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Paraguay",
+						"countryCode": "Py"
+					}
+				}
+			},
+			{
+				"name": "CONTROL_DP_MERCADOS_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_FS_DE_PARA_MERCADOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Bolivia",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Bolivia",
+						"countryCode": "Bo"
+					}
+				}
+			},
+			{
+				"name": "CONTROL_DP_MERCADOS_PY",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_FS_DE_PARA_MERCADOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Paraguay",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Paraguay",
+						"countryCode": "Py"
+					}
+				}
+			},
+			{
+				"name": "CONTROL_DP_PRODUCTOS_CL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_FS_DE_PARA_PRODUCTOS_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Chile",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Chile",
+						"countryCode": "Cl",
+						"equipoFS": "06-CommAn"
+					}
+				}
+			},
+			{
+				"name": "CONTROL_DP_MERCADOS_CL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_FS_DE_PARA_MERCADOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Chile",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Chile",
+						"countryCode": "Cl",
+						"equipoFS": "06-CommAn"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tema": {
+				"type": "string",
+				"defaultValue": "Depara"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM/Control_DP"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:59Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

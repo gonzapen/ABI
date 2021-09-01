@@ -1,0 +1,198 @@
+{
+	"name": "01_GetSecTokenAndStoreIt",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get_AAD_Token",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Get_TenantId_AKV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Get_ClientId_AKV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Get_ClientSecret_AKV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://login.microsoftonline.com/',activity('Get_TenantId_AKV').output.value,'/oauth2/token')",
+						"type": "Expression"
+					},
+					"connectVia": {
+						"referenceName": "IntegrationRTPlatform",
+						"type": "IntegrationRuntimeReference"
+					},
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					"body": {
+						"value": "@concat('grant_type=client_credentials&resource=https://analysis.windows.net/powerbi/api&client_id=',activity('Get_ClientId_AKV').output.value,'&client_secret=',encodeUriComponent(activity('Get_ClientSecret_AKV').output.value))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Get_TenantId_AKV",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat(pipeline().parameters.KeyVaultDnsName,'secrets/',pipeline().parameters.SecretName_TenantId,'/',pipeline().parameters.SecretVersion_TenantId,'?api-version=7.0')",
+						"type": "Expression"
+					},
+					"method": "GET",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "Get_ClientId_AKV",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat(pipeline().parameters.KeyVaultDnsName,'secrets/',pipeline().parameters.SecretName_ClientId,'/',pipeline().parameters.SecretVersion_ClientId,'?api-version=7.0')",
+						"type": "Expression"
+					},
+					"method": "GET",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "Get_ClientSecret_AKV",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat(pipeline().parameters.KeyVaultDnsName,'secrets/',pipeline().parameters.SecretName_ClientSecret,'/',pipeline().parameters.SecretVersion_ClientSecret,'?api-version=7.0')",
+						"type": "Expression"
+					},
+					"method": "GET",
+					"authentication": {
+						"type": "MSI",
+						"resource": "https://vault.azure.net"
+					}
+				}
+			},
+			{
+				"name": "WriteToken",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Get_AAD_Token",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/PowerBi/Update_Security_Token",
+					"baseParameters": {
+						"encodedToken": {
+							"value": "@base64(activity('Get_AAD_Token').output.access_token)",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"KeyVaultDnsName": {
+				"type": "string",
+				"defaultValue": "https://abilasdevueeanalitycskv.vault.azure.net/"
+			},
+			"SecretName_TenantId": {
+				"type": "string",
+				"defaultValue": "TenantId"
+			},
+			"SecretVersion_TenantId": {
+				"type": "string",
+				"defaultValue": "c60113bf427249a89e4c1b28b4b5ecd5"
+			},
+			"SecretName_ClientId": {
+				"type": "string",
+				"defaultValue": "ClientId"
+			},
+			"SecretVersion_ClientId": {
+				"type": "string",
+				"defaultValue": "2bebcaa1d12d46b2901ba21eba86c2ad"
+			},
+			"SecretName_ClientSecret": {
+				"type": "string",
+				"defaultValue": "ClientSecret"
+			},
+			"SecretVersion_ClientSecret": {
+				"type": "string",
+				"defaultValue": "6c0161e756104ba69788ba4017ba5452"
+			}
+		},
+		"folder": {
+			"name": "LAS/PowerBI/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-26T21:39:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

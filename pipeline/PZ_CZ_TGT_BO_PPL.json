@@ -1,0 +1,100 @@
+{
+	"name": "PZ_CZ_TGT_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PZ_CZ_Template_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": {
+						"value": "@pipeline().parameters.pathDBPZCZ",
+						"type": "Expression"
+					},
+					"baseParameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": "KeyVault",
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"partitionByField": {
+							"value": "@pipeline().parameters.partitionByField",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"pathDBPZCZ": {
+				"type": "string"
+			},
+			"tableFinal": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/TGT/Storage/PZ_HZ_CZ"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:23Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

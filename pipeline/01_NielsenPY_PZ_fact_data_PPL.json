@@ -1,0 +1,552 @@
+{
+	"name": "01_NielsenPY_PZ_fact_data_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data PZ",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Paraguay/Nielsen/PY082TXT/PY082TXT.zip",
+							"wildcardFileName": {
+								"value": "@concat('*','fact_data.csv')",
+								"type": "Expression"
+							}
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "MKT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MKT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PROD_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PROD_TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PER_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PER_TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000000100000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000000100000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000000200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000000200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000000300000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000000300000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000007000000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000007000000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000007100000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000007100000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000007200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000007200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000014600000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000014600000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000024200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000024200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000024700000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000024700000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000024700000000000000065001",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000024700000000000000065001",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000024700000000000000065002",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000024700000000000000065002",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000024700000000000000065003",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000024700000000000000065003",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000024700000000000000065004",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000024700000000000000065004",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000024700000000000000065005",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000024700000000000000065005",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000091600000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000091600000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000145900000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000145900000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000147300000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000147300000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000162200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000162200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000162200000000000000065001",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000162200000000000000065001",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000162200000000000000065002",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000162200000000000000065002",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000162200000000000000065003",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000162200000000000000065003",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000162200000000000000065004",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000162200000000000000065004",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000162200000000000000065005",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000162200000000000000065005",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000173400000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000173400000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000173500000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000173500000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000174000000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000174000000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000013500000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000013500000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000178000000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000178000000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000207700000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000207700000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000237200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000237200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000237300000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000237300000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000238800000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000238800000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000247000000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000247000000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000247100000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000247100000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000247200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000247200000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "F000000000000000207500000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "F000000000000000207500000000000000000000",
+									"type": "String",
+									"physicalType": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_NielsenPY_CSV_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_NielsenPY_DL_Avro_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": "@pipeline().parameters.tableName"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string",
+				"defaultValue": "fact_data"
+			}
+		},
+		"folder": {
+			"name": "Paraguay/Nielsen/fact_data"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:16Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,91 @@
+{
+	"name": "Sink_AlgoSellingCosmos_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_CosmosDb",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"collection": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/AlgoSelling"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"schema": {
+			"type": "object",
+			"properties": {
+				"poc_code": {
+					"type": "string"
+				},
+				"preferred_pid": {
+					"type": "string"
+				},
+				"recommendation_id_type": {
+					"type": "string"
+				},
+				"rating": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"quantity": {
+					"type": "string"
+				},
+				"recommendation_ts": {
+					"type": "string"
+				},
+				"HIGH_pid": {
+					"type": "string"
+				},
+				"group_id": {
+					"type": "string"
+				},
+				"group_name": {
+					"type": "string"
+				},
+				"business_rule": {
+					"type": "string"
+				},
+				"experiment_id": {
+					"type": "string"
+				},
+				"score": {
+					"type": "string"
+				},
+				"trigger_ratio_based_on_sku_value": {
+					"type": "string"
+				},
+				"descriptions": {
+					"type": "string"
+				},
+				"exclusiveTriggers": {
+					"type": "string"
+				},
+				"images": {
+					"type": "string"
+				},
+				"combo": {
+					"type": "string"
+				},
+				"is_combo": {
+					"type": "string"
+				},
+				"created_date": {
+					"type": "integer"
+				}
+			}
+		},
+		"typeProperties": {
+			"collectionName": {
+				"value": "@dataset().collection",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

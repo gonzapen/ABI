@@ -1,0 +1,38 @@
+{
+	"name": "Source_LAS_DE_PARA_Strategy_Output_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"contexto": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA_Strategy"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(dataset().country,'/',dataset().contexto,'/Manual/DePara/Output/',dataset().tableName)",
+					"type": "Expression"
+				},
+				"fileSystem": "consumezone"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

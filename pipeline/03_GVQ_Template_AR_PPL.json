@@ -1,0 +1,345 @@
+{
+	"name": "03_GVQ_Template_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "SELECT_PIVOT_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "PZ",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "SELECT_PIVOT_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OracleSource",
+						"oracleReaderQuery": {
+							"value": "@activity('SELECT_PIVOT_DB').output.runOutput.query",
+							"type": "Expression"
+						},
+						"partitionOption": "None",
+						"queryTimeout": "02:00:00"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_GVQ_PROD_AR_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"schema": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_GVQ_DEV_AR_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "INSERT_PIVOT_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "PZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"descripcion": {
+							"value": "@pipeline().parameters.descripcion",
+							"type": "Expression"
+						},
+						"cantidadLeido": {
+							"value": "@concat(activity('PZ').output.rowsRead)",
+							"type": "Expression"
+						},
+						"cantidadEscrito": {
+							"value": "@concat(activity('PZ').output.rowsCopied)",
+							"type": "Expression"
+						},
+						"duracionCD": {
+							"value": "@concat(activity('PZ').output.copyDuration)",
+							"type": "Expression"
+						},
+						"fechaFin": {
+							"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"bytesLeido": {
+							"value": "@concat(activity('PZ').output.dataRead)",
+							"type": "Expression"
+						},
+						"bytesEscrito": {
+							"value": "@concat(activity('PZ').output.dataWritten)",
+							"type": "Expression"
+						},
+						"ultimoValorPivot": {
+							"value": "@activity('SELECT_PIVOT_DB').output.runOutput.ultimovalorpivot",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "IfCantidadLeidoIgual0",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "INSERT_PIVOT_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(concat(activity('PZ').output.rowsCopied),'0')",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "HZ",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "01_PZ_HZ_Template_AR_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "CZ",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "HZ",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "02_HZ_CZ_Template_AR_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "GVQ"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Public"
+			},
+			"schema": {
+				"type": "string"
+			},
+			"descripcion": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/GVQ/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

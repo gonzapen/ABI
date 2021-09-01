@@ -1,0 +1,48 @@
+{
+	"name": "A_LASCommercial_Argentina_Truck_FACT_Ventas_Historico",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "FT_VENTAS_MENSUAL_AR_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"country": "Argentina",
+					"keys": "KEY",
+					"origenSystem": "Truck",
+					"scope": "KeyVault",
+					"tableFinal": "FT_VENTAS",
+					"context": "Commercial",
+					"tableName": "PCLMOV, PSTMLN, PTBL03, PSTOCK, PLANIL, PTBL53, PPRDTI, PCLIEN, PCLMER, INVMER, PCODES, PTB92C, UNINEG, SGMMKT, PTBL30, PTBL71, PTBLRE, PTBLGT, PTBLAR, PTBL01"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Month",
+				"interval": 1,
+				"startTime": "2020-12-01T08:50:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						50
+					],
+					"hours": [
+						8
+					],
+					"monthDays": [
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			}
+		}
+	}
+}

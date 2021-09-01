@@ -1,0 +1,143 @@
+{
+	"name": "05_Truck_Maestros_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PCAMIO",
+				"description": "Listado de camiones",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PCAMIO",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, CamId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Listado de camiones",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PLACLS",
+				"description": "Clases de planilla",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PLACLS",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "PLACLSID",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Clases de planilla",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBL80",
+				"description": "Listado de motivos",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL80",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "MOTTRNID",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Listado de motivos",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTPOMO",
+				"description": "Tipos de motivo de transacción",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTPOMO",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "TPOMOTID",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tipos de motivo de transacción",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PCAMAT",
+				"description": "Códigos adicionales de camiones",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PCAMAT",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, CamId, UsrAttId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Códigos adicionales de camiones",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Truck/Replicas/Maestros"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

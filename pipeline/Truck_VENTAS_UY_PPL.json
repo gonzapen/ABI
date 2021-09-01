@@ -1,0 +1,113 @@
+{
+	"name": "Truck_VENTAS_UY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PCLMOV",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "Pclmov",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "ClmNroInt",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Cabecera Movimientos",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			},
+			{
+				"name": "PSTMLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "Pstmln",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "ClmNroInt, PrdId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Detalle de la cabecera de Movimiento",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Truck"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Uruguay"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "TRKNULLFNC"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			}
+		},
+		"folder": {
+			"name": "Uruguay/Truck/Replicas/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

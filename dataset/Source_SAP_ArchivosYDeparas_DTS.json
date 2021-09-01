@@ -1,0 +1,52 @@
+{
+	"name": "Source_SAP_ArchivosYDeparas_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_FileSystem",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tableName": {
+				"type": "string",
+				"defaultValue": "SALESFORCE"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"tipo": {
+				"type": "string",
+				"defaultValue": "01-Archivos"
+			}
+		},
+		"folder": {
+			"name": "Argentina/SAP"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": {
+					"value": "@concat(dataset().tableName,'.txt')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('02-LASCommercial/',dataset().entorno,'/01-Sales/04-SAP/',dataset().country,'/01-Input/',dataset().tipo)",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": "|",
+			"encodingName": "UTF-8",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": ""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

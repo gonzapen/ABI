@@ -1,0 +1,23 @@
+{
+	"name": "LASCommercial_AzureSqlDatabase_PortalAcciones",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Conexión a base de datos del Portal de Acciones",
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "LASAzureSqlDbPortalAccionesConnectionString"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTLas",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

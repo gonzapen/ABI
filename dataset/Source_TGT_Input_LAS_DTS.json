@@ -1,0 +1,45 @@
+{
+	"name": "Source_TGT_Input_LAS_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_FileSystem",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tablename": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/TGT"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": {
+					"value": "@concat(dataset().tableName,'.csv')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('02-LASCommercial/',dataset().entorno,'/01-Sales/03-Budget/',dataset().country,'/01-Input')",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ";",
+			"encodingName": "WINDOWS-1252",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": ""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

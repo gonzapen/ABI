@@ -1,0 +1,183 @@
+{
+	"name": "RESU_FACT_CLIENTES_COMPRA_MENSUAL_HISTORIA_DESA_DBO_CHESS",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach_RESU_FACT_CLIENTES_COMPRA_MENSUAL",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.years",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data RESU_FACT_CLIENTES_COMPRA_MENSUAL HISTORIA",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat('SELECT \n Fecha, Cod_Compania, Cod_Empresa, Cod_Modo_Atencion, Fuente, Cod_Cliente, Cod_Producto, SK_Cliente, SK_Distribuidor, SK_Producto, Cod_Compania_Empresa_Cliente, Fecha_Actualizacion, Universo, Cod_Compania_Empresa_Producto, Cod_Compania_Empresa_ProductoEstadistico, Accion\nFROM dbo.RESU_FACT_CLIENTES_COMPRA_MENSUAL\nWHERE YEAR(Fecha)*100+MONTH(Fecha) =', item())",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_Chess_PROD_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "RESU_FACT_CLIENTES_COMPRA_MENSUAL HISTORIA",
+										"schema": "dbo"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_Chess_DESA_DTS_history",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "RESU_FACT_CLIENTES_COMPRA_MENSUAL",
+										"year": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"years": {
+				"type": "array",
+				"defaultValue": [
+					201412,
+					201411,
+					201410,
+					201409,
+					201408,
+					201407,
+					201406,
+					201405,
+					201404,
+					201403,
+					201402,
+					201512,
+					201511,
+					201510,
+					201509,
+					201508,
+					201507,
+					201506,
+					201505,
+					201504,
+					201503,
+					201502,
+					201501,
+					201612,
+					201611,
+					201610,
+					201609,
+					201608,
+					201607,
+					201606,
+					201605,
+					201604,
+					201603,
+					201602,
+					201601,
+					201712,
+					201711,
+					201710,
+					201709,
+					201708,
+					201707,
+					201706,
+					201705,
+					201704,
+					201703,
+					201702,
+					201701,
+					201812,
+					201811,
+					201810,
+					201809,
+					201808,
+					201807,
+					201806,
+					201805,
+					201804,
+					201803,
+					201802,
+					201801,
+					201912,
+					201911,
+					201910,
+					201909,
+					201908,
+					201907,
+					201906,
+					201905,
+					201904,
+					201903,
+					201902,
+					201901,
+					202012,
+					202011,
+					202010,
+					202009,
+					202008,
+					202007,
+					202006,
+					202005,
+					202004,
+					202003,
+					202002,
+					202001,
+					202101,
+					202102,
+					202103
+				]
+			}
+		},
+		"variables": {
+			"years": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Chess/Carga_Historica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

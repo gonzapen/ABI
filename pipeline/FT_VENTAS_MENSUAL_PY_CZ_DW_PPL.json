@@ -1,0 +1,84 @@
+{
+	"name": "FT_VENTAS_MENSUAL_PY_CZ_DW_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_VENTAS_MENSUAL_PY_CZ_DW_PPL",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 3,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Paraguay/Truck/Ventas/Replicas_CZ_DW/CZ_DW_Replica_Fact_Ventas",
+					"baseParameters": {
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Paraguay"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Truck"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Public"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "FT_TRUCK_VENTAS_PY"
+			}
+		},
+		"folder": {
+			"name": "Paraguay/DW/Fact"
+		},
+		"annotations": [
+			"FT_VENTAS_MENSUAL_PY_CZ_DW_PPL",
+			"Consume",
+			"Data_Warehouse",
+			"Truck",
+			"Ventas",
+			"Paraguay"
+		],
+		"lastPublishTime": "2021-08-19T17:51:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,242 @@
+{
+	"name": "02_Scentia_Ecommerce_PZ_SOM_PPL_PrimeraEjecucion",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data Ecommerce",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "PERIODO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PERIODO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CANAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CANAL",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Key Account",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Key_Account"
+								}
+							},
+							{
+								"source": {
+									"name": "Categoria",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Categoria",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EAN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EAN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DESC_2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DESC_2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Manuf",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Manuf",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Brand",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Brand",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SEGMENTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SEGMENTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TIPO_ENV",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TIPO_ENV",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SIZE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SIZE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUB_BRAND",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUB_BRAND",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Calibre",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Calibre",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Contenido",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Contenido",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Sum of Unidades",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Sum_of_Unidades"
+								}
+							},
+							{
+								"source": {
+									"name": "Sum of VentaValorizada",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Sum_of_VentaValorizada"
+								}
+							},
+							{
+								"source": {
+									"name": "Sum of Volumen_Lts",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Sum_of_Volumen_Lts"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Scentia_Ecommerce_PZ_CSV_DTS_HTTP_PrimeraEjecucion",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Scentia_Ecommerce_PZ_SOM_DTS_PrimeraEjecucion",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Scentia/Ecommerce"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

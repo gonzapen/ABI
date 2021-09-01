@@ -1,0 +1,48 @@
+{
+	"name": "Sink_SOM_Bajada_Template_FS_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_FileSystem",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"pais": {
+				"type": "string"
+			},
+			"periodo": {
+				"type": "string"
+			},
+			"paisFS": {
+				"type": "string"
+			},
+			"origenFS": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM/BajadaBases"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": {
+					"value": "@concat('bajada_',toLower(dataset().pais),'_',dataset().periodo,'.csv')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('02-LASCommercial/02-Desarrollo/02-Strategy/04-BajadaBases/',dataset().paisFs,'/',dataset().origenFs)",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ";",
+			"encodingName": "WINDOWS-1252",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": ""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,661 @@
+{
+	"name": "PSTMLN_HISTORIA_PROD_Dia",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach_PSTMLN",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.years",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data PSTMLN historia",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "Db2Source",
+									"query": {
+										"value": "@concat('SELECT detalle.*, (CASE WHEN (aux.PLASTS = ','''','CER','''',') THEN 1 ELSE 0 END) AS PLANILLA_CERRADA, SUBSTRING(cabecera.ClmFchEmi, 1, 6) as part_clmfchemi_mes FROM TRK35NULL.PSTMLN detalle INNER JOIN TRK35NULL.PCLMOV cabecera ON  detalle.clmnroint = cabecera.clmnroint INNER JOIN TRK35NULL.PLANIL aux ON cabecera.ClmNroPla = aux.planro AND cabecera.empid = aux.empid WHERE cabecera .ClmFchEmi = ',item(),' FOR FETCH ONLY')",
+										"type": "Expression"
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "CAJAFCH",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CAJAFCH",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CAJAID",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CAJAID",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "EMPID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "EMPID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "FLTID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "FLTID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLACAMTXT",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLACAMTXT",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLACMPMON",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLACMPMON",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLACMPPSO",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLACMPPSO",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLADISID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLADISID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFCH",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFCH",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFCHCIE",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFCHCIE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFCHENT",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFCHENT",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFCHENTR",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFCHENTR",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFCHING",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFCHING",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFCHSAL",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFCHSAL",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFLGCTL",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFLGCTL",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFLGENT",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFLGENT",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFLGMOD",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFLGMOD",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFLGRETP",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFLGRETP",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFLGSAL",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFLGSAL",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFLGTRAN",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFLGTRAN",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFLTFLG",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAFLTFLG",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAFLTTOT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLAFLTTOT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAHORENT",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAHORENT",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAHORSAL",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAHORSAL",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDCAM",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAIDCAM",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDDPSDS",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLAIDDPSDS",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDDPSOR",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLAIDDPSOR",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDDPSTR",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLAIDDPSTR",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDFLTCT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLAIDFLTCT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDPTOEM",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAIDPTOEM",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDTRRCB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLAIDTRRCB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDTRS",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAIDTRS",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDUSRCI",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAIDUSRCI",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDUSREN",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAIDUSREN",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAIDUSRSA",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLAIDUSRSA",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLANRO",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLANRO",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLANROCCOU",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLANROCCOU",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLANROREF",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLANROREF",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLANROVJE",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLANROVJE",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLANROXORI",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLANROXORI",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLASTS",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLASTS",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATOTLIQ",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLATOTLIQ",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATOTPSOC",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLATOTPSOC",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATOTPSOI",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLATOTPSOI",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATOTVAL",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLATOTVAL",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATPO",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLATPO",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATPOFLT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLATPOFLT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATPOLSTF",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLATPOLSTF",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATPOORI",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLATPOORI",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATXT1",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLATXT1",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLATXT2",
+												"type": "String"
+											},
+											"sink": {
+												"name": "PLATXT2",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAVALSTS",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLAVALSTS",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAVALTPOF",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLAVALTPOF",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PLAVALULTN",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PLAVALULTN",
+												"type": "Decimal"
+											}
+										}
+									]
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_Truck_PROD_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "PSTMLN",
+										"schema": "TRK35NULL"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_Truck_PROD_DTS_HISTORIA_copy1_dia",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "PSTMLN",
+										"year": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"years": {
+				"type": "array",
+				"defaultValue": [
+					20201101,
+					20201102,
+					20201103,
+					20201104,
+					20201105,
+					20201106,
+					20201107,
+					20201108,
+					20201109,
+					20201110,
+					20201111,
+					20201112,
+					20201113,
+					20201114,
+					20201115,
+					20201116,
+					20201117,
+					20201118,
+					20201119,
+					20201120,
+					20201121
+				]
+			}
+		},
+		"variables": {
+			"years": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Truck/PLANIL_HISTORIA"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

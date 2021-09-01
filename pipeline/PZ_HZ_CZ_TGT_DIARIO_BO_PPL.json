@@ -1,0 +1,132 @@
+{
+	"name": "PZ_HZ_CZ_TGT_DIARIO_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PZ_HZ_TGT_DIARIO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "INIT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PZ_HZ_TGT_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "TGT_DIARIO",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "Area_Id, Date, Negocio_Id, Canal",
+						"partitionByField": "part_vol_anno_mes",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"pathDBPZHZ": "/Bolivia/Truck/TARGET/Template/PZ_HZ_PARTICIONES_DB"
+					}
+				}
+			},
+			{
+				"name": "PZ_CZ_TGT_DIARIO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "INIT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "PZ_CZ_TGT_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "TGT_DIARIO",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "Area_Id, Date, Negocio_Id, Canal",
+						"partitionByField": "part_vol_anno_mes",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"pathDBPZCZ": "/Bolivia/Truck/TARGET/Template/PZ_CZ_PARTICIONES_DB",
+						"tableFinal": "TgtDiario"
+					}
+				}
+			},
+			{
+				"name": "INIT",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"origenSystem": "Truck",
+						"country": "Bolivia"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/TGT/Storage/PZ_HZ_CZ"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

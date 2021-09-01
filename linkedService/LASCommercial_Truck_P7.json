@@ -1,0 +1,24 @@
+{
+	"name": "LASCommercial_Truck_P7",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Base de datos de backup",
+		"annotations": [],
+		"type": "Db2",
+		"typeProperties": {
+			"connectionString": "server=167.252.100.200:446;database=S217eff7;authenticationType=Basic;username=datalake;packageCollection=QGPL",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "LASCommercialTruckP7Password"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTPlatform",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

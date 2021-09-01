@@ -1,0 +1,126 @@
+{
+	"name": "CZ_DL_DW_Calendario_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "INIT",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"origenSystem": "Truck",
+						"country": "Bolivia"
+					}
+				}
+			},
+			{
+				"name": "CZ to DL CALENDARIO_BO",
+				"description": "Datos PARA al datalake",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "INIT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_DL_CALENDARIO_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableFinal": "FtCalendarioBo",
+						"tableName": "Calendario",
+						"scope": "KeyVault"
+					}
+				}
+			},
+			{
+				"name": "CZ_DW_Replica_CALENDARIO_BO",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ to DL CALENDARIO_BO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_DW_CALENDARIO_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableFinal": "FT_CALENDARIO_BO",
+						"tableName": "FtCalendarioBo"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/TGT/Storage/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

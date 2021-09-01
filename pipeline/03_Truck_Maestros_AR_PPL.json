@@ -1,0 +1,513 @@
+{
+	"name": "03_Truck_Maestros_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PTBL38",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL38",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "CNVUNIIDDE, CNVUNIIDOR",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro Unidades de conversión de truck",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBL73",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL73",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, DpsId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro Depósitos de truck",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBL03",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL03",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "CodmovId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro Movimientos de truck",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PFERLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PFERLN",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, FerFch, FerDpsId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Detalle_Utilizado_Para_Cognos",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBL82",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL82",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "ZonentId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro de zonas de entrega",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBL71",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL71",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, ZonId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro Zonas de truck",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBLZC",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBLZC",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, ZonId, ZonIdCoor",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Coordinador x Zona_Utilizado_Para_Cognos",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBL76",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL76",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "TpolprId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Utilizado_Para_Cognos",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "GPQLVE",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "GPQLVE",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, LivId, LinId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Versión Línea Pricing_Utilizado_Para_Cognos",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "FCHREG",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "FCHREG",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, FchRegFch, FchRegId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Fecha de Feriados por Sub-region_Utilizado_Para_Cognos",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PCODES",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PCODES",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "PrdCodEst",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro Código Estadístico de truck",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PLCDES",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PLCDES",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "Lcdid",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro de Localidades",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBL3V",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL3V",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "VdrCod",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro personal responsable de truck",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTB30C",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTB30C",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, TrrCmlId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Territorio complementario",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PCICLO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PCICLO",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "CicFch",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Utilizado_Para_Cognos",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "POPPRD",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "POPPRD",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "PopPrdId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "-_Utilizado_Para_Cognos",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PSTOCK",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PSTOCK",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "PrdId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro Productos de truck",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBL32",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL32",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, AtnCod, RutId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Rutas",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PTBL30",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PTBL30",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, TrrId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Tabla maestro Territorios de truck",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "PRUTFR",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PRUTFR",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, AtnCod, RutId, RutNroDia",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Frecuencia Ruta_Utilizado_Para_Cognos",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Truck/Replicas/Maestros"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

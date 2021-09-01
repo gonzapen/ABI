@@ -1,0 +1,13 @@
+{
+	"name": "RestService1_testRodri",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "RestService",
+		"typeProperties": {
+			"url": "https://anheuserbuschinbev.sharepoint.com/sites/Analytics-DataLake",
+			"enableServerCertificateValidation": false,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

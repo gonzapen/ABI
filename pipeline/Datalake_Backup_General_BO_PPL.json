@@ -1,0 +1,86 @@
+{
+	"name": "Datalake_Backup_General_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "CZ_Backup_Dim_BO_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_Backup_Dim_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CZ_Backup_Truck_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ_Backup_Fact_BO_PPL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_Backup_Truck_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "HZ_Backup_Truck_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ_Backup_Truck_PPL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "HZ_Backup_Truck_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CZ_Backup_Fact_BO_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ_Backup_Dim_BO_PPL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_Backup_Fact_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/Backup"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:05Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,144 @@
+{
+	"name": "FullDigital_Generar_Diario_PY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "REFRESH_TABLAS_TRUCK_PY",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Refresh_Tables_Truck_FullDigital_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CUSTOMER",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "REFRESH_TABLAS_TRUCK_PY",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_Customer_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "PRODUCT",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "REFRESH_TABLAS_TRUCK_PY",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_Product_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "INVOICE_DAILY",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "REFRESH_TABLAS_TRUCK_PY",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_Invoice_Daily_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "KFD",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "REFRESH_TABLAS_TRUCK_PY",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_KFD_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CREATE_EXTERNAL_TABLES_FD",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CUSTOMER",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "PRODUCT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "INVOICE_DAILY",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "KFD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Create_Tablas_Externas_FullDigital_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Paraguay/FullDigital"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

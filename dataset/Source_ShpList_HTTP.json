@@ -1,0 +1,47 @@
+{
+	"name": "Source_ShpList_HTTP",
+	"properties": {
+		"description": "This dataset takes shp lists in the source. It takes three parameters. The listName, the columns to catch and the top parameter (limit of list items to receive). The Logic is in the Linked Service 'sharepoint'.",
+		"linkedServiceName": {
+			"referenceName": "sharepoint",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"ListName": {
+					"value": "@dataset().ListName",
+					"type": "Expression"
+				},
+				"Columns": {
+					"value": "@dataset().Columns",
+					"type": "Expression"
+				},
+				"Top": {
+					"value": "@dataset().Top",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"ListName": {
+				"type": "string"
+			},
+			"Columns": {
+				"type": "String"
+			},
+			"Top": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "LAS/Sharepoint"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

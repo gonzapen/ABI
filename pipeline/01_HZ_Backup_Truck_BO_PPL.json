@@ -1,0 +1,318 @@
+{
+	"name": "01_HZ_Backup_Truck_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PLANIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PLANIL",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "INVMER",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/INVMER",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCLICC",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PCLICC",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCLIEN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PCLIEN",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCLMCO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PCLMCO",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCLIVE",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PCLIVE",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PDOCUM",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PDOCUM",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PDOCLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PDOCLN",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCODES",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PCODES",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCODAD",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PCODAD",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCLMER",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PCLMER",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PPRDTI",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PPRDTI",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PLARLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PLARLN",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PSTOCK",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PSTOCK",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PTB92C",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Truck/PTB92C",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"zone": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/Backup/Historyzone"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

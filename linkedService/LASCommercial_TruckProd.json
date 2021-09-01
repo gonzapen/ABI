@@ -1,0 +1,28 @@
+{
+	"name": "LASCommercial_TruckProd",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "Db2",
+		"typeProperties": {
+			"server": "167.252.7.150:446",
+			"database": "S217eff7",
+			"authenticationType": "Basic",
+			"username": "DATALAKE",
+			"packageCollection": "QGPL",
+			"certificateCommonName": "",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "ArgTruckPassword"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTPlatform",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

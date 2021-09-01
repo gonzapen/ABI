@@ -1,0 +1,94 @@
+{
+	"name": "Source_Embotelladora_DB_DTS_BKP",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_EmbonorCL_dev",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"schema": {
+				"type": "string",
+				"defaultValue": "dbo"
+			},
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Chile/Embotelladora"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "cam_usr_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "cam_nro_camion",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "cam_patente",
+				"type": "varchar"
+			},
+			{
+				"name": "cam_marca",
+				"type": "varchar"
+			},
+			{
+				"name": "cam_modelo",
+				"type": "varchar"
+			},
+			{
+				"name": "cam_permiso",
+				"type": "varchar"
+			},
+			{
+				"name": "cam_ven_permiso",
+				"type": "date"
+			},
+			{
+				"name": "cam_revision_tecnica",
+				"type": "varchar"
+			},
+			{
+				"name": "cam_ven_revision_tecnica",
+				"type": "date"
+			},
+			{
+				"name": "cam_soap",
+				"type": "varchar"
+			},
+			{
+				"name": "cam_ven_soap",
+				"type": "date"
+			},
+			{
+				"name": "cam_fecha_creacion",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "cam_fecha_modificacion",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().tableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,95 @@
+{
+	"name": "FT_PEDIDOS_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_PEDIDOS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/LakeHouse/Sales/Pedidos/CZ_CZ_FT_TRUCK_PEDIDOS_FOTO",
+					"baseParameters": {
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "PPEDCB, PTBL73, PCLIEN, PTBL30, PTBL71, PTBLRE, PTBLGT, PCLMER, PPEDLN, PSTOCK, PCODES, PTB92C, UNINEG, SGMMKT, PTBL38, PTBL03, INVMER, PLANIL"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "FT_PEDIDOS"
+			},
+			"context": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DW/Fact"
+		},
+		"annotations": [
+			"01_DIM_TRUCK_PEDIDOS",
+			"Consume",
+			"Data_Warehouse",
+			"Truck",
+			"Pedidos",
+			"Argentina"
+		],
+		"lastPublishTime": "2021-08-19T17:51:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

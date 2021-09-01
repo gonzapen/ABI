@@ -1,0 +1,77 @@
+{
+	"name": "Truck_General_Dimensiones_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIMENSIONES",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIM_TRUCK_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial"
+					}
+				}
+			},
+			{
+				"name": "CZ_DW_DIM",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMENSIONES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIM_TRUCK_AR_CZ_DW_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial"
+					}
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Argentina"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

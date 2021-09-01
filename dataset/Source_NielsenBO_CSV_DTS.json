@@ -1,0 +1,28 @@
+{
+	"name": "Source_NielsenBO_CSV_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Bolivia/Nielsen"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Bolivia/NielsenZip/B082TXT2.zip",
+				"fileSystem": "prelandingzone"
+			},
+			"columnDelimiter": "|",
+			"encodingName": "WINDOWS-1252",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,986 @@
+{
+	"name": "01_Truck_Maestros_UY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "OCACOC",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "OCACOC",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "OCCId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Ocasión de consumo",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCLIVA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PCLIVA",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "CliTpoIva",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Tipo de cliente para el IVA",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PPRDTI",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PPRDTI",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "TpoprdId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Tipo Producto",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PPRFPR",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PPRFPR",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "PrdIdPrf",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Perfiles de productos",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PTBCNL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PTBCNL",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "CnlId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Canales de venta",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PTBL72",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PTBL72",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "EmpId, AtnCod",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Forma de atención al cliente",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "GPQLIV",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "GPQLIV",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "EmpId, LivId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Versionado de Línea Pricing",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCLCAT",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PCLCAT",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "CliValCat",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Categoria cliente",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "OCACOD",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "OCACOD",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "OCCDId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Sub ocasión de consumo",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PTBLFA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PTBLFA",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "FamId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Familia",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SGMMKA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "SGMMKA",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "SgmAgId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Codigos de agrupaciones\n",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PTB70C",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PTB70C",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "DptCmlId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Datos complementarios de los departamentos",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PTBLZC",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PTBLZC",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "EmpId, ZonId, ZonIdCoor",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Coordinador x Zona",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PTBL82",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PTBL82",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "ZonentId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Zonas de entrega",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "GPQLVE",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "GPQLVE",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "EmpId, LivId, LinId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Versión Línea Pricing",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "FCHREG",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "FCHREG",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "EmpId, FchRegFch, FchRegId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Fecha de Feriados por Sub-regi",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PFERLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PFERLN",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "EmpId, FerFch, FerDpsId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Detalle",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PTBL75",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PTBL75",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "RamId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Tipo de ramo",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PTBL76",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PTBL76",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "TpolprId",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Lista de precios",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PLCDES",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "PLCDES",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "Lcdid",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Localidad",
+						"pathDBPZHZ": {
+							"value": "@pipeline().parameters.pathDBPZHZ",
+							"type": "Expression"
+						},
+						"partitionByField": "-",
+						"pathDBHZCZ": {
+							"value": "@pipeline().parameters.pathDBHZCZ",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"schema": {
+				"type": "string",
+				"defaultValue": "TRKNULLFNC"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Uruguay"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Truck"
+			},
+			"pathDBPZHZ": {
+				"type": "string",
+				"defaultValue": "/LAS/Templates/PZ_HZ_TEMPLATE_DB"
+			},
+			"partitionByField": {
+				"type": "string"
+			},
+			"pathDBHZCZ": {
+				"type": "string",
+				"defaultValue": "/LAS/Templates/HZ_CZ_TEMPLATE_DB"
+			}
+		},
+		"folder": {
+			"name": "Uruguay/Truck/Replicas/Maestros"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

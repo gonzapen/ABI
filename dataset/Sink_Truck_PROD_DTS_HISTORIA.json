@@ -1,0 +1,34 @@
+{
+	"name": "Sink_Truck_PROD_DTS_HISTORIA",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table": {
+				"type": "string"
+			},
+			"year": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Truck/PROD"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat('/Argentina/Truck/',dataset().table,'/',substring(string(dataset().year),0,4),'/',substring(string(dataset().year),4,2),'/',dataset().table)",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

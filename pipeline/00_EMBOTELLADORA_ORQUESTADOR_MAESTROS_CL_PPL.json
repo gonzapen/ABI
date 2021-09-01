@@ -1,0 +1,116 @@
+{
+	"name": "00_EMBOTELLADORA_ORQUESTADOR_MAESTROS_CL_PPL",
+	"properties": {
+		"description": "Extracción general desde Embotelladora (Los Bottlers) de las tablas de maestros para Chile",
+		"activities": [
+			{
+				"name": "MAESTROS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_SOURCE_CZ_EMBOTELLADORA_MAESTROS_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "CREACION SOURCE DIMENSIONES",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "MAESTROS",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Chile/Embotelladora/Tablas_Externas/TABLAS_EXTERNAS_EMBOTELLADORA_SOURCES_DIMENSIONALES"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "CREACION SOURCE FACTS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "MAESTROS",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Chile/Embotelladora/Tablas_Externas/TABLAS_EXTERNAS_EMBOTELLADORA_SOURCES_FACTS"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Chile"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Embotelladora"
+			},
+			"ambiente": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Chile/Embotelladora/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

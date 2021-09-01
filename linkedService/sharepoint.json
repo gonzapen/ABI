@@ -1,0 +1,25 @@
+{
+	"name": "sharepoint",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"ListName": {
+				"type": "String"
+			},
+			"Columns": {
+				"type": "String"
+			},
+			"Top": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "@{concat('https://anheuserbuschinbev.sharepoint.com/sites/LASAnalytics/_api/lists/getbytitle(''',linkedService().ListName,''')/items?$select=',linkedService().Columns,'&$top=',linkedService().Top)}",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		},
+		"description": "This Linked Service gets certain columns from LAS Analytics sharepoint's lists' items.\nThe parameters are ListName, Columns (columns to get from items) and Top (limit of items that we want to receive). The Auth is anonymous but it will be configured in the source's configuration of datasets as HTTP headers (OAuth token). "
+	}
+}

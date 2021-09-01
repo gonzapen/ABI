@@ -1,0 +1,13 @@
+{
+	"name": "HttpServer_test_SP",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://anheuserbuschinbev.sharepoint.com/_api/web/GetFileByServerRelativeUrl('/sites/Analytics-DataLake/Lists/Mails/AllItems.aspx')/$value",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

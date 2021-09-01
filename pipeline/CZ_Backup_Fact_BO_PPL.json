@@ -1,0 +1,39 @@
+{
+	"name": "CZ_Backup_Fact_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_TRUCK_VENTAS_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Bolivia/Public/Truck/Ventas/FT_TRUCK_VENTAS_BO",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"zone": {
+				"type": "string",
+				"defaultValue": "consumezone"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/Backup/Consume/Fact"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

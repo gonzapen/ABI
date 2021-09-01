@@ -1,0 +1,54 @@
+{
+	"name": "02_TABLAS_EXTERNAS_PPL",
+	"properties": {
+		"description": "PPL encargada de crear las tablas externas de DIMs y FACTs.",
+		"activities": [
+			{
+				"name": "DIMENSIONES",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/SOM/Tablas_Externas/TABLAS_EXTERNAS_SOM_DIMENSIONALES"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "FACTS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/SOM/Tablas_Externas/TABLAS_EXTERNAS_SOM_FACT"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/SOM/DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T21:20:07Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

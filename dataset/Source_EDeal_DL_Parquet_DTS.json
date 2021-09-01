@@ -1,0 +1,112 @@
+{
+	"name": "Source_EDeal_DL_Parquet_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatformEDeal",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"origenSystem": {
+				"type": "string"
+			},
+			"fileName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Chile/E-Deal"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat('Chile/Commercial/',dataset().origenSystem,'/',dataset().fileName)",
+					"type": "Expression"
+				},
+				"fileSystem": "consumezone"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": [
+			{
+				"name": "Sk_Accion",
+				"type": "INT32"
+			},
+			{
+				"name": "Cod_Empresa",
+				"type": "INT32"
+			},
+			{
+				"name": "Cod_Tipo_Linea",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cod_Tipo_Accion",
+				"type": "INT32"
+			},
+			{
+				"name": "Desc_Accion",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cod_Desc_Accion",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cod_Promocion",
+				"type": "INT32"
+			},
+			{
+				"name": "Desc_Promocion",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cod_Desc_Promocion",
+				"type": "UTF8"
+			},
+			{
+				"name": "Categoria_TS",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cod_Promocion_Cia",
+				"type": "INT32"
+			},
+			{
+				"name": "Desc_Promocion_Cia",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cod_Desc_Promocion_Cia",
+				"type": "UTF8"
+			},
+			{
+				"name": "Cod_TipificacionTruck",
+				"type": "INT32"
+			},
+			{
+				"name": "Desc_TipificacionTrunk",
+				"type": "UTF8"
+			},
+			{
+				"name": "Presupuesto_Limite",
+				"type": "BOOLEAN"
+			},
+			{
+				"name": "Fecha_Actualizacion",
+				"type": "UTF8"
+			},
+			{
+				"name": "Accion",
+				"type": "UTF8"
+			},
+			{
+				"name": "CREATED_DATE",
+				"type": "INT32"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,299 @@
+{
+	"name": "01_NielsenCL_PZ_PROD_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data PZ",
+				"description": "Falta modificar source sink",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Chile/Nielsen/zip",
+							"wildcardFileName": {
+								"value": "@concat('*',toUpper(pipeline().parameters.tableName),'*','.csv')",
+								"type": "Expression"
+							}
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SHORT",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SHORT",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "LONG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "LONG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DISPLAY_ORDER",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DISPLAY_ORDER",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PARENT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PARENT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_NUM",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_NUM",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_NAME",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_NAME",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_LEVEL_NUM",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_LEVEL_NUM",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_LEVEL_NAME",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_LEVEL_NAME",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CL_RT_CERVEZAS CCH level 0",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CL_RT_CERVEZAS_CCH_level_0",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FABRICANTE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FABRICANTE",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MARCA",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MARCA",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBMARCA",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SUBMARCA",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SEGMENTO CCH",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SEGMENTO_CCH",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SABORES",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SABORES",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PRESENTACION",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PRESENTACION",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EMPAQUE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EMPAQUE",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TAMANO",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TAMANO",
+									"type": "String",
+									"physicalType": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_NielsenCL_CSV_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_NielsenCL_DL_Avro_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": "@pipeline().parameters.tableName"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string",
+				"defaultValue": "PROD"
+			}
+		},
+		"folder": {
+			"name": "Chile/Nielsen/PROD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,89 @@
+{
+	"name": "FT_VENTAS_MENSUAL_BO_CZ_DW_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_VENTAS_MENSUAL_BO_CZ_DW_PPL",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 3,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Bolivia/Truck/Ventas/Replicas_CZ_DWH/CZ_DW_Replica_Fact_Ventas",
+					"baseParameters": {
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Bolivia"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "FT_TRUCK_VENTAS_BO"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Public"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/DW/Fact"
+		},
+		"annotations": [
+			"Carga_DL_To_DW_FT_Ventas_BO",
+			"Consume",
+			"Data_Warehouse",
+			"Truck",
+			"Ventas",
+			"Bolivia"
+		],
+		"lastPublishTime": "2021-08-19T17:51:13Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

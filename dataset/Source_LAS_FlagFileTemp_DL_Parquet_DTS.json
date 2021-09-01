@@ -1,0 +1,41 @@
+{
+	"name": "Source_LAS_FlagFileTemp_DL_Parquet_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/Template"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(dataset().country,'/',dataset().context,'/',dataset().origenSystem,'/FlagFile/',dataset().tableName,'_',utcnow('yyyyMMdd'),'_temp')",
+					"type": "Expression"
+				},
+				"fileSystem": "consumezone"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,39 @@
+{
+	"name": "A_LASCommercial_ChileEmbotelladora",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "00_COMMERCIAL_EMBOTELLADORA_ORQUESTADOR_GRL_CL_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"ambiente": "Produccion",
+					"scope": "KeyVault",
+					"country": "Chile",
+					"origenSystem": "Embotelladora",
+					"context": "Commercial"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-07-07T14:43:00",
+				"timeZone": "Pacific SA Standard Time",
+				"schedule": {
+					"minutes": [
+						45
+					],
+					"hours": [
+						7
+					]
+				}
+			}
+		}
+	}
+}

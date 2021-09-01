@@ -1,0 +1,129 @@
+{
+	"name": "CZ_Backup_Truck_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Bolivia"
+					}
+				}
+			},
+			{
+				"name": "01_Truck",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_CZ_Backup_Truck_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"zone": "consumezone"
+					}
+				}
+			},
+			{
+				"name": "02_Truck",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_CZ_Backup_Truck_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"zone": "consumezone"
+					}
+				}
+			},
+			{
+				"name": "04_Avance_Ventas",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_CZ_Backup_Truck_Avanc_Ventas_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"zone": "consumezone"
+					}
+				}
+			},
+			{
+				"name": "03_Ventas",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_CZ_Backup_Truck_Ventas_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"zone": "consumezone"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"zone": {
+				"type": "string",
+				"defaultValue": "consumezone"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/Backup/Consume/Maestros"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

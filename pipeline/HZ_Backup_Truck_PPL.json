@@ -1,0 +1,159 @@
+{
+	"name": "HZ_Backup_Truck_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PLANIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Truck/PLANIL",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PPEDCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Truck/PPEDCB",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PPEDLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Truck/PPEDLN",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PCLMOV",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Truck/PCLMOV",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PSTMLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Truck/PSTMLN",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "ORETCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Truck/ORETCB",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "ORETLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Datalake_Backup_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"directory": "Argentina/Truck/ORETLN",
+						"zone": {
+							"value": "@pipeline().parameters.zone",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"zone": {
+				"type": "string",
+				"defaultValue": "historyzone"
+			}
+		},
+		"folder": {
+			"name": "LAS/Backup"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

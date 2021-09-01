@@ -1,0 +1,150 @@
+{
+	"name": "03_Nielsen_CL_COPY_ZIP_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data Zip",
+				"description": "",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "02-LASCommercial/01-Produccion/06-CommAn/01-Bases/01-Chile/"
+					},
+					{
+						"name": "Destination",
+						"value": "prelandingzone/Chile/Nielsen/zip/"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": false,
+							"fileFilter": "*.zip",
+							"deleteFilesAfterCompletion": false
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_NielsenCL_Filesystem_Zip_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_NielsenCL_DL_Zip_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Copy data decompress zip",
+				"description": "",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy data Zip",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "prelandingzone/Chile/Nielsen/zip/"
+					},
+					{
+						"name": "Destination",
+						"value": "prelandingzone/Chile/Nielsen/zip/"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": false,
+							"wildcardFolderPath": "Chile/Nielsen/zip",
+							"wildcardFileName": "*.zip",
+							"deleteFilesAfterCompletion": false
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings",
+							"compressionProperties": {
+								"type": "ZipDeflateReadSettings",
+								"preserveZipFileNameAsFolder": false
+							}
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "PreserveHierarchy"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_NielsenCL_DL_Zip_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_NielsenCL_DL_CSV_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			}
+		},
+		"folder": {
+			"name": "Chile/Nielsen"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-23T21:05:24Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

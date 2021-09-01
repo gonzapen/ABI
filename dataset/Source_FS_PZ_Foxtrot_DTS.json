@@ -1,0 +1,42 @@
+{
+	"name": "Source_FS_PZ_Foxtrot_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_FileSystem",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Argentina/Foxtrot"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "DCs",
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": "DeliveryCenters.xlsx",
+				"folderPath": "03-Logistics/01-DeliveryCenters"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "Argentina",
+				"type": "String"
+			},
+			{
+				"name": "Bolivia",
+				"type": "String"
+			},
+			{
+				"name": "Paraguay",
+				"type": "String"
+			},
+			{
+				"name": "Uruguay",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

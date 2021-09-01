@@ -1,0 +1,685 @@
+{
+	"name": "SOM_GENERAL_PPL",
+	"properties": {
+		"description": "PPL orquestador para las distintas fuentes y paises que cargan al DW de SOM",
+		"activities": [
+			{
+				"name": "NIELSEN_BO_DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_BO_CZ",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SOM_NIELSEN_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIM_SOM_FUENTES_PAISES",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SOM_TABLAS_EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_DIM_SOM_PPL_LAS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "FS_DW_DE_PARA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FS_DW_DE_PARA_GENERAL_SOM",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Depara",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "CONTROL_DE_PARA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ_DW_Replica_SOM",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CONTROL_DP_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Depara",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "NIELSEN_BO_CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIM_SOM_FUENTES_PAISES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Nielsen_BO_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "CZ_DW_Replica_SOM",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_PY_DW",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "NIELSEN_CL_DW",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "NIELSEN_BO_DW",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_DW_Replica_SOM",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "SOM_TABLAS_EXTERNAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "FS_DW_DE_PARA",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SOM_TABLAS_EXTERNAS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "NIELSEN_PY_CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIM_SOM_FUENTES_PAISES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Nielsen_PY_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "NIELSEN_PY_DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_PY_CZ",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SOM_NIELSEN_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "MAIL NIELSEN BO CZ",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_BO_CZ",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Bolivia",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Nielsen",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a CZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL NIELSEN PY CZ",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_PY_CZ",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Paraguay",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Nielsen",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a CZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL NIELSEN BO DW",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_BO_DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Bolivia",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Nielsen",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL NIELSEN PY DW",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_PY_DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Paraguay",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Nielsen",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL REPLICA DW SQL",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CZ_DW_Replica_SOM",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "LAS",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Replica",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW SQL",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL CONTROL DP",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CONTROL_DE_PARA",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": "LAS",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Control DP",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Control DP",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "NIELSEN_CL_CZ",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIM_SOM_FUENTES_PAISES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Nielsen_CL_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL NIELSEN CL CZ",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_CL_CZ",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Chile",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Nielsen",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a CZ",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "NIELSEN_CL_DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_CL_CZ",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "SOM_NIELSEN_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "MAIL NIELSEN CL DW",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "NIELSEN_CL_DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Chile",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Nielsen",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "01-Produccion"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-23T21:05:26Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

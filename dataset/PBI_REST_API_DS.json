@@ -1,0 +1,27 @@
+{
+	"name": "PBI_REST_API_DS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_PowerBI_API",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"adminApi": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Power BI"
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "@dataset().adminApi",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

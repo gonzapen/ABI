@@ -1,0 +1,143 @@
+{
+	"name": "00_ShpLists_AdlsTemp_PPL",
+	"properties": {
+		"description": "This pipeline gets a token to access LAS Analytics sharepoint's lists and given the sharepoint list name as a parameter, it makes a data movement from the sharepoint (HTTP source) to the temp adls container with the columns needed.",
+		"activities": [
+			{
+				"name": "Get Token",
+				"description": "Web Activity that ask MS as a service principal to get an access OAuth Token to Sharepoint. It requires AppId, TenantId, SharepointDomain and AppSecret parameters.",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://accounts.accesscontrol.windows.net/',pipeline().parameters.tenantId,'/tokens/OAuth/2')",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/x-www-form-urlencoded"
+					},
+					"body": {
+						"value": "@concat('grant_type=client_credentials&client_id=', pipeline().parameters.appId,'@',pipeline().parameters.tenantId,'&client_secret=', pipeline().parameters.appSecret,'&resource=00000003-0000-0ff1-ce00-000000000000/',pipeline().parameters.shpDomain,'@',pipeline().parameters.tenantId)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "From ShpList-HTTP To ADLS-Temp-Blob",
+				"description": "Copy Activity that takes a list in sharepoint and loads it to a temp blob. As Source it takes a Source_ShpList_HTTP dataset and with the ListName it makes the other two parameters (columns and top). The additional headers includes the token returned in the previous activity and it ask for a response in json format.\nThe Sink is the dataset ''Sink_ShpList_TempBlob\".",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Get Token",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET",
+							"additionalHeaders": {
+								"value": "@{concat('Accept: application/json;odata=verbose\nAuthorization: Bearer ', activity('Get Token').output.access_token)}\n",
+								"type": "Expression"
+							},
+							"requestTimeout": ""
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_ShpList_HTTP",
+						"type": "DatasetReference",
+						"parameters": {
+							"ListName": {
+								"value": "@pipeline().parameters.ListName",
+								"type": "Expression"
+							},
+							"Columns": {
+								"value": "@if(startswith(pipeline().parameters.ListName,'Mails'),'id,equipo,pipeline,pais,entorno,tema,subtema,destinatario,asunto,mensaje','id,negocio,tabla_nombre,schema,tipo_carga,query,file_dir_cz,file_dir_hz,file_dir_pz,estado,origen,pais,fecha_insert_update,tipo_campo_pivot,descripcion,query_reproceso,tabla_pivot,campo_pivot')",
+								"type": "Expression"
+							},
+							"Top": {
+								"value": "@if(startswith(pipeline().parameters.ListName,'Mails'),'500','1000')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_ShpList_TempBlob",
+						"type": "DatasetReference",
+						"parameters": {
+							"ListName": {
+								"value": "@pipeline().parameters.ListName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"ListName": {
+				"type": "string"
+			},
+			"appId": {
+				"type": "String",
+				"defaultValue": "b2b658d4-9cba-4abc-959e-9dfdeb574640"
+			},
+			"tenantId": {
+				"type": "String",
+				"defaultValue": "cef04b19-7776-4a94-b89b-375c77a8f936"
+			},
+			"appSecret": {
+				"type": "String",
+				"defaultValue": "4qNzTSpAdGI2oHV/4SCvblhWFjU/kNlutL61SZiIU1M="
+			},
+			"shpDomain": {
+				"type": "String",
+				"defaultValue": "anheuserbuschinbev.sharepoint.com"
+			}
+		},
+		"folder": {
+			"name": "LAS/Sharepoint/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,548 @@
+{
+	"name": "00_SOURCE_CZ_EMBOTELLADORA_MAESTROS_CL_PPL",
+	"properties": {
+		"description": "Se ejecutan todas las tablas maestro en paralelos y las tablas de movimientos luego",
+		"activities": [
+			{
+				"name": "Cliente",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_EMBOTELLADORA_TEMPLATE_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableNameOrigen": "tbl_cliente",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "cli_usr_id, cli_cod",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Tabla maestro de clientes",
+						"pathDBPZHZ": "/Chile/Embotelladora/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-",
+						"tableNameDL": "TblCliente"
+					}
+				}
+			},
+			{
+				"name": "Vendedor",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_EMBOTELLADORA_TEMPLATE_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableNameOrigen": "tbl_vendedor",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "ven_usr_id, ven_cod",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Tabla maestro de vendedores",
+						"pathDBPZHZ": "/Chile/Embotelladora/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-",
+						"tableNameDL": "TblVendedor"
+					}
+				}
+			},
+			{
+				"name": "Centro Distribucion",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_EMBOTELLADORA_TEMPLATE_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableNameOrigen": "tbl_centro_distribucion",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "cd_usr_id, cd_cod",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Tabla maestro de centro de distribucion",
+						"pathDBPZHZ": "/Chile/Embotelladora/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-",
+						"tableNameDL": "TblCentroDistribucion"
+					}
+				}
+			},
+			{
+				"name": "Producto",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_EMBOTELLADORA_TEMPLATE_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableNameOrigen": "tbl_producto",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "prd_usr_id, prd_sku",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Tabla maestro de productos",
+						"pathDBPZHZ": "/Chile/Embotelladora/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-",
+						"tableNameDL": "TblProducto"
+					}
+				}
+			},
+			{
+				"name": "Ventas",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_EMBOTELLADORA_TEMPLATE_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableNameOrigen": "tbl_ventas",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "ven_usr_id, ven_fecha, ven_cod_cliente, ven_cod_vendedor, ven_cod_cd, ven_sku_producto",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Tabla hechos de Ventas",
+						"pathDBPZHZ": "/Chile/Embotelladora/Template/PZ_HZ_PARTICIONES_DB",
+						"partitionByField": "part_ven_anno_mes",
+						"tableNameDL": "TblVentas"
+					}
+				}
+			},
+			{
+				"name": "Usuario",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "2_EMBOTELLADORA_TEMPLATE_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableNameOrigen": "tbl_usuario",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "usr_id",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": "Tabla Maestro de Usuario",
+						"pathDBPZHZ": "/Chile/Embotelladora/Template/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-",
+						"tableNameDL": "TblUsuario"
+					}
+				}
+			},
+			{
+				"name": "Mail Alerta Cliente",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Cliente",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": "Cliente"
+					}
+				}
+			},
+			{
+				"name": "Mail Alerta Vendedor",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Vendedor",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": "Vendedor"
+					}
+				}
+			},
+			{
+				"name": "Mail Alerta Centro Distribucion",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Centro Distribucion",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": "Centro_Distribucion"
+					}
+				}
+			},
+			{
+				"name": "Mail Alerta Producto",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Producto",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": "Producto"
+					}
+				}
+			},
+			{
+				"name": "Mail Alerta Ventas",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Ventas",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": "Ventas"
+					}
+				}
+			},
+			{
+				"name": "Mail Alerta Usuario",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Usuario",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": "Usuario"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Embotelladora"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Chile"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "dbo"
+			},
+			"ambiente": {
+				"type": "string",
+				"defaultValue": "Desarrollo"
+			},
+			"tema": {
+				"type": "string",
+				"defaultValue": "Replica"
+			}
+		},
+		"folder": {
+			"name": "Chile/Embotelladora/Replicas/Maestros"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,23 @@
+{
+	"name": "LASCommercial_BlobTemporal",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "archivos temporales",
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "blobConnectionKey"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTPlatform",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

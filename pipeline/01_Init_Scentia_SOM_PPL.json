@@ -1,0 +1,81 @@
+{
+	"name": "01_Init_Scentia_SOM_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Init_SOM",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Scentia/Template_Scentia/Init_TEMPLATE_DB",
+					"baseParameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string",
+				"defaultValue": "1"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "SOM"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Scentia"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Public"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Scentia"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

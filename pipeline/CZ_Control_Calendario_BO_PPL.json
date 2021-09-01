@@ -1,0 +1,119 @@
+{
+	"name": "CZ_Control_Calendario_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "CONTROL_CALENDARIO",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Bolivia/Truck/TARGET/Template/Control_TGT/CONTROL_BD",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"tableFinal": "FtCalendarioBo",
+						"Field": "FK_TIEMPO_MES",
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "IfExistenRegistrosMesActual",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "CONTROL_CALENDARIO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('CONTROL_CALENDARIO').output.runOutput,0)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Enviar mail",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Mail_LAS_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"scope": "KeyVault",
+									"equipo": "Sales Andina BO",
+									"pais": "Bolivia",
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"tema": "Plana_Avance_Vta",
+									"subTema": "CALENDARIO"
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/TGT/Control"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,24 @@
+{
+	"name": "LASCommercial_OracleDWMaradonaBID",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "DB Oracle con info proveniente de SAP por proyecto Maradona (logística).",
+		"annotations": [],
+		"type": "Oracle",
+		"typeProperties": {
+			"connectionString": "host=172.25.154.78;port=1525;serviceName=BID;user id=srv_quilmes",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "LASOracleDbBidPassword"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTLas",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

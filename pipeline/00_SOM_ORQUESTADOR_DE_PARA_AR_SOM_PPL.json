@@ -1,0 +1,140 @@
+{
+	"name": "00_SOM_ORQUESTADOR_DE_PARA_AR_SOM_PPL",
+	"properties": {
+		"description": "Este proceso es un hijo de SOM_SCENTIA_PPL y se encarga de procesar la carga de los DP de FS a DW.",
+		"activities": [
+			{
+				"name": "DE_PARA_AREAS_AR",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_FS_DW_DE_PARA_AREAS_ORQUESTADOR_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "DeParaAreasMapa",
+						"origenSystem": "DePara",
+						"country": "Argentina",
+						"keys": "-",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": "-",
+						"descripcion": "De Para Areas Argentina",
+						"partitionByField": "-",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_MERCADOS_AR",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_FS_DW_DE_PARA_MERCADOS_ORQUESTADOR_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "DeParaMercados",
+						"origenSystem": "DePara",
+						"country": "Argentina",
+						"keys": "-",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": "-",
+						"descripcion": "De Para Mercados Argentina",
+						"partitionByField": "-",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_PRODUCTOS_AR",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_FS_DW_DE_PARA_PRODUCTOS_ORQUESTADOR_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "DeParaProductosSom",
+						"origenSystem": "DePara",
+						"country": "Argentina",
+						"keys": "-",
+						"context": "Commercial",
+						"schema": "-",
+						"descripcion": "De Para Productos Argentina",
+						"partitionByField": "-",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"equipo": {
+				"type": "string",
+				"defaultValue": "Som"
+			},
+			"tema": {
+				"type": "string",
+				"defaultValue": "Depara"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "DePara"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA/SOM"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

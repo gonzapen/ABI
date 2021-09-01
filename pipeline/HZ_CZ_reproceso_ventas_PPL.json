@@ -1,0 +1,231 @@
+{
+	"name": "HZ_CZ_reproceso_ventas_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach_reprocesoxdia",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.dias",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "HZ_CZ_TEMPLATE_DB_PLANIL",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Users/fequinoy@quilmes.com.ar/HZ_CZ_TEMPLATE_DB_20210325",
+								"baseParameters": {
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"scope": "KeyVault",
+									"tableName": "PLANIL",
+									"origenSystem": "Truck",
+									"country": "Argentina",
+									"keys": "EmpId, PlaNro",
+									"partitionByField": "part_plafch_mes",
+									"fechaReproceso": {
+										"value": "@item()",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "HZ_CZ_TEMPLATE_DB_PCLMOV",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "HZ_CZ_TEMPLATE_DB_PLANIL",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Users/fequinoy@quilmes.com.ar/HZ_CZ_TEMPLATE_DB_20210325",
+								"baseParameters": {
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"scope": "KeyVault",
+									"tableName": "PCLMOV",
+									"origenSystem": "Truck",
+									"country": "Argentina",
+									"keys": "ClmNroInt",
+									"partitionByField": "part_clmfchemi_mes",
+									"fechaReproceso": {
+										"value": "@item()",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "HZ_CZ_TEMPLATE_DB_PSTMLN",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "HZ_CZ_TEMPLATE_DB_PCLMOV",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Users/fequinoy@quilmes.com.ar/HZ_CZ_TEMPLATE_DB_20210325",
+								"baseParameters": {
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"scope": "KeyVault",
+									"tableName": "PSTMLN",
+									"origenSystem": "Truck",
+									"country": "Argentina",
+									"keys": "ClmNroInt, PrdId",
+									"partitionByField": "part_clmfchemi_mes",
+									"fechaReproceso": {
+										"value": "@item()",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "CZ_ODS_TRUCK_AVANCE_VENTAS_FQ",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "HZ_CZ_TEMPLATE_DB_PSTMLN",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Users/fequinoy@quilmes.com.ar/CZ_ODS_TRUCK_AVANCE_VENTAS_FQ",
+								"baseParameters": {
+									"context": "Public",
+									"country": "Argentina",
+									"keys": "KEY",
+									"origenSystem": "Truck",
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"scope": "KeyVault",
+									"tableFinal": "ODS_TRUCK_AVANCE_VENTAS",
+									"tableName": "PCLMOV, PSTMLN, PTBL03, PSTOCK, PLANIL, PTBL53, PPRDTI, PCLIEN, PCLMER, INVMER, PCODES, PTB92C, UNINEG, SGMMKT, PTBL30, PTBL71, PTBLRE, PTBLGT, PTBLAR, PTBL01",
+									"fechaReproceso": {
+										"value": "@item()",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"dias": {
+				"type": "array",
+				"defaultValue": [
+					20210301,
+					20210302,
+					20210303,
+					20210304,
+					20210305,
+					20210306,
+					20210307,
+					20210308,
+					20210309,
+					20210310,
+					20210311,
+					20210312,
+					20210313,
+					20210314,
+					20210315,
+					20210316,
+					20210317,
+					20210318,
+					20210319,
+					20210320,
+					20210321,
+					20210322,
+					20210323,
+					20210324,
+					20210325
+				]
+			}
+		},
+		"variables": {
+			"dias": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Truck/reprocesoHZ"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

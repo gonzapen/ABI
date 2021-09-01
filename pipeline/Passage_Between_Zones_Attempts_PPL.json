@@ -1,0 +1,475 @@
+{
+	"name": "Passage_Between_Zones_Attempts_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "IfCantidadLeidoIgual0",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Switch Country",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(pipeline().parameters.rowsCopied,'0')",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "02_PZ_HZ_Attempts_PPL",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "02_PZ_HZ_Attempts_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"originSystem": {
+										"value": "@pipeline().parameters.originSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"partitionByField": {
+										"value": "@pipeline().parameters.partitionByField",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "03_HZ_CZ_Routes_PPL",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "02_PZ_HZ_Attempts_PPL",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "03_HZ_CZ_Attempts_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"originSystem": {
+										"value": "@pipeline().parameters.originSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"partitionByField": {
+										"value": "@pipeline().parameters.partitionByField",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Switch Country",
+				"type": "Switch",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"on": {
+						"value": "@pipeline().parameters.country",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "Bolivia",
+							"activities": [
+								{
+									"name": "INSERT_PIVOT_BO_DB",
+									"type": "DatabricksNotebook",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+										"baseParameters": {
+											"country": {
+												"value": "@pipeline().parameters.country",
+												"type": "Expression"
+											},
+											"origenSystem": {
+												"value": "@pipeline().parameters.originSystem",
+												"type": "Expression"
+											},
+											"tableName": "ATTEMPTS_BO",
+											"descripcion": {
+												"value": "@concat('Tabla de Foxtrot Analytics Routes ',pipeline().parameters.country)",
+												"type": "Expression"
+											},
+											"cantidadLeido": {
+												"value": "@pipeline().parameters.cantidadLeido",
+												"type": "Expression"
+											},
+											"cantidadEscrito": {
+												"value": "@pipeline().parameters.cantidadEscrito",
+												"type": "Expression"
+											},
+											"duracionCD": {
+												"value": "@pipeline().parameters.duracionCD",
+												"type": "Expression"
+											},
+											"fechaFin": {
+												"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+												"type": "Expression"
+											},
+											"schema": {
+												"value": "@concat('Tabla de Foxtrot Analytics ',pipeline().parameters.tableName, ' ', pipeline().parameters.country)",
+												"type": "Expression"
+											},
+											"runId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"bytesLeido": {
+												"value": "@pipeline().parameters.bytesLeido",
+												"type": "Expression"
+											},
+											"bytesEscrito": {
+												"value": "@pipeline().parameters.cantidadEscrito",
+												"type": "Expression"
+											},
+											"ultimoValorPivot": {
+												"value": "@pipeline().parameters.ultimoValorPivot",
+												"type": "Expression"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LASCommercial_Databricks",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						},
+						{
+							"value": "Paraguay",
+							"activities": [
+								{
+									"name": "INSERT_PIVOT_PY_DB",
+									"type": "DatabricksNotebook",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+										"baseParameters": {
+											"country": {
+												"value": "@pipeline().parameters.country",
+												"type": "Expression"
+											},
+											"origenSystem": {
+												"value": "@pipeline().parameters.originSystem",
+												"type": "Expression"
+											},
+											"tableName": "ATTEMPTS_PY",
+											"descripcion": {
+												"value": "@concat('Tabla de Foxtrot Analytics Routes ',pipeline().parameters.country)",
+												"type": "Expression"
+											},
+											"cantidadLeido": {
+												"value": "@pipeline().parameters.cantidadLeido",
+												"type": "Expression"
+											},
+											"cantidadEscrito": {
+												"value": "@pipeline().parameters.cantidadEscrito",
+												"type": "Expression"
+											},
+											"duracionCD": {
+												"value": "@pipeline().parameters.duracionCD",
+												"type": "Expression"
+											},
+											"fechaFin": {
+												"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+												"type": "Expression"
+											},
+											"schema": {
+												"value": "@concat('Tabla de Foxtrot Analytics ',pipeline().parameters.tableName, ' ', pipeline().parameters.country)",
+												"type": "Expression"
+											},
+											"runId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"bytesLeido": {
+												"value": "@pipeline().parameters.bytesLeido",
+												"type": "Expression"
+											},
+											"bytesEscrito": {
+												"value": "@pipeline().parameters.cantidadEscrito",
+												"type": "Expression"
+											},
+											"ultimoValorPivot": {
+												"value": "@pipeline().parameters.ultimoValorPivot",
+												"type": "Expression"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LASCommercial_Databricks",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						},
+						{
+							"value": "Uruguay",
+							"activities": [
+								{
+									"name": "INSERT_PIVOT_UY_DB",
+									"type": "DatabricksNotebook",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+										"baseParameters": {
+											"country": {
+												"value": "@pipeline().parameters.country",
+												"type": "Expression"
+											},
+											"origenSystem": {
+												"value": "@pipeline().parameters.originSystem",
+												"type": "Expression"
+											},
+											"tableName": "ATTEMPTS_UY",
+											"descripcion": {
+												"value": "@concat('Tabla de Foxtrot Analytics Routes ',pipeline().parameters.country)",
+												"type": "Expression"
+											},
+											"cantidadLeido": {
+												"value": "@pipeline().parameters.cantidadLeido",
+												"type": "Expression"
+											},
+											"cantidadEscrito": {
+												"value": "@pipeline().parameters.cantidadEscrito",
+												"type": "Expression"
+											},
+											"duracionCD": {
+												"value": "@pipeline().parameters.duracionCD",
+												"type": "Expression"
+											},
+											"fechaFin": {
+												"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+												"type": "Expression"
+											},
+											"schema": {
+												"value": "@concat('Tabla de Foxtrot Analytics ',pipeline().parameters.tableName, ' ', pipeline().parameters.country)",
+												"type": "Expression"
+											},
+											"runId": {
+												"value": "@pipeline().RunId",
+												"type": "Expression"
+											},
+											"bytesLeido": {
+												"value": "@pipeline().parameters.bytesLeido",
+												"type": "Expression"
+											},
+											"bytesEscrito": {
+												"value": "@pipeline().parameters.cantidadEscrito",
+												"type": "Expression"
+											},
+											"ultimoValorPivot": {
+												"value": "@pipeline().parameters.ultimoValorPivot",
+												"type": "Expression"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LASCommercial_Databricks",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					],
+					"defaultActivities": [
+						{
+							"name": "INSERT_PIVOT_AR_DB",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+								"baseParameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.originSystem",
+										"type": "Expression"
+									},
+									"tableName": "ATTEMPTS_AR",
+									"descripcion": {
+										"value": "@concat('Tabla de Foxtrot Analytics Routes ',pipeline().parameters.country)",
+										"type": "Expression"
+									},
+									"cantidadLeido": {
+										"value": "@pipeline().parameters.cantidadLeido",
+										"type": "Expression"
+									},
+									"cantidadEscrito": {
+										"value": "@pipeline().parameters.cantidadEscrito",
+										"type": "Expression"
+									},
+									"duracionCD": {
+										"value": "@pipeline().parameters.duracionCD",
+										"type": "Expression"
+									},
+									"fechaFin": {
+										"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+										"type": "Expression"
+									},
+									"schema": {
+										"value": "@concat('Tabla de Foxtrot Analytics ',pipeline().parameters.tableName, ' ', pipeline().parameters.country)",
+										"type": "Expression"
+									},
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"bytesLeido": {
+										"value": "@pipeline().parameters.bytesLeido",
+										"type": "Expression"
+									},
+									"bytesEscrito": {
+										"value": "@pipeline().parameters.cantidadEscrito",
+										"type": "Expression"
+									},
+									"ultimoValorPivot": {
+										"value": "@pipeline().parameters.ultimoValorPivot",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"rowsCopied": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"originSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string"
+			},
+			"bytesLeido": {
+				"type": "string"
+			},
+			"bytesEscrito": {
+				"type": "string"
+			},
+			"duracionCD": {
+				"type": "string"
+			},
+			"cantidadLeido": {
+				"type": "string"
+			},
+			"cantidadEscrito": {
+				"type": "string"
+			},
+			"ultimoValorPivot": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/Foxtrot/Attempts"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

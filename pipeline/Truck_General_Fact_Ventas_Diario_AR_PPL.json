@@ -1,0 +1,71 @@
+{
+	"name": "Truck_General_Fact_Ventas_Diario_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_VENTAS_DIARIO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FT_VENTAS_DIARIO_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "FT_VENTAS_DIARIO_CZ_DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "FT_VENTAS_DIARIO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FT_VENTAS_DIARIO_AR_CZ_DW_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Argentina"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

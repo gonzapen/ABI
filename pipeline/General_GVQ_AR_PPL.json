@@ -1,0 +1,128 @@
+{
+	"name": "General_GVQ_AR_PPL",
+	"properties": {
+		"description": "Lista de Tablas",
+		"activities": [
+			{
+				"name": "DLK_ESTRUCTURA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_GVQ_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "DLK_ESTRUCTURA",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": "ID_PDV",
+						"context": "Public",
+						"schema": "AR_PROD_GVQ",
+						"descripcion": "Fecha de última modificación"
+					}
+				}
+			},
+			{
+				"name": "DLK_SUBREGION_CON_NOVEDAD_VIEW",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_GVQ_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "DLK_SUBREGION_CON_NOVEDAD_VIEW",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": "PERIODO_ID, SUBREGION_ID",
+						"context": "Public",
+						"schema": "AR_PROD_GVQ",
+						"descripcion": "Fecha de última modificación"
+					}
+				}
+			},
+			{
+				"name": "DLK_OBJ_MES",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_GVQ_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "DLK_OBJ_MES",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": "SOCIEDAD_ID,  ANIOMES,  SUBREGION_ID, PRODUCTO_ID, TERRITORIO_ID, CLIENTE_ID",
+						"context": "Public",
+						"schema": "AR_PROD_GVQ",
+						"descripcion": "Fecha de última modificación"
+					}
+				}
+			},
+			{
+				"name": "DLK_OBJ_MES_DET",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_GVQ_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "DLK_OBJ_MES_DET",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": "SOCIEDAD_ID, ANIOMES, SUBREGION_ID, PRODUCTO_ID, TERRITORIO_ID, CLIENTE_ID",
+						"context": "Public",
+						"schema": "AR_PROD_GVQ",
+						"descripcion": "Fecha de última modificación"
+					}
+				}
+			},
+			{
+				"name": "DLK_OBJ_SUB_REGION_HIST",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_GVQ_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "DLK_OBJ_SUB_REGION_HIST",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": "PERIODO_ID,  SOCIEDAD_ID,  SUBREGION_ID, PRODUCTO_ID",
+						"schema": "AR_PROD_GVQ",
+						"descripcion": "Fecha de última modificación"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/GVQ"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,764 @@
+{
+	"name": "01_Chess_Maestros_AR_PPL",
+	"properties": {
+		"description": "Se ejecutan todas las tablas maestro en paralelos y las tablas de movimientos luego",
+		"activities": [
+			{
+				"name": "DIM_MODO_ATENCION",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nSK_Modo_Atencion\n,Cod_Compania\n,Cod_Empresa\n,Cod_Modo_Atencion\n,Desc_Modo_Atencion\n,Primario\n,Presencial\n,Cod_Desc_Modo_Atencion\n,Fecha_Actualizacion\n,Accion \nFROM dbo.DIM_MODO_ATENCION",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_MODO_ATENCION",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_MODO_ATENCION"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_TIEMPO",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nFecha\n,Fecha_Hora\n,Anio\n,Nro_Trimestre\n,Desc_Trimestre\n,Desc_Trimestre_Anio\n,Nro_Mes\n,Desc_Mes\n,Desc_Mes_Corta\n,Desc_Mes_Anio\n,Desc_Mes_con_Nro\n,Nro_Semana\n,Desc_Semana\n,Desc_Semana_Anio\n,Nro_Dia_Mes\n,Nro_Dia_Semana\n,Desc_Dia_Semana\n,Desc_Dia_Largo\n,Ejercicio\n,Anio_Mes\n,Anio_Mes_Dia\n,Mes_AC_A_AA\n,Anio_AC_A\n,Anio_Anterior_a_Fecha\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_TIEMPO",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_TIEMPO",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_TIEMPO"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_PERSONAL_COMERCIAL",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nSK_Personal_Comercial\n,Cod_Compania\n,Cod_Empresa\n,Cod_Sucursal\n,Cod_Vendedor\n,Desc_Vendedor\n,Cod_Desc_Vendedor\n,Cod_Supervisor\n,Desc_Supervisor\n,Cod_Desc_Supervisor\n,Cod_Gerente\n,Desc_Gerente\n,Cod_Desc_Gerente\n,Telesales\n,SK_Modo_Atencion\n,Presencial\n,Desc_Segmento_Atencion\n,Limite_Inferior_Segmento_Atencion\n,Limite_Superior_Segmento_Atencion\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_PERSONAL_COMERCIAL",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_PERSONAL_COMERCIAL",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_PERSONAL_COMERCIAL"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_PRODUCTOS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nSK_Producto\n,Cod_Compania\n,Cod_Producto\n,Desc_Producto\n,Desc_Producto_Corta\n,Cod_Agrupa_Formas_1\n,Desc_Agrupa_Formas_1\n,Cod_Agrupa_1\n,Desc_Agrupa_1\n,Cod_Desc_Agrupa_1\n,Cod_Agrupa_Formas_2\n,Desc_Agrupa_Formas_2\n,Cod_Agrupa_2\n,Desc_Agrupa_2\n,Cod_Desc_Agrupa_2\n,Cod_Agrupa_Formas_3\n,Desc_Agrupa_Formas_3\n,Cod_Agrupa_3\n,Desc_Agrupa_3\n,Cod_Desc_Agrupa_3\n,Cod_Agrupa_Formas_4\n,Desc_Agrupa_Formas_4\n,Cod_Agrupa_4\n,Desc_Agrupa_4\n,Cod_Desc_Agrupa_4\n,Cod_Agrupa_Formas_5\n,Desc_Agrupa_Formas_5\n,Cod_Agrupa_5\n,Desc_Agrupa_5\n,Cod_Desc_Agrupa_5\n,Cod_Agrupa_Formas_6\n,Desc_Agrupa_Formas_6\n,Cod_Agrupa_6\n,Desc_Agrupa_6\n,Cod_Desc_Agrupa_6\n,Cod_Agrupa_Formas_7\n,Desc_Agrupa_Formas_7\n,Cod_Agrupa_7\n,Desc_Agrupa_7\n,Cod_Desc_Agrupa_7\n,Cod_Agrupa_Formas_8\n,Desc_Agrupa_Formas_8\n,Cod_Agrupa_8\n,Desc_Agrupa_8\n,Cod_Desc_Agrupa_8\n,Cod_Agrupa_Formas_9\n,Desc_Agrupa_Formas_9\n,Cod_Agrupa_9\n,Desc_Agrupa_9\n,Cod_Desc_Agrupa_9\n,Cod_Agrupa_Formas_10\n,Desc_Agrupa_Formas_10\n,Cod_Agrupa_10\n,Desc_Agrupa_10\n,Cod_Desc_Agrupa_10\n,Cod_Agrupa_Formas_11\n,Desc_Agrupa_Formas_11\n,Cod_Agrupa_11\n,Desc_Agrupa_11\n,Cod_Desc_Agrupa_11\n,Cod_Agrupa_Formas_12\n,Desc_Agrupa_Formas_12\n,Cod_Agrupa_12\n,Desc_Agrupa_12\n,Cod_Desc_Agrupa_12\n,Cod_Agrupa_Formas_13\n,Desc_Agrupa_Formas_13\n,Cod_Agrupa_13\n,Desc_Agrupa_13\n,Cod_Desc_Agrupa_13\n,Cod_Agrupa_Formas_14\n,Desc_Agrupa_Formas_14\n,Cod_Agrupa_14\n,Desc_Agrupa_14\n,Cod_Desc_Agrupa_14\n,Cod_Agrupa_Formas_15\n,Desc_Agrupa_Formas_15\n,Cod_Agrupa_15\n,Desc_Agrupa_15\n,Cod_Desc_Agrupa_15\n,Resto\n,Peso\n,Valor\n,Codigo_Barras\n,Alcohol\n,Bultos_x_Pallet\n,Retornable\n,Material_Pop\n,Trazabilidad\n,Cantidad_Puertas\n,Unidades_Vis_Material_Pop\n,Litros_Repago_Material_Pop\n,Cod_Producto_Usado\n,Anios_Amortizacion\n,Anulado\n,Cod_Desc_Producto\n,Cod_Desc_Producto_Corta\n,Categoria\n,Estado\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_PRODUCTOS",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_PRODUCTOS",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_PRODUCTOS"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_FUENTES",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nCod_Compania\n,Cod_Empresa\n,Fuente\n,Etiqueta\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_FUENTES",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_FUENTES",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_FUENTES"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_TIPOS_ANALISIS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nCod_Compania\n,Cod_Empresa\n,Tipo_Analisis\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_TIPOS_ANALISIS",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_TIPOS_ANALISIS",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_TIPOS_ANALISIS"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_SUPERA_TOPE",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nCod_Supera_Tope\n,Desc_Supera_Tope\n,Cod_Desc_Supera_Tope\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_SUPERA_TOPE",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_SUPERA_TOPE",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_SUPERA_TOPE"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_TIPOS_DESCUENTOS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nCod_Tipo_Descuento,\nDesc_Tipo_Descuento,\nCod_Desc_Tipo_Descuento,\nFecha_Actualizacion,\nAccion\nFROM dbo.DIM_TIPOS_DESCUENTOS",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_TIPOS_DESCUENTOS",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_TIPOS_DESCUENTOS"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_CLIENTES_RUTAS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nSK_Clientes_Rutas\n,Cod_Compania\n,Cod_Empresa\n,Cod_Fuerza_Ventas\n,Cod_Modo_Atencion\n,Cod_Cliente\n,Fecha_Cliente_Fuerza_Desde\n,Fecha_Cliente_Fuerza_Hasta\n,Cod_Empresa_Factura\n,Cod_Sucursal\n,Cod_Ruta_Venta\n,Fecha_Ruta_Desde\n,Fecha_Anulacion\n,Periodicidad\n,Semana\n,Dias_Visita\n,Vigente\n,SK_Clientes\n,SK_Fuerza_Ventas\n,SK_Modo_Atencion\n,SK_Distribuidor\n,Anulado\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_CLIENTES_RUTAS",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_CLIENTES_RUTAS",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_CLIENTES_RUTAS"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_PRODUCTOS_GRUPOS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nCod_Compania\n,Cod_Grupo_Productos\n,Cod_Producto\n,SK_Producto\n,Desc_Grupo_Productos\n,Aplicable_A_Reporte_Vtas\n,Aplicable_A_Taco_RM\n,Cod_Empresa\n,Cod_Desc_Grupo_Producto\n,Aplica_DW\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_PRODUCTOS_GRUPOS",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_PRODUCTOS_GRUPOS",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_PRODUCTOS_GRUPOS"
+						}
+					}
+				]
+			},
+			{
+				"name": "RESU_FACT_CLIENTES_ACTIVOS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nFecha\n,Cod_Compania\n,Cod_Empresa\n,Cod_Sucursal\n,Cod_Modo_Atencion\n,SK_Personal_Comercial\n,SK_Clientes\n,Cod_Cliente\n,Cant_Clientes_Activos\n,Cliente_Potencial\n,Programas_Mercado\n,Fecha_Actualizacion\n,Accion\nFROM dbo.RESU_FACT_CLIENTES_ACTIVOS",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_CLIENTES_ACTIVOS",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_CLIENTES_ACTIVOS"
+						}
+					}
+				]
+			},
+			{
+				"name": "RESU_FACT_CANTIDAD_PEDIDOS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nFecha_Factura\n,SK_Distribuidor\n,SK_Cliente\n,Cod_Cliente\n,Fecha_Pedido\n,Cod_Modo_Atencion\n,Fuente\n,SK_Personal_Comercial\n,Cod_Personal_Comercial\n,Cod_Compania\n,Cod_Empresa\n,Cod_Sucursal\n,Cod_Distribuidor\n,Cantidad_Pedidos\n,Cantidad_Pedidos_Efectivos\n,Fecha_Actualizacion\n,Accion\nFROM dbo.RESU_FACT_CANTIDAD_PEDIDOS",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_CANTIDAD_PEDIDOS",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_CANTIDAD_PEDIDOS"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_CLIENTES",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nSK_Clientes,\nCod_Compania,\nCod_Empresa,\nCod_Cliente\n,Cod_Sucursal\n,Cod_Subcanal_Mkt\n,Cod_Canal_Mkt\n,Cod_Segmento_Mkt\n,Cod_Segmento_Venta\n,Cod_Postal\n,Cod_Lista_Precio\n,Cod_Tipo_Pago\n,Cod_Cliente_Asociado\n,Cod_Documento\n,Cod_Comision\n,Cod_Id_Cliente\n,Cod_Id_Cliente_Asociado\n,Cod_Ruta_Distribuidor\n,Cod_Dominio\n,Cod_Rango\n,Cod_Cluster\n,Nombre_Cliente\n,Nombre_Fantasia\n,Domicilio\n,Cod_Identificacion\n,Contacto\n,Telefono\n,Desc_Subcanal_Mkt\n,Desc_Canal_Mkt\n,Desc_Segmento_Mkt\n,Desc_Segmento_Venta,\nHora_Entrega\n,Lugar_Entrega\n,Ubicacion\n,Apellido_Paterno\n,Apellido_Materno\n,Nombe_Persona\n,Calle\n,Altura\n,Departamento\n,Calle_Entrega\n,Altura_Entrega\n,Departamento_Entrega\n,Ubicacion_Entrega\n,Categoria\n,Email\n,Entre_Calle_1\n,Entre_Calle_2\n,Comentario\n,Entre_Calle_Entrega_1\n,Entre_Calle_Entrega_2\n,Comentario_Entrega\n,Movil\n,Comentario_Libre\n,Numero_Ingresos_Brutos\n,Agente\n,Convenio\n,Exento_Ingresos_Brutos\n,Fecha_Venc_Cuit\n,Debito_Automatico\n,X_Coord\n,Y_Coord\n,Internos\n,Ingresos_Brutos\n,Cant_Articulo_Lim_Cred\n,Art_Lim_Cred\n,Monto_Limite_Cred\n,Dias_Pago\n,Anulado\n,Fecha_Alta\n,Fecha_Anulacion\n,Vende_Alcohol\n,Fecha_Venc_Lic_Venta_Alcohol\n,Porcentaje_Flete\n,X_Coord_Entrega\n,Y_Coord_Entrega\n,Comision_Flete\n,Horario_Atencion\n,Cliente_Potencial\n,Cliente_Cta_Orden\n,Orden_Ruta_Distribuidor\n,Foco\n,Dominado\n,Cod_Desc_Cliente\n,Cod_Desc_Subcanal_Mkt\n,Cod_Desc_Canal_Mkt\n,Cod_Desc_Segmento_Mkt\n,Cod_Desc_Segmento_Venta\n,Cod_Desc_Segmento_Precio\n,Cartera_Alcohol\n,DsDetOcacion\n,DsOcacion\n,ClusterOrigen\n,SubCatFoco\n,SK_Distribuidor\n,Cod_Localidad\n,On_Premise\n,Programas_Mercado\n,Desc_Fiscal\n,Latitud_Preventa\n,Longitud_Preventa\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_CLIENTES",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_CLIENTES",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_CLIENTES"
+						}
+					}
+				]
+			},
+			{
+				"name": "RESU_FACT_CLIENTES_RECOMPRADORES",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nFecha\n,Cod_Compania\n,Cod_Empresa\n,Cod_Modo_Atencion\n,Cod_Cliente\n,Cod_Producto\n,SK_Cliente\n,SK_Distribuidor\n,SK_Personal_Comercial\n,SK_Producto\n,Cod_Compania_Empresa_Cliente\n,Fecha_Actualizacion\n,Cliente_Recomprador\n,Universo\n,Accion\nFROM dbo.RESU_FACT_CLIENTES_RECOMPRADORES",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_CLIENTES_RECOMPRADORES",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_CLIENTES_RECOMPRADORES"
+						}
+					}
+				]
+			},
+			{
+				"name": "RESU_FACT_KPI_POP_UN",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nFecha,\nCod_Empresa\n,Cod_Distribuidor\n,Cod_Agrupa_12\n,Cod_Agrupa_4\n,Cod_Segmento_POP\n,Desc_Segmento_POP\n,Parque\n,Pdv_Con_Frio\n,Cobertura\n,Vta_Prom_C_Ponderada\n,Vta_Prom_Frio_C_Ponderada\n,Frio_X_Pdv\n,Stock\n,Stock_Parque\n,Pdv_Objetivo_Frio\n,Equipos_Repagan\n,Equipos_Vta_0\n,Equipos_No_Repagan\n,Pdvs_Frio_Repago_Positivo\n,Objetivo_Cierre\n,Objetivo_Acum_Mes\n,Pdvs_Sin_Repago\n,No_Objetivo_ConFrio\n,Universo\n,Pdv_Objetivo\n,Pdv_No_Objetivo\n,Adheridos\n,Adheridos_Foco\n,Adheridos_No_Foco\n,Adheridos_Alcance\n,Adhesion_Objetivo\n,Adhesion_Oportunidad\n,Cobertura_Ponderada\n,Fecha_Actualizacion\n,Fecha_Desde\n,Fecha_Hasta\n,Asignaciones\n,Instalaciones\n,Instalaciones_On_Premise\n,Instalaciones_Off_Premise\n,Instalaciones_Objetivo\n,Equipo_Vta_O_On_Premise\n,Equipo_Vta_O_Off_Premise\n,Equipos_a_Recolocar\n,Equipos_No_Repagan_On_Premise\n,Equipos_No_Repagan_Off_Premise\n,Equipos_Repagan_On_Premise\n,Equipos_Repagan_Off_Premise\n,Adheridos_On_Premise\n,Adheridos_Off_Premise\n,Pdv_Con_Frio_On_Premise\n,Pdv_Con_Frio_Off_Premise\n,Parque_On_Premise\n,Parque_Off_Premise\n,Equipos_Adheridos_Repagan\n,Equipos_Adheridos_No_Repagan\n,Stock_Buen_Estado\n,Stock_Mal_Estado\n,Puertas_Heladeras\n,PDV_Puerta1\n,PDV_Puerta2\n,PDV_Puerta3\n,Equipos_Repagan_PDV_Puerta1\n,Equipos_Repagan_PDV_Puerta2\n,Equipos_Repagan_PDV_Puerta3\n,No_Repagan_PDV_Puerta1\n,No_Repagan_PDV_Puerta2\n,No_Repagan_PDV_Puerta3\n,PDV_Repagan_Puerta1\n,PDV_Repagan_Puerta2\n,PDV_Repagan_Puerta3\n,Venta_Cero_Puerta1\n,Venta_Cero_Puerta2\n,Venta_Cero_Puerta3\n,Target_Repago\n,Objetivo_EDF_Venta_Cero\n,Objetivo_Loss_Rate\n,Universo_On_Premise\n,Universo_Off_Premise\n,Cobertura_On_Premise\n,Cobertura_Off_Premise\n,Equipos_Adheridos_No_Repagan_On_Premise\n,Equipos_Adheridos_No_Repagan_Off_Premise\n,Accion\nFROM dbo.RESU_FACT_KPI_POP_UN",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_KPI_POP_UN",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_KPI_POP_UN"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Argentina/Chess/Carga_Historica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

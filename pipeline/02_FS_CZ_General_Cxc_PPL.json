@@ -1,0 +1,64 @@
+{
+	"name": "02_FS_CZ_General_Cxc_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "GrupoReclamo",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_FS_CZ_Cxc_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "GrupoReclamo",
+						"descripcion": "Grupo Reclamo"
+					}
+				}
+			},
+			{
+				"name": "Targets",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_FS_CZ_Cxc_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "Targets",
+						"descripcion": "Targets"
+					}
+				}
+			},
+			{
+				"name": "CodigosCentroDeDespacho",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_FS_CZ_Cxc_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "CodigosCentroDeDespacho",
+						"descripcion": "Códigos centro de despacho"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Teleperformance/Manual"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

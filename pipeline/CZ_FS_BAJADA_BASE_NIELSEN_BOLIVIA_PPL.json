@@ -1,0 +1,131 @@
+{
+	"name": "CZ_FS_BAJADA_BASE_NIELSEN_BOLIVIA_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "BajadaBolivia",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/SOM/BajadaBases/CZ_CZ_BAJADA_BASE_NIELSEN_BOLIVIA",
+					"baseParameters": {
+						"periodo": {
+							"value": "@pipeline().parameters.periodo",
+							"type": "Expression"
+						},
+						"produccion": "Si",
+						"scope": "KeyVault"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy data Bolivia",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "BajadaBolivia",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat('Bolivia/Public/Manual/SOM/Nielsen/bajada_bolivia_',pipeline().parameters.periodo)",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_SOM_Bajada_Template_DL_Parquet_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"pais": "Bolivia",
+							"origen": "Nielsen",
+							"periodo": {
+								"value": "@pipeline().parameters.periodo",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_SOM_Bajada_Template_FS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"pais": "Bolivia",
+							"periodo": {
+								"value": "@pipeline().parameters.periodo",
+								"type": "Expression"
+							},
+							"paisFS": "02-Bolivia",
+							"origenFS": "01-Nielsen"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"periodo": {
+				"type": "string",
+				"defaultValue": "20210326"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM/Bajada_Datos_FS"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

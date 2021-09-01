@@ -1,0 +1,30 @@
+{
+	"name": "Source_Backup_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_BlobDatalakebksa",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"directory": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/Backup"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().directory",
+					"type": "Expression"
+				},
+				"container": "backup"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

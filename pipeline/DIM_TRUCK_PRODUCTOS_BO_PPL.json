@@ -1,0 +1,96 @@
+{
+	"name": "DIM_TRUCK_PRODUCTOS_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM_TRUCK_PRODUCTOS_BO",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Bolivia/Truck/Dimensiones/CZ_DW_DIM_TRUCK_PRODUCTOS_DB",
+					"baseParameters": {
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Bolivia"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "PSTOCK, PCODES, PTBL90, PTBL91, PTBL92, PTBL93, PTBL94, PTB92C, UNINEG, PPRDTI"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "DimTruckProductosBo"
+			},
+			"context": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/DW/Dimensiones"
+		},
+		"annotations": [
+			"DIM_TRUCK_PRODUCTOS_BO",
+			"Consume",
+			"Data_Warehouse",
+			"Truck",
+			"Ventas",
+			"Bolivia"
+		],
+		"lastPublishTime": "2021-08-19T17:51:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

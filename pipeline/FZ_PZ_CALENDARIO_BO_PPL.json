@@ -1,0 +1,595 @@
+{
+	"name": "FZ_PZ_CALENDARIO_BO_PPL",
+	"properties": {
+		"description": "template para carga de plnas target, volumenes dirios y calendario",
+		"activities": [
+			{
+				"name": "Validation TGT en File Server",
+				"type": "Validation",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_TARGET_Input_Exc_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": {
+								"value": "@pipeline().parameters.tablename",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"index": {
+								"value": "@pipeline().parameters.index",
+								"type": "Expression"
+							},
+							"file": {
+								"value": "@pipeline().parameters.file",
+								"type": "Expression"
+							}
+						}
+					},
+					"timeout": "0.00:02:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Validation TGT en File Server",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Validation TGT en File Server').output.exists",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "CONTROL_CALENDARIO",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "CZ_Control_Calendario_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Copy data PZ",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ExcelSource",
+									"storeSettings": {
+										"type": "FileServerReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "Fecha",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Fecha",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Año",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Anio",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "NumeroTrimestre",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Numero_Trimestre",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "NumeroMes",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Numero_Mes",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Dia",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Dia",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "AñoMesDia",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Anio_Mes_Dia",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "AñoMes",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Anio_Mes",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Mes",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Mes",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Trimestre",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Trimestre",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "MesAño",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Mes_Anio",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "TrimAño",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Trim_Anio",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "DiaSemana",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Dia_Semana",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "NombreDia",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Nombre_Dia",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "NumDia",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Num_Dia",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "FinalSemana",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Final_Semana",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "NumeroSemana",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Numero_Semana",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "Añocorto",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Anio_Corto",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "FY",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "FY",
+												"type": "String",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "AñoTrim",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Anio_Trim",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "DiaHabiles",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Dia_Habiles",
+												"physicalType": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "IntDias",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Int_Dias",
+												"physicalType": "String"
+											}
+										}
+									],
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_TARGET_Input_Exc_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": {
+											"value": "@pipeline().parameters.tablename",
+											"type": "Expression"
+										},
+										"entorno": {
+											"value": "@pipeline().parameters.entorno",
+											"type": "Expression"
+										},
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"index": {
+											"value": "@pipeline().parameters.index",
+											"type": "Expression"
+										},
+										"file": {
+											"value": "@pipeline().parameters.file",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_TGT_Input_PZ_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": {
+											"value": "@pipeline().parameters.tablename",
+											"type": "Expression"
+										},
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"file": {
+											"value": "@pipeline().parameters.file",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Delete TGT en File Server",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Copy data PZ",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Delete_TGT_Input_Exc_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": {
+											"value": "@pipeline().parameters.tablename",
+											"type": "Expression"
+										},
+										"entorno": {
+											"value": "@pipeline().parameters.entorno",
+											"type": "Expression"
+										},
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"file": {
+											"value": "@pipeline().parameters.file",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true
+								}
+							}
+						},
+						{
+							"name": "PZ_HZ_CZ_CALENDARIO",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Delete TGT en File Server",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "PZ_HZ_CZ_CALENDARIO_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "CZ_DL_DW_CALENDARIO",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "PZ_HZ_CZ_CALENDARIO",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "CZ_DL_DW_Calendario_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"tablename": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"index": {
+				"type": "int"
+			},
+			"file": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/TGT/Storage/FS_PZ"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

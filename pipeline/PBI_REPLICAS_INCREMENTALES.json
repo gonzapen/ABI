@@ -1,0 +1,42 @@
+{
+	"name": "PBI_REPLICAS_INCREMENTALES",
+	"properties": {
+		"activities": [
+			{
+				"name": "ACTIVITYLOG API",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_PBI_ACTIVITYLOG_API_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "ActivityLogPbi",
+						"origenSystem": "PowerBi",
+						"country": "Argentina",
+						"keys": "Id",
+						"context": "Commercial",
+						"descripcion": "None",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"prelandingName": "ActivityLogPbi",
+						"partitionByField": "creation_month",
+						"daysToExtract": "1"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Power BI/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

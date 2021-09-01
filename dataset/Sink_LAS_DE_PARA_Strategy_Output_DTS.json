@@ -1,0 +1,48 @@
+{
+	"name": "Sink_LAS_DE_PARA_Strategy_Output_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_FileSystem",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"equipoFS": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA_Strategy"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": {
+					"value": "@concat(dataset().tableName,'.csv')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('02-LASCommercial/',dataset().entorno,'/',dataset().equipoFS,'/01-DePara/',dataset().country,'/02-Output')",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ";",
+			"encodingName": "WINDOWS-1252",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": ""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

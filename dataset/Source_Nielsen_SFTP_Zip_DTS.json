@@ -1,0 +1,22 @@
+{
+	"name": "Source_Nielsen_SFTP_Zip_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_Nielsen",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Argentina/Nielsen"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "SftpLocation",
+				"fileName": "M82ABI2T.zip",
+				"folderPath": "/ABI"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

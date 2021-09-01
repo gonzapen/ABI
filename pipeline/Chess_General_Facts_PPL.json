@@ -1,0 +1,26 @@
+{
+	"name": "Chess_General_Facts_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Replica Facts",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Chess_Replica_Facts_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Chess/Carga_Historica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:59Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

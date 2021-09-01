@@ -1,0 +1,51 @@
+{
+	"name": "Truck_Replica_Maestros_CH_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Chile"
+					}
+				}
+			},
+			{
+				"name": "MAESTROS 01",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Truck_Maestros_CH_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Chile/Truck/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

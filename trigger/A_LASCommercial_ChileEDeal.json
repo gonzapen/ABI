@@ -1,0 +1,39 @@
+{
+	"name": "A_LASCommercial_ChileEDeal",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "00_COMMERCIAL_EDEAL_ORQUESTADOR_GRL_CL_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"origenSystem": "EDeal",
+					"fileName": "VwVentasEdealCondicion",
+					"userName": "'Datalake'",
+					"urlAPI": ".",
+					"ambiente": "Produccion"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-07-07T21:56:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						3
+					]
+				}
+			}
+		}
+	}
+}

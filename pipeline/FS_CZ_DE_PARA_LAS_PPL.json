@@ -1,0 +1,235 @@
+{
+	"name": "FS_CZ_DE_PARA_LAS_PPL",
+	"properties": {
+		"description": "DE-PARA ",
+		"activities": [
+			{
+				"name": "Copy data PZ",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Validation DE_PARA en File Server",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_DE_PARA_Input_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_DE_PARA_Input_PZ_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Validation DE_PARA en File Server",
+				"type": "Validation",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_DE_PARA_Input_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					},
+					"timeout": "0.00:03:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "Delete DE_PARA en File Server",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "Copy data PZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Delete_DE_PARA_Input_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "FileServerReadSettings",
+						"recursive": true
+					}
+				}
+			},
+			{
+				"name": "PZ to CZ - Copy Data",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Delete DE_PARA en File Server",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PZ_CZ_TEMPLATE_DB",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.contexto",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "ID",
+						"origenSystem": "DE_PARA",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": "KeyVault",
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"contexto": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/DE_PARA/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

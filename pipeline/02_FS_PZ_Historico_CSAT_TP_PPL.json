@@ -1,0 +1,720 @@
+{
+	"name": "02_FS_PZ_Historico_CSAT_TP_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PZ",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "02-LASCommercial/01-Produccion/05-FullDigital/05-CXC/01-Teleperformance",
+							"wildcardFileName": "Report_CSAT_*.csv",
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "año",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "anio",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "fecha",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "fecha",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FMH",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FMH",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ACD",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ACD",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Atendidas",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Atendidas",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Salientes",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Salientes",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Encuestables",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Encuestables",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ucid",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ucid",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Linea",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Linea",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "2NEncuestas",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "E2NEncuestas",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "2NEncuestaEF1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "E2NEncuestaEF1",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "2NEncuestaEF2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "E2NEncuestaEF2",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "2NEncuestaEF",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "E2NEncuestaEF",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EncuestaPos1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EncuestaPos1",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EncuestaPos2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EncuestaPos2",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EncuestaNeg1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EncuestaNeg1",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EncuestaNeg2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "EncuestaNeg2",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SDEncuestas",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SDEncuestas",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SDEncuestaEF1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SDEncuestaEF1",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SDEncuestaEF2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SDEncuestaEF2",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SDEncuestaEF3",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SDEncuestaEF3",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SDEncuestaEF",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SDEncuestaEF",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg1_1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg1_1",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg1_2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg1_2",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg2_1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg2_1",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg2_2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg2_2",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg2_3",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg2_3",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg2_4",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg2_4",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg2_5",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg2_5",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg3_1",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg3_1",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg3_2",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg3_2",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg3_3",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg3_3",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg3_4",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg3_4",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Preg3_5",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Preg3_5",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "idccms",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "idccms",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "empleado",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "empleado",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "supervisor",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "supervisor",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "pm",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "pm",
+									"type": "String",
+									"physicalType": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Teleperformance_Report_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Teleperformance_Report_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "IfCantidadLeidoIgual0",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "PZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(concat(activity('PZ').output.rowsCopied),'0')",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "PZ_HZ_TEMPLATE",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Argentina/LakeHouse/FullDigital/Teleperformance/TEMPLATE/PZ_HZ_TEMPLATE",
+								"baseParameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"partitionByField": {
+										"value": "@pipeline().parameters.partitionByField",
+										"type": "Expression"
+									},
+									"outPutTableName": {
+										"value": "@pipeline().parameters.outPutTableName",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"runId": {
+										"value": "@pipeline().parameters.runId",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "HZ_CZ_TEMPLATE",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "PZ_HZ_TEMPLATE",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Argentina/LakeHouse/FullDigital/Teleperformance/TEMPLATE/HZ_CZ_TEMPLATE",
+								"baseParameters": {
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"partitionByField": {
+										"value": "@pipeline().parameters.partitionByField",
+										"type": "Expression"
+									},
+									"runId": {
+										"value": "@pipeline().parameters.runId",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"tableFinal": {
+										"value": "@pipeline().parameters.tableFinal",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Teleperformance"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "Csat"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"descripcion": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"partitionByField": {
+				"type": "string",
+				"defaultValue": "part_aniomes"
+			},
+			"outPutTableName": {
+				"type": "string",
+				"defaultValue": "Csat"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "fecha, ucid, FMH, Linea"
+			},
+			"runId": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "Csat"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Teleperformance/Historia"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-30T21:13:10Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

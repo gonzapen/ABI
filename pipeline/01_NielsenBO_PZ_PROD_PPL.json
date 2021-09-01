@@ -1,0 +1,296 @@
+{
+	"name": "01_NielsenBO_PZ_PROD_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data PZ",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Bolivia/Nielsen/NielsenZip/B082TXT2.zip",
+							"wildcardFileName": {
+								"value": "@concat('*',toUpper(pipeline().parameters.tableName),'.csv')",
+								"type": "Expression"
+							}
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SHORT",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SHORT",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "LONG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "LONG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DISPLAY_ORDER",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DISPLAY_ORDER",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PARENT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PARENT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_NUM",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_NUM",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_NAME",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_NAME",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_LEVEL_NUM",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_LEVEL_NUM",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HIER_LEVEL_NAME",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HIER_LEVEL_NAME",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "H1 CERVEZAS level 0",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "H1_CERVEZAS_level_0",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FABRICANTE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FABRICANTE",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MARCA",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MARCA",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBMARCA",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SUBMARCA",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PROCEDENCIA",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PROCEDENCIA",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SEGMENTO DE PRECIO",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SEGMENTO_DE_PRECIO",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ENVASE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "ENVASE",
+									"type": "String",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "RET/NO RET",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "RET_NO_RET",
+									"physicalType": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TAMA¥O",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "TAMANO",
+									"physicalType": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_NielsenBO_CSV_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_NielsenBO_DL_Avro_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": "@pipeline().parameters.tableName"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string",
+				"defaultValue": "PROD"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/Nielsen/PROD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

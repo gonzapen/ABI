@@ -1,0 +1,349 @@
+{
+	"name": "04_SOM_Nielsen_Descomprimir_Template_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "SELECT_PIVOT_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT_ALL_PARAMETERS",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy data decompress zip",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copy data ZIP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings",
+							"compressionProperties": {
+								"type": "ZipDeflateReadSettings"
+							}
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_SOM_Template_DL_ZIP_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": {
+								"value": "@activity('SELECT_PIVOT_DB').output.runOutput.fileDirPZ",
+								"type": "Expression"
+							},
+							"file": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_SOM_Template_DL_CSV_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": {
+								"value": "@activity('SELECT_PIVOT_DB').output.runOutput.fileDirPZ",
+								"type": "Expression"
+							},
+							"file": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "INSERT_PIVOT_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Copy data decompress zip",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"descripcion": {
+							"value": "@pipeline().parameters.descripcion",
+							"type": "Expression"
+						},
+						"cantidadLeido": {
+							"value": "0",
+							"type": "Expression"
+						},
+						"cantidadEscrito": {
+							"value": "0",
+							"type": "Expression"
+						},
+						"duracionCD": {
+							"value": "@concat(activity('Copy data ZIP').output.copyDuration)",
+							"type": "Expression"
+						},
+						"fechaFin": {
+							"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"bytesLeido": {
+							"value": "@concat(activity('Copy data ZIP').output.dataRead)",
+							"type": "Expression"
+						},
+						"bytesEscrito": {
+							"value": "@concat(activity('Copy data ZIP').output.dataWritten)",
+							"type": "Expression"
+						},
+						"ultimoValorPivot": {
+							"value": "@activity('SELECT_PIVOT_DB').output.runOutput.ultimovalorpivot",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Delete old files",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "SELECT_PIVOT_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Sink_SOM_Template_DL_CSV_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": {
+								"value": "@activity('SELECT_PIVOT_DB').output.runOutput.fileDirPZ",
+								"type": "Expression"
+							},
+							"file": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
+				}
+			},
+			{
+				"name": "Copy data ZIP",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Delete old files",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "BinarySource",
+						"storeSettings": {
+							"type": "SftpReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "BinaryReadSettings"
+						}
+					},
+					"sink": {
+						"type": "BinarySink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_SOM_Template_SFTP_ZIP_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": {
+								"value": "@activity('SELECT_PIVOT_DB').output.runOutput.fileDirHZ",
+								"type": "Expression"
+							},
+							"file": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_SOM_Template_DL_ZIP_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": {
+								"value": "@activity('SELECT_PIVOT_DB').output.runOutput.fileDirPZ",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "M82ABI2T"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Nielsen"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"descripcion": {
+				"type": "string",
+				"defaultValue": "Nielsen ZIP ARG"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

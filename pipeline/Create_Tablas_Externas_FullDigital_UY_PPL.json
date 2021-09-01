@@ -1,0 +1,33 @@
+{
+	"name": "Create_Tablas_Externas_FullDigital_UY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "CREATE_TABLAS_FDUY",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Uruguay/LakeHouse/FullDigital/TablasExternas/Create_Tables_FullDigital_UY"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Uruguay/FullDigital"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:11Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

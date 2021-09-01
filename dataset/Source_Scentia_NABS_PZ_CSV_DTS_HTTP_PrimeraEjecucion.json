@@ -1,0 +1,118 @@
+{
+	"name": "Source_Scentia_NABS_PZ_CSV_DTS_HTTP_PrimeraEjecucion",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_Scentia",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Argentina/Scentia"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@concat(string(formatDateTime(getPastTime(2,'Month'),'yyyyMM')),'/Datos_TOTAL_InBev_',string(formatDateTime(getPastTime(2,'Month'),'yyyyMM')),'.csv')",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Mes",
+				"type": "String"
+			},
+			{
+				"name": "CANAL",
+				"type": "String"
+			},
+			{
+				"name": "Categoria",
+				"type": "String"
+			},
+			{
+				"name": "AREA",
+				"type": "String"
+			},
+			{
+				"name": "REGION",
+				"type": "String"
+			},
+			{
+				"name": "Manuf",
+				"type": "String"
+			},
+			{
+				"name": "Brand",
+				"type": "String"
+			},
+			{
+				"name": "Formato2",
+				"type": "String"
+			},
+			{
+				"name": "EanCod",
+				"type": "String"
+			},
+			{
+				"name": "EanDes",
+				"type": "String"
+			},
+			{
+				"name": "GAS",
+				"type": "String"
+			},
+			{
+				"name": "DROPS",
+				"type": "String"
+			},
+			{
+				"name": "AZUCAR",
+				"type": "String"
+			},
+			{
+				"name": "ENVASE",
+				"type": "String"
+			},
+			{
+				"name": "SABOR",
+				"type": "String"
+			},
+			{
+				"name": "Calibre",
+				"type": "String"
+			},
+			{
+				"name": "Contenido",
+				"type": "String"
+			},
+			{
+				"name": "Sum of Unidades",
+				"type": "String"
+			},
+			{
+				"name": "Sum of VentaValorizada",
+				"type": "String"
+			},
+			{
+				"name": "Sum of Volumen (Lts)",
+				"type": "String"
+			},
+			{
+				"name": "ND",
+				"type": "String"
+			},
+			{
+				"name": "WD",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,110 @@
+{
+	"name": "0_CZ_DW_COMMERCIAL_EMBOTELLADORA_REPLICA_FT_CL_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "REPLICA_CZ_A_DW_FT",
+				"description": "Se replica las Facts que existes en el ConsumeZone al Data Warehouse",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Chile/Embotelladora/Facts/Replica_CZ_DW/CZ_DW_Replica_Fact",
+					"baseParameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Mail Alerta Replica Facts",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "REPLICA_CZ_A_DW_FT",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						},
+						"tema": "Replica_DW",
+						"subTema": "Facts"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"ambiente": {
+				"type": "string",
+				"defaultValue": "Desarrollo"
+			}
+		},
+		"folder": {
+			"name": "Chile/Commercial/Embotelladora_DW/Fact/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

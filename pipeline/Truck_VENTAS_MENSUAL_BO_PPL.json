@@ -1,0 +1,73 @@
+{
+	"name": "Truck_VENTAS_MENSUAL_BO_PPL",
+	"properties": {
+		"description": "Extracción desde Truck de las tablas de novedades relacionadas a Ventas para Bolivia",
+		"activities": [
+			{
+				"name": "PCLMOV",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PCLMOV",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Bolivia",
+						"keys": "ClmNroInt",
+						"context": {
+							"value": "Public",
+							"type": "Expression"
+						},
+						"schema": "TRKNULLCBN",
+						"descripcion": "Cabecera Movimientos",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PCLMOV_DB",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			},
+			{
+				"name": "PSTMLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PSTMLN",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Bolivia",
+						"keys": "ClmNroInt, PrdId",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Detalle de la cabecera de Movimiento",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PSTMLN_DB",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/Truck/Replicas/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

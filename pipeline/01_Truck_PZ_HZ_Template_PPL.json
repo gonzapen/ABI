@@ -1,0 +1,98 @@
+{
+	"name": "01_Truck_PZ_HZ_Template_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PZ_HZ_Template_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": {
+						"value": "@pipeline().parameters.pathDBPZHZ",
+						"type": "Expression"
+					},
+					"baseParameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"partitionByField": {
+							"value": "@pipeline().parameters.partitionByField",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"pathDBPZHZ": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/Truck/Template"
+		},
+		"annotations": [
+			"01_TRUCK_PZ_HZ_Template_PPL",
+			"Prelanding",
+			"History",
+			"Truck",
+			"Argentina"
+		],
+		"lastPublishTime": "2021-08-19T17:51:12Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

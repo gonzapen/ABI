@@ -1,0 +1,431 @@
+{
+	"name": "01_API_PZ_Routes_Repro_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup Delivery Centers Ids",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy data Delivery Centers Ids",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AvroSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"dataset": {
+						"referenceName": "Sink_FS_PZ_Foxtrot_DTS",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "For Each Row DC Ids File",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup Delivery Centers Ids",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup Delivery Centers Ids').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "If is not null",
+							"type": "IfCondition",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@not(equals(item()[pipeline().parameters.country],null))",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Append variable Delivery Center Id",
+										"type": "AppendVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "dcIdsArray",
+											"value": {
+												"value": "@item()[pipeline().parameters.country]",
+												"type": "Expression"
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Set variable DC Ids",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "For Each Row DC Ids File",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "dcIds",
+					"value": {
+						"value": "@join(variables('dcIdsArray'),',')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy data Delivery Centers Ids",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Set init month",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_FS_PZ_Foxtrot_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_FS_PZ_Foxtrot_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Set init month",
+				"description": "",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "monthCounter",
+					"value": {
+						"value": "@pipeline().parameters.mesDesde",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Until last month",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Set variable DC Ids",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(int(variables('monthCounter')),int(pipeline().parameters.mesHasta))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Post Analytics Routes",
+							"type": "WebActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": "https://apiv1.foxtrotsystems.com/analytics/download-requests",
+								"method": "POST",
+								"headers": {
+									"Content-Type": "application/json",
+									"Authorization": "Bearer 8d652039-f2f5-4e15-81e3-f2eb3048e28e"
+								},
+								"body": {
+									"value": "@json(concat('{\"analytics_types\":[\"ROUTE_ANALYTICS\"],\"dc_ids\":[\"',replace(string(variables('dcIds')),',','\",\"'),'\"],\n\"from_date\":\"',\nconcat(pipeline().parameters.anio, \nif(equals(1, length(variables('monthCounter'))), \nconcat('0', variables('monthCounter')), \nvariables('monthCounter')), \n'01'),'\",\n\"to_date\":\"',\nconcat(pipeline().parameters.anio, \nif(lessOrEquals(add(int(variables('monthCounter')),1), 9), \n concat('0', string(add(int(variables('monthCounter')), 1))),\n if(less(int(variables('monthCounter')), 12),\n   string(add(int(variables('monthCounter')), 1)),\n   variables('monthCounter'))) , \nif(equals(variables('monthCounter'), '12'),\n   '31',\n   '01')),'\"}'))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Web Get Response",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "Post Analytics Routes",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 4,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@concat('https://apiv1.foxtrotsystems.com//analytics/download-requests/',activity('Post Analytics Routes').output.data.download_request_txid,'/files')",
+									"type": "Expression"
+								},
+								"method": "GET",
+								"headers": {
+									"Content-Type": "application/json",
+									"Authorization": "Bearer 8d652039-f2f5-4e15-81e3-f2eb3048e28e"
+								}
+							}
+						},
+						{
+							"name": "ForEachFile_PPL",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Web Get Response",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "02_HZ_CZ_Routes_Repro_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"outputGetter": {
+										"value": "@activity('Web Get Response').output.data.download_request_files",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"originSystem": {
+										"value": "@pipeline().parameters.originSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"partitionByField": {
+										"value": "@pipeline().parameters.partitionByField",
+										"type": "Expression"
+									},
+									"mes": {
+										"value": "@variables('monthCounter')",
+										"type": "Expression"
+									},
+									"anio": {
+										"value": "@pipeline().parameters.anio",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "Increment month",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "ForEachFile_PPL",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "monthTempCounter",
+								"value": {
+									"value": "@if(less(int(variables('monthCounter')), 9), \n concat('0', string(add(int(variables('monthCounter')), 1))),\n string(add(int(variables('monthCounter')), 1)))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set temp month",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Increment month",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "monthCounter",
+								"value": {
+									"value": "@variables('monthTempCounter')",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Wait",
+							"type": "Wait",
+							"dependsOn": [
+								{
+									"activity": "Set temp month",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 30
+							}
+						}
+					],
+					"timeout": "7.00:00:00"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"originSystem": {
+				"type": "string",
+				"defaultValue": "Foxtrot"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "Route_Id"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"partitionByField": {
+				"type": "string",
+				"defaultValue": "Planned_Route_Start_Timestamp"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "ROUTES_AR"
+			},
+			"mesDesde": {
+				"type": "string"
+			},
+			"mesHasta": {
+				"type": "string"
+			},
+			"anio": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"dcIdsArray": {
+				"type": "Array"
+			},
+			"dcIds": {
+				"type": "String"
+			},
+			"downloadLink": {
+				"type": "String"
+			},
+			"monthCounter": {
+				"type": "String"
+			},
+			"monthTempCounter": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "LAS/Foxtrot/Routes/Reproceso"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

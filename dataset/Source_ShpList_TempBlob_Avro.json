@@ -1,0 +1,31 @@
+{
+	"name": "Source_ShpList_TempBlob_Avro",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_BlobTemporal",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ListName": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "LAS/Sharepoint"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@concat('Argentina/ShpList/',dataset().ListName,'/Silver')",
+					"type": "Expression"
+				},
+				"container": "source"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

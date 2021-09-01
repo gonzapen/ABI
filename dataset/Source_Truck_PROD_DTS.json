@@ -1,0 +1,35 @@
+{
+	"name": "Source_Truck_PROD_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_TruckProd",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table": {
+				"type": "string"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "TRK35NULL"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Truck/PROD"
+		},
+		"annotations": [],
+		"type": "Db2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().table",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

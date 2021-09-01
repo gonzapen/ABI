@@ -1,0 +1,126 @@
+{
+	"name": "General_Historia_GVQ_PROD_AR_PPL",
+	"properties": {
+		"description": "Lista de Tablas",
+		"activities": [
+			{
+				"name": "DLK_ESTRUCTURA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_GVQ_PROD_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DLK_ESTRUCTURA",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": {
+							"value": "ID_PDV",
+							"type": "Expression"
+						},
+						"schema": "AR_PROD_GVQ"
+					}
+				}
+			},
+			{
+				"name": "DLK_SUBREGION_CON_NOVEDAD_VIEW",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_GVQ_PROD_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DLK_SUBREGION_CON_NOVEDAD_VIEW",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": {
+							"value": "PERIODO_ID, SUBREGION_ID",
+							"type": "Expression"
+						},
+						"schema": "AR_PROD_GVQ"
+					}
+				}
+			},
+			{
+				"name": "DLK_OBJ_MES",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_GVQ_PROD_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DLK_OBJ_MES",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": {
+							"value": "SOCIEDAD_ID,  ANIOMES,  SUBREGION_ID, PRODUCTO_ID, TERRITORIO_ID, CLIENTE_ID",
+							"type": "Expression"
+						},
+						"schema": "AR_PROD_GVQ"
+					}
+				}
+			},
+			{
+				"name": "DLK_OBJ_MES_DET",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_GVQ_PROD_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DLK_OBJ_MES_DET",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": "SOCIEDAD_ID,  ANIOMES,  SUBREGION_ID, PRODUCTO_ID, TERRITORIO_ID, CLIENTE_ID",
+						"schema": "AR_PROD_GVQ"
+					}
+				}
+			},
+			{
+				"name": "DLK_OBJ_SUB_REGION_HIST",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_GVQ_PROD_Template_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DLK_OBJ_SUB_REGION_HIST",
+						"origenSystem": "GVQ",
+						"country": "Argentina",
+						"keys": {
+							"value": "PERIODO_ID,  SOCIEDAD_ID,  SUBREGION_ID, PRODUCTO_ID ",
+							"type": "Expression"
+						},
+						"schema": "AR_PROD_GVQ"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/GVQ/Datos_Historicos_Prod"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

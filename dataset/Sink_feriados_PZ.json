@@ -1,0 +1,27 @@
+{
+	"name": "Sink_feriados_PZ",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat('feriados_',string(formatDateTime(utcnow(),'yyyy')),'.avro')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('Argentina/Logistica/Feriado/',string(formatDateTime(utcnow(),'yyyy')))",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

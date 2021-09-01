@@ -1,0 +1,78 @@
+{
+	"name": "Truck_General_Fact_Ventas_Mensual_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_VENTAS_MENSUAL_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FT_VENTAS_MENSUAL_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "FT_VENTAS_MENSUAL_BO_CZ_DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "FT_VENTAS_MENSUAL_BO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FT_VENTAS_MENSUAL_BO_CZ_DW_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"country": "Bolivia",
+						"keys": "KEY",
+						"origenSystem": "Truck",
+						"scope": "KeyVault",
+						"tableFinal": "FT_TRUCK_VENTAS_BO",
+						"context": "Public"
+					}
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"origenSystem": "Truck",
+						"country": "Bolivia"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

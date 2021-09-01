@@ -1,0 +1,86 @@
+{
+	"name": "FT_VENTAS_DIARIO_AR_CZ_DW_PPL",
+	"properties": {
+		"description": "Carga  Data Warehouse - tabla final",
+		"activities": [
+			{
+				"name": "FT_VENTAS_DIARIO_CZ_DW",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 3,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/DataWarehouse/Sales/CZ_DW_Replica_FT_VENTAS_DIARIO_AR",
+					"baseParameters": {
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "KEY"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Truck"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "FT_VENTAS_DIARIO_AR"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DW/Fact"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:12Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,13 @@
+{
+	"name": "HttpServerFoxtrot",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "https://generated-analysis-results-files.s3.amazonaws.com/",
+			"enableServerCertificateValidation": false,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

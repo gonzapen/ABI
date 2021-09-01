@@ -1,0 +1,491 @@
+{
+	"name": "FZ_PZ_TGT_TASA_BO_PPL",
+	"properties": {
+		"description": "template para carga de plnas target, volumenes dirios y calendario",
+		"activities": [
+			{
+				"name": "Validation TGT en File Server",
+				"type": "Validation",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_TARGET_Input_Exc_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tablename": "TGT_MENSUAL",
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"index": 0,
+							"file": "TGT_MENSUAL"
+						}
+					},
+					"timeout": "0.00:02:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Validation TGT en File Server",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Validation TGT en File Server').output.exists",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "CONTROL_TGT_MENSUAL",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "CZ_Control_Tgt_Mensual_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Copy TGT data PZ",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ExcelSource",
+									"storeSettings": {
+										"type": "FileServerReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_TARGET_Input_Exc_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": "TGT_MENSUAL",
+										"entorno": {
+											"value": "@pipeline().parameters.entorno",
+											"type": "Expression"
+										},
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"index": 0,
+										"file": "TGT_MENSUAL"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_TGT_Input_PZ_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": "TGT_MENSUAL",
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"file": "TGT_MENSUAL"
+									}
+								}
+							]
+						},
+						{
+							"name": "Copy TASA data PZ",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ExcelSource",
+									"storeSettings": {
+										"type": "FileServerReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_TARGET_Input_Exc_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tablename": "TASA_CAMBIO",
+										"entorno": {
+											"value": "@pipeline().parameters.entorno",
+											"type": "Expression"
+										},
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"index": 1,
+										"file": "TGT_MENSUAL"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_TGT_Input_PZ_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": "TASA_CAMBIO",
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"file": "TGT_MENSUAL"
+									}
+								}
+							]
+						},
+						{
+							"name": "Delete TGT Mensual en File Server",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Copy TGT data PZ",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "Copy TASA data PZ",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Delete_TGT_Input_Exc_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": "TGT_MENSUAL",
+										"entorno": {
+											"value": "@pipeline().parameters.entorno",
+											"type": "Expression"
+										},
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"file": "TGT_MENSUAL"
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true
+								}
+							}
+						},
+						{
+							"name": "PZ_HZ_CZ_TGT_MENSUAL",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Delete TGT Mensual en File Server",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "PZ_HZ_CZ_TGT_MENSUAL_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "PZ_HZ_CZ_TASA_CAMBIO",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Delete TGT Mensual en File Server",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "PZ_HZ_CZ_TASA_CAMBIO_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "CZ_DL_DW_TGT_MENSUAL",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "PZ_HZ_CZ_TGT_MENSUAL",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "CZ_DL_DW_Tgt_Mensual_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "CZ_DL_DW_TASA_CAMBIO",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "PZ_HZ_CZ_TASA_CAMBIO",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "CZ_DL_DW_Tasa_Cambio_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"tablename": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"index": {
+				"type": "int"
+			},
+			"file": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/TGT/Storage/FS_PZ"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

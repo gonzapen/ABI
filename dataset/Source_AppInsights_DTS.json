@@ -1,0 +1,32 @@
+{
+	"name": "Source_AppInsights_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_FileSystem",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Argentina/AppInsights"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation",
+				"fileName": "CustomEvents.csv",
+				"folderPath": "02-LASCommercial/01-Produccion/05-FullDigital/06-AppInsights"
+			},
+			"columnDelimiter": ";",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "timestamp;name;itemType;customDimensions;customMeasurements;operation_Name;operation_Id;operation_ParentId;operation_SyntheticSource;session_Id;user_Id;user_AuthenticatedId;user_AccountId;application_Version;client_Type;client_Model;client_OS;client_IP;client_City;client_StateOrProvince;client_CountryOrRegion;client_Browser;cloud_RoleName;cloud_RoleInstance;appId;appName;iKey;sdkVersion;itemId;itemCount",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,134 @@
+{
+	"name": "01_CZ_DW_FT_SOM_PPL_NIELSEN_PY",
+	"properties": {
+		"activities": [
+			{
+				"name": "FtSom",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Paraguay/LakeHouse/Som/Dw/Fact/CZ_DW_FT_SOM_NIELSEN_PY",
+					"baseParameters": {
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "TABLA_EXTERNA_REFRESH",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "FtSom",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/LakeHouse/Som/TABLAS _EXTERNAS_SOM_FACT_REFRESH"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Las"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "Periodo, CANAL, KEY_ACCOUNT, REGION, AREA, FORMATO, Ean, SOURCE_FILE"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Nielsen"
+			},
+			"runId": {
+				"type": "string",
+				"defaultValue": "1"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "Som"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "FtSom"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			}
+		},
+		"folder": {
+			"name": "Paraguay/SOM/DW/Facts/NIELSEN"
+		},
+		"annotations": [
+			"01_CZ_DW_FT_SOM_PPL",
+			"Consume",
+			"Data_Warehouse",
+			"Scentia",
+			"Argentina"
+		],
+		"lastPublishTime": "2021-08-19T17:51:21Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

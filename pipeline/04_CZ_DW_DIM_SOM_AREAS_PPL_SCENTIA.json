@@ -1,0 +1,107 @@
+{
+	"name": "04_CZ_DW_DIM_SOM_AREAS_PPL_SCENTIA",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM_AREAS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/SOM/DW/Dimension/CZ_CZ_DIM_SOM_AREAS_SCENTIA_AR_DB",
+					"baseParameters": {
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "Periodo, CANAL, KEY_ACCOUNT, REGION, AREA, FORMATO, Ean, SOURCE_FILE"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Scentia"
+			},
+			"runId": {
+				"type": "string",
+				"defaultValue": "1"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "Som"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "DimSomAreas"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			}
+		},
+		"folder": {
+			"name": "Argentina/SOM/DW/Dimensiones/SCENTIA"
+		},
+		"annotations": [
+			"03_CZ_DW_DIM_SOM_AREAS_PPL",
+			"Consume",
+			"Data_Warehouse",
+			"Scentia",
+			"Argentina"
+		],
+		"lastPublishTime": "2021-08-19T17:51:10Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

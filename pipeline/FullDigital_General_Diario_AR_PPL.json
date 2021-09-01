@@ -1,0 +1,346 @@
+{
+	"name": "FullDigital_General_Diario_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "TABLA EXTERNAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "REFRESH TABLES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Create_Tablas_Externas_FullDigital_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CUSTOMER",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_Customer_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DISTRIBUTION_CENTER",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_DistributionCenter_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "PRODUCT",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_Product_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "REPLICA DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CUSTOMER",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DISTRIBUTION_CENTER",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "PRODUCT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "INVOICE DIARIO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SALES_ROUTE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DELIVERY_ROUTE_AND_SCHEDULE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "COMERCIAL_STRUCTURE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "KFD",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "PRICE_LISTS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "ALGOHEALTH",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "INVOICE SAP DIARIO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_DW_Tablas_FullDigital_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "INVOICE DIARIO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_Invoice_Diario_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "REFRESH TABLES",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Refresh_Tables_Truck_FullDigital_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "SALES_ROUTE",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_SalesRoute_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "COMERCIAL_STRUCTURE",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_ComercialStructure_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DELIVERY_ROUTE_AND_SCHEDULE",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_DeliveryRouteAndSchedule_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "KFD",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_KFD_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "PRICE_LISTS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_PriceLists_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "ALGOHEALTH",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_AlgoHealth_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "INVOICE SAP DIARIO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TABLA EXTERNAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Tabla_FullDigital_InvoiceSap_Diario_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/FullDigital"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-30T21:53:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,219 @@
+{
+	"name": "00_CZ_DW_ORQUESTADOR_DP_SOM_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DE_PARA_AREAS_AR - CZ to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_CZ_DW_DP_SOM_AREAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DE_PARA_PRODUCTOS_AR - CZ to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_CZ_DW_DP_SOM_PRODUCTOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"country": "",
+						"countryCode": ""
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_MERCADOS_AR - CZ to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_CZ_DW_DP_SOM_MERCADOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"country": "",
+						"countryCode": ""
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP DW AREAS AR",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_AREAS_AR - CZ to DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Argentina",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW Areas",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP DW PRODUCTOS AR",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_PRODUCTOS_AR - CZ to DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Argentina",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW Productos",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP DW MERCADOS AR",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_MERCADOS_AR - CZ to DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Argentina",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW Mercados",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"equipo": {
+				"type": "string",
+				"defaultValue": "Som"
+			},
+			"tema": {
+				"type": "string",
+				"defaultValue": "Depara"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM/DW/DE_PARA"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

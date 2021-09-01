@@ -1,0 +1,22 @@
+{
+	"name": "LASCommercial_EmbonorCL_dev",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "LASSqlServerEmbotelladoraDevConnectionString"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTLas",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

@@ -1,0 +1,281 @@
+{
+	"name": "Truck_General_Incremental_Fact_PPL_UY",
+	"properties": {
+		"activities": [
+			{
+				"name": "Carga Incremental",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_Replica_Incremental_UY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CTRLPLANIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga Incremental",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_CTRLPLANIL_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "TRKNULLFNC",
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "PLANIL HZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CTRLPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Truck_PZ_HZ_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "Planil",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "EmpId, PlaNro",
+						"pathDBPZHZ": "/Argentina/LakeHouse/Truck/Template/PZ_HZ_PLANIL_DB",
+						"partitionByField": "part_plafch_mes"
+					}
+				}
+			},
+			{
+				"name": "PPEDCB HZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CTRLPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Truck_PZ_HZ_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "Ppedcb",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "EmpId, CodmovId, Pednro, Pedcor",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_INCREMENTALES_DB",
+						"partitionByField": "part_pedfchped_mes"
+					}
+				}
+			},
+			{
+				"name": "PPEDLN HZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CTRLPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Truck_PZ_HZ_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "Ppedln",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "EmpId, CodmovId, Pednro, Pedcor, PrdId",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_INCREMENTALES_DB",
+						"partitionByField": "part_pedfchped_mes"
+					}
+				}
+			},
+			{
+				"name": "PSTMLN HZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CTRLPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Truck_PZ_HZ_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "Pstmln",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "ClmNroInt, PrdId",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_INCREMENTALES_DB",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			},
+			{
+				"name": "PCLMOV HZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CTRLPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Truck_PZ_HZ_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": "Pclmov",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": "ClmNroInt",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_INCREMENTALES_DB",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Truck"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Uruguay"
+			}
+		},
+		"folder": {
+			"name": "Uruguay/Truck"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

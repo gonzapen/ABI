@@ -1,0 +1,40 @@
+{
+	"name": "A_LASCommercial_ArgentinaTeleperformanceDiario",
+	"properties": {
+		"description": "Carga los archivos de Teleperformance del File System al Datalake.",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "00_FS_CZ_Teleperformance_PPL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Week",
+				"interval": 1,
+				"startTime": "2021-08-26T21:05:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						16
+					],
+					"weekDays": [
+						"Monday",
+						"Tuesday",
+						"Wednesday",
+						"Thursday",
+						"Friday"
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"name": "IntegrationRTLASChess",
+	"properties": {
+		"type": "SelfHosted",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/e093f001-15a9-44f8-85af-e1873454fc6a/resourcegroups/ANALYTICS-PLATFORM-DEV/providers/Microsoft.DataFactory/factories/demo-Analytics-Platform-Dev/integrationruntimes/IntegrationRTLASChess",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}

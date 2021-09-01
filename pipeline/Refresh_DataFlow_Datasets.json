@@ -1,0 +1,463 @@
+{
+	"name": "Refresh_DataFlow_Datasets",
+	"properties": {
+		"activities": [
+			{
+				"name": "GenerateToken",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_GenerateTokenIfNeeded",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Refresh_flow",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "LookForLastToken",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://api.powerbi.com/v1.0/myorg/groups/',pipeline().parameters.PbiAppWorkspaceIdDf,'/dataflows/',pipeline().parameters.PbiDataFlowId,'/refreshes')",
+						"type": "Expression"
+					},
+					"method": "POST",
+					"headers": {
+						"Authorization": {
+							"value": "@concat('Bearer ',base64ToString(activity('LookForLastToken').output.firstRow.token))",
+							"type": "Expression"
+						}
+					},
+					"body": {
+						"refreshRequest": "y"
+					}
+				}
+			},
+			{
+				"name": "LookForLastToken",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "GenerateToken",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Las/PowerBi/ActiveSecToken",
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"dataset": {
+						"referenceName": "SecToken",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "Wait_For_Refresh",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "Refresh_flow",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": {
+						"value": "@sub(int(pipeline().parameters.AverageDataFlowRefreshTime_seconds),int(pipeline().parameters.IncrementalDataFlowRefreshTime_seconds))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Hasta que termine refresh",
+				"type": "Until",
+				"dependsOn": [
+					{
+						"activity": "Wait_For_Refresh",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@not(equals(first(activity('GetTransactions').output.value).status,'InProgress'))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "GetTransactions",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "LookForLastToken_Loop",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@concat('https://api.powerbi.com/v1.0/myorg/groups/',pipeline().parameters.PbiAppWorkspaceIdDf,'/dataflows/',pipeline().parameters.PbiDataFlowId,'/transactions?$top=1')",
+									"type": "Expression"
+								},
+								"method": "GET",
+								"headers": {
+									"Authorization": {
+										"value": "@concat('Bearer ',base64ToString(activity('LookForLastToken_Loop').output.firstRow.token))",
+										"type": "Expression"
+									}
+								},
+								"body": {
+									"refreshRequest": "y"
+								}
+							}
+						},
+						{
+							"name": "Espera_x_segundos",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": {
+									"value": "@int(pipeline().parameters.IncrementalDataFlowRefreshTime_seconds)",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "GenerateToken_Loop",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "Espera_x_segundos",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "00_GenerateTokenIfNeeded",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true
+							}
+						},
+						{
+							"name": "LookForLastToken_Loop",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "GenerateToken_Loop",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"wildcardFolderPath": "Las/PowerBi/ActiveSecToken",
+										"wildcardFileName": "*.parquet",
+										"enablePartitionDiscovery": false
+									}
+								},
+								"dataset": {
+									"referenceName": "SecToken",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "If_Status_is_Failed_Or_Cancelled",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "GetTransactions",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@or(equals(first(activity('GetTransactions').output.value).status,'Failed'),equals(first(activity('GetTransactions').output.value).status,'Cancelled'))",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Enviar Mail de fallo",
+										"type": "ExecutePipeline",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"pipeline": {
+												"referenceName": "Mail_LAS_PPL",
+												"type": "PipelineReference"
+											},
+											"waitOnCompletion": true,
+											"parameters": {
+												"scope": "KeyVault",
+												"equipo": {
+													"value": "@pipeline().parameters.equipo",
+													"type": "Expression"
+												},
+												"pais": {
+													"value": "@pipeline().parameters.pais",
+													"type": "Expression"
+												},
+												"entorno": {
+													"value": "@pipeline().parameters.entorno",
+													"type": "Expression"
+												},
+												"tema": {
+													"value": "@concat(pipeline().parameters.equipo, ': Error en el refresh del dataflow')",
+													"type": "Expression"
+												},
+												"subTema": "Auto Refresh del dataflow ha fallado o se ha cancelado"
+											}
+										}
+									},
+									{
+										"name": "Throw error",
+										"type": "SetVariable",
+										"dependsOn": [
+											{
+												"activity": "Enviar Mail de fallo",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "example",
+											"value": {
+												"value": "@string(div(1,0))",
+												"type": "Expression"
+											}
+										}
+									}
+								]
+							}
+						}
+					],
+					"timeout": "0.01:30:00"
+				}
+			},
+			{
+				"name": "ForEachAssociatedDataset",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "LookForLastToken_3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@split(pipeline().parameters.PbiDatasetsId,', ')",
+						"type": "Expression"
+					},
+					"batchCount": 5,
+					"activities": [
+						{
+							"name": "Refresh_dataset",
+							"type": "WebActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@concat('https://api.powerbi.com/v1.0/myorg/groups/',pipeline().parameters.PbiAppWorkspaceIdDs,'/datasets/',item(),'/refreshes')",
+									"type": "Expression"
+								},
+								"method": "POST",
+								"headers": {
+									"Authorization": {
+										"value": "@concat('Bearer ',base64ToString(activity('LookForLastToken_3').output.firstRow.token))",
+										"type": "Expression"
+									}
+								},
+								"body": {
+									"refreshRequest": "y"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "GenerateToken_3",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Hasta que termine refresh",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_GenerateTokenIfNeeded",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "LookForLastToken_3",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "GenerateToken_3",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Las/PowerBi/ActiveSecToken",
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"dataset": {
+						"referenceName": "SecToken",
+						"type": "DatasetReference"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"PbiAppWorkspaceIdDf": {
+				"type": "string"
+			},
+			"PbiDataFlowId": {
+				"type": "string"
+			},
+			"AverageDataFlowRefreshTime_seconds": {
+				"type": "int",
+				"defaultValue": 500
+			},
+			"IncrementalDataFlowRefreshTime_seconds": {
+				"type": "int",
+				"defaultValue": 60
+			},
+			"PbiDatasetsId": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "01-Produccion"
+			},
+			"pais": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"equipo": {
+				"type": "string",
+				"defaultValue": "Visualizadores-SalidasEstimadas"
+			},
+			"PbiAppWorkspaceIdDs": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"example": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "LAS/PowerBI"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-27T21:26:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

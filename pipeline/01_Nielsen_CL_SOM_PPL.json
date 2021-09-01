@@ -1,0 +1,88 @@
+{
+	"name": "01_Nielsen_CL_SOM_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "COPY_ZIP",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Nielsen_CL_COPY_ZIP_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "CARGA_DL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "COPY_ZIP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_Nielsen_CL_CARGA_DL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "TABLAS_EXTERNAS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "CARGA_DL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Chile/LakeHouse/Nielsen/TABLAS_EXTERNAS_NIELSEN_CL"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			}
+		},
+		"folder": {
+			"name": "Chile/Nielsen"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-23T21:05:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

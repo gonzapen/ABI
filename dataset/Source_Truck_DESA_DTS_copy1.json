@@ -1,0 +1,25 @@
+{
+	"name": "Source_Truck_DESA_DTS_copy1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_TruckProd",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Truck/DESA"
+		},
+		"annotations": [],
+		"type": "Db2Table",
+		"schema": [],
+		"typeProperties": {
+			"schema": "",
+			"table": ""
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

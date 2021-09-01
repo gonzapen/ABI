@@ -1,0 +1,20 @@
+{
+	"name": "LASCommercial_DatabricksLowPriority",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://eastus.azuredatabricks.net",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "ARGTokenDB"
+			},
+			"existingClusterId": "1130-214809-occur781"
+		}
+	}
+}

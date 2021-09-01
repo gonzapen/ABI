@@ -1,0 +1,95 @@
+{
+	"name": "Truck_Replica_Maestros_PY_PPL",
+	"properties": {
+		"description": "Extracción general desde truck de las tablas de maestros para Paraguay",
+		"activities": [
+			{
+				"name": "MAESTROS 01",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_Truck_Maestros_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Paraguay"
+					}
+				}
+			},
+			{
+				"name": "MAESTROS 02",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MAESTROS 01",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_Truck_Maestros_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "MAESTROS 03",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "MAESTROS 02",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Maestros_PY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Paraguay/Truck/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

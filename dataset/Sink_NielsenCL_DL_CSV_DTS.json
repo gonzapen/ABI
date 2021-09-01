@@ -1,0 +1,19 @@
+{
+	"name": "Sink_NielsenCL_DL_CSV_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Chile/Nielsen/zip",
+				"fileSystem": "prelandingzone"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

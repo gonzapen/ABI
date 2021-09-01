@@ -1,0 +1,30 @@
+{
+	"name": "A_LASCommercial_ArgentinaFullDigitalWholesalers",
+	"properties": {
+		"description": "Ejecuta la carga de tablas de distribuidores que se disponiblizan a Global",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "FullDigital_General_Wholesalers_Diario_AR_PPL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-05-07T18:45:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"hours": [
+						10
+					]
+				}
+			}
+		}
+	}
+}

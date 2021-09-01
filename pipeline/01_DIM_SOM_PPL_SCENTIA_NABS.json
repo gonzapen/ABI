@@ -1,0 +1,73 @@
+{
+	"name": "01_DIM_SOM_PPL_SCENTIA_NABS",
+	"properties": {
+		"description": "Orquestador de las cargas dimensionales",
+		"activities": [
+			{
+				"name": "DIM_CANALES",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_CZ_DW_DIM_SOM_CANALES_PPL_SCENTIA_NABS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIM_PRODUCTOS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_CZ_DW_DIM_SOM_PRODUCTOS_PPL_SCENTIA_NABS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "TABLAS_EXTERNAS_REFRESH",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "DIM_CANALES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DIM_PRODUCTOS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/SOM/TABLAS _EXTERNAS_SOM_DIMENSIONALES_REFRESH"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/SOM/DW/Dimensiones/SCENTIA - NABS"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

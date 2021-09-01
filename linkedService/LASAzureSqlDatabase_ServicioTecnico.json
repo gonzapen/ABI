@@ -1,0 +1,23 @@
+{
+	"name": "LASAzureSqlDatabase_ServicioTecnico",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Conexión a Activos comerciales - Aplicación Servicio técnico",
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "LASAzureSQLDatabaseServicioTecnicoConnectionString"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTLas",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

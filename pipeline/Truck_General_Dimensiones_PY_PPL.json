@@ -1,0 +1,72 @@
+{
+	"name": "Truck_General_Dimensiones_PY_PPL",
+	"properties": {
+		"description": "Carga general de las dimensiones del proceso de ventas históricas de Paraguay (Truck + DW)",
+		"activities": [
+			{
+				"name": "DIMENSIONES",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIM_TRUCK_PY_PPL_PY",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIM_TRUCK_PY_CZ_DW_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMENSIONES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIM_TRUCK_PY_CZ_DW_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Paraguay"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Paraguay/DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

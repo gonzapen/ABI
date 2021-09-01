@@ -1,0 +1,582 @@
+{
+	"name": "FS_DW_DE_PARA_GENERAL_SOM",
+	"properties": {
+		"description": "Este proceso es un hijo de SOM_SCENTIA_PPL y se encarga de procesar la carga de los DP de FS a DW.",
+		"activities": [
+			{
+				"name": "DE_PARA_PRODUCTOS_BO - FS to CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FS_CZ_DE_PARA_PRODUCTOS_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Bolivia"
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_PRODUCTOS_BO - CZ to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_PRODUCTOS_BO - FS to CZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_CZ_DW_DP_SOM_PRODUCTOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Bolivia",
+						"countryCode": "Bo"
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP DW PRODUCTOS BO",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_PRODUCTOS_BO - CZ to DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Bolivia",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW Productos",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_PRODUCTOS_PY - FS to CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FS_CZ_DE_PARA_PRODUCTOS_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Paraguay"
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_PRODUCTOS_PY - CZ to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_PRODUCTOS_PY - FS to CZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_CZ_DW_DP_SOM_PRODUCTOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Paraguay",
+						"countryCode": "Py"
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP DW PRODUCTOS PY",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_PRODUCTOS_PY - CZ to DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Paraguay",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW Productos",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_MERCADOS_BO - FS to CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FS_CZ_DE_PARA_MERCADOS_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Bolivia"
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_MERCADOS_BO - CZ to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_MERCADOS_BO - FS to CZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_CZ_DW_DP_SOM_MERCADOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Bolivia",
+						"countryCode": "Bo"
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP DW MERCADOS BO",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_MERCADOS_BO - CZ to DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Bolivia",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW Mercados",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_MERCADOS_PY - FS to CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FS_CZ_DE_PARA_MERCADOS_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Paraguay"
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_MERCADOS_PY - CZ to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_MERCADOS_PY - FS to CZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_CZ_DW_DP_SOM_MERCADOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Paraguay",
+						"countryCode": "Py"
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP DW MERCADOS PY",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_MERCADOS_PY - CZ to DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Paraguay",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW Mercados",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_MERCADOS_CL - FS to CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FS_CZ_DE_PARA_MERCADOS_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Chile",
+						"equipoFS": "06-CommAn"
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_MERCADOS_CL - CZ to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_MERCADOS_CL - FS to CZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_CZ_DW_DP_SOM_MERCADOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Chile",
+						"countryCode": "Cl"
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP DW MERCADOS CL",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_MERCADOS_CL - CZ to DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Chile",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW Mercados",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_PRODUCTOS_CL - FS to CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FS_CZ_DE_PARA_PRODUCTOS_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"pais": "Chile",
+						"equipoFS": "06-CommAn"
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_PRODUCTOS_CL - CZ to DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_PRODUCTOS_CL - FS to CZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_CZ_DW_DP_SOM_PRODUCTOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Chile",
+						"countryCode": "Cl"
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP DW PRODUCTOS CL",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_PRODUCTOS_CL - CZ to DW",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "Som",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "Chile",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Carga a DW Productos",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tema": {
+				"type": "string",
+				"defaultValue": "Depara"
+			}
+		},
+		"folder": {
+			"name": "LAS/DE_PARA_SOM"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

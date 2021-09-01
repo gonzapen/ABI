@@ -1,0 +1,21 @@
+{
+	"name": "LASCommercial_TruckDev",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "Db2",
+		"typeProperties": {
+			"server": "167.252.7.164:446",
+			"database": "B207EFF7",
+			"authenticationType": "Basic",
+			"username": "testcmq1",
+			"packageCollection": "VKM227174",
+			"certificateCommonName": "",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIwZGYwMjRiOC0zNWM5LTRkMDEtOTJjYS1kOWI3NTNkMWRhNDUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTPlatform",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

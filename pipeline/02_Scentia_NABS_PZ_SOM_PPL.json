@@ -1,0 +1,301 @@
+{
+	"name": "02_Scentia_NABS_PZ_SOM_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data NABS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Mes",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PERIODO"
+								}
+							},
+							{
+								"source": {
+									"name": "CANAL",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CANAL",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "KEY ACCOUNT",
+									"type": "String"
+								},
+								"sink": {
+									"name": "KEY_ACCOUNT"
+								}
+							},
+							{
+								"source": {
+									"name": "Categoria",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Categoria",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "AREA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AREA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "REGION",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REGION",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Manuf",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Manuf",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Brand",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Brand",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Formato2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Formato2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EanCod",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EanCod",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "EanDes",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EanDes",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "GAS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GAS",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DROPS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DROPS",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "AZUCAR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AZUCAR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ENVASE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ENVASE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SABOR",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SABOR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Calibre",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Calibre",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Contenido",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Contenido",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Sum of Unidades",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Sum_of_Unidades"
+								}
+							},
+							{
+								"source": {
+									"name": "Sum of VentaValorizada",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Sum_of_VentaValorizada"
+								}
+							},
+							{
+								"source": {
+									"name": "Sum of Volumen (Lts)",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Sum_of_Volumen_Lts"
+								}
+							},
+							{
+								"source": {
+									"name": "ND",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ND",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "WD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "WD",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Scentia_NABS_PZ_CSV_DTS_HTTP",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Scentia_NABS_PZ_SOM_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Scentia/NABS"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:13Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

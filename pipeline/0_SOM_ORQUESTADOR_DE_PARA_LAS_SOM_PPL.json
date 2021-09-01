@@ -1,0 +1,248 @@
+{
+	"name": "0_SOM_ORQUESTADOR_DE_PARA_LAS_SOM_PPL",
+	"properties": {
+		"description": "Este proceso es un hijo de SOM_SCENTIA_PPL y se encarga de procesar la carga de los DP de FS a DW.",
+		"activities": [
+			{
+				"name": "DE_PARA_AREAS_AR - FS to CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_LAS_DE_PARA_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "DE_PARA_AREAS_MAPA",
+						"origenSystem": "SOM",
+						"country": "Argentina",
+						"keys": "-",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": "-",
+						"descripcion": "DP Mercados Argentina",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_MERCADOS_AR - FS to CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_LAS_DE_PARA_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "DE_PARA_MERCADOS",
+						"origenSystem": "SOM",
+						"country": "Argentina",
+						"keys": "-",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": "-",
+						"descripcion": "DP Mercados Argentina",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "DE_PARA_PRODUCTOS_AR - FS to CZ",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_LAS_DE_PARA_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "DE_PARA_PRODUCTOS_SOM",
+						"origenSystem": "SOM",
+						"country": "Argentina",
+						"keys": "-",
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": "-",
+						"descripcion": "DP Productos Argentina",
+						"partitionByField": "-"
+					}
+				}
+			},
+			{
+				"name": "Carga DE-PARA al DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DE_PARA_AREAS_AR - FS to CZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DE_PARA_MERCADOS_AR - FS to CZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DE_PARA_PRODUCTOS_AR - FS to CZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_CZ_DW_ORQUESTADOR_DP_SOM_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "CONTROL_DE_PARA",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga DE-PARA al DW",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CONTROL_DP_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Depara",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "MAIL CONTROL DP",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CONTROL_DE_PARA",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "LAS",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "Control DP",
+							"type": "Expression"
+						},
+						"subTema": {
+							"value": "Control DP",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"equipo": {
+				"type": "string",
+				"defaultValue": "Som"
+			},
+			"tema": {
+				"type": "string",
+				"defaultValue": "Depara"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			}
+		},
+		"folder": {
+			"name": "LAS/DE_PARA/Replica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

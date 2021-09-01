@@ -1,0 +1,35 @@
+{
+	"name": "Sink_Scentia_Mayoristas_PZ_SOM_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Scentia"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat('Informe_Mayoristas_INBEV_',string(formatDateTime(getPastTime(1,'Month'),'yyyyMM')),'.avro')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('/Argentina/Scentia/',dataset().tableName,'/',string(formatDateTime(utcnow(), 'yyyy')),'/',string(formatDateTime(utcnow(), 'MM')),'/',formatDateTime(utcnow(), 'dd')) ",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

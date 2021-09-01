@@ -1,0 +1,23 @@
+{
+	"name": "LASCommercial_Chess",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "SQL Server - base de distribuidores ",
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "LASSqlServerChessConnectionString"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTLASChess",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

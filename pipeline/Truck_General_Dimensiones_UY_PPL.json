@@ -1,0 +1,54 @@
+{
+	"name": "Truck_General_Dimensiones_UY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIMENSIONES",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DIM_TRUCK_UY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial"
+					}
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Argentina"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Uruguay/DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-26T19:25:15Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

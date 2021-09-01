@@ -1,0 +1,811 @@
+{
+	"name": "02_HZ_CZ_Routes_Repro_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEachFile",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.outputGetter",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "If CSV",
+							"type": "IfCondition",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(item().file_type,'CSV')",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Set variable",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "downloadLink",
+											"value": {
+												"value": "@item().download_link",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Copy Analytics Routes Files",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Set variable",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 4,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "DelimitedTextSource",
+												"storeSettings": {
+													"type": "HttpReadSettings",
+													"requestMethod": "GET"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextReadSettings"
+												}
+											},
+											"sink": {
+												"type": "AvroSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												},
+												"formatSettings": {
+													"type": "AvroWriteSettings"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "DC ID",
+															"type": "String"
+														},
+														"sink": {
+															"name": "DC_ID"
+														}
+													},
+													{
+														"source": {
+															"name": "DC Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "DC_Name"
+														}
+													},
+													{
+														"source": {
+															"name": "DC Time Zone",
+															"type": "String"
+														},
+														"sink": {
+															"name": "DC_Time_Zone"
+														}
+													},
+													{
+														"source": {
+															"name": "Route ID",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Route_ID"
+														}
+													},
+													{
+														"source": {
+															"name": "Route Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Route_Name"
+														}
+													},
+													{
+														"source": {
+															"name": "Planned Route Start Date",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Planned_Route_Start_Date"
+														}
+													},
+													{
+														"source": {
+															"name": "Planned Route Start Timestamp",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Planned_Route_Start_Timestamp"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver ID",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_ID"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver Name",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_Name"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver Groups",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_Groups"
+														}
+													},
+													{
+														"source": {
+															"name": "Is Digital Route",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Is_Digital_Route"
+														}
+													},
+													{
+														"source": {
+															"name": "Digital Route: Driver Trace Passed",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Digital_Route_Driver_Trace_Passed"
+														}
+													},
+													{
+														"source": {
+															"name": "Digital Route: Driver Click Score Passed",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Digital_Route_Driver_Click_Score_Passed"
+														}
+													},
+													{
+														"source": {
+															"name": "Digital Route: Hardware Trace Passed",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Digital_Route_Hardware_Trace_Passed"
+														}
+													},
+													{
+														"source": {
+															"name": "Imported Customers Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Imported_Customers_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Real-time Sequencing Enabled",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Real_Time_Sequencing_Enabled"
+														}
+													},
+													{
+														"source": {
+															"name": "Customers with Confident Locations Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Customers_With_Confident_Locations_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Customers with Unconfident Locations Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Customers_With_Unconfident_Locations_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Customers with Unknown Locations Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Customers_With_Unknown_Locations_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Successful Customers Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Successful_Customers_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Failed Customers Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Failed_Customers_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Try Again Later Customers Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Try_Again_Later_Customers_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Mixed Status Customers Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Mixed_Status_Customers_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Visited Customers Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Visited_Customers_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Unvisited Customers Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Unvisited_Customers_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Reattempt Authorizations Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Reattempt_Authorizations_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Clicks at Confident Locations",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Clicks_At_Confident_Locations"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Clicks at Unconfident Locations",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Clicks_At_Unconfident_Locations"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Clicks at Unknown Locations",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Clicks_At_Unknown_Locations"
+														}
+													},
+													{
+														"source": {
+															"name": "Actual Route Departure Time",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Actual_Route_Departure_Time"
+														}
+													},
+													{
+														"source": {
+															"name": "Actual Route Arrival Time",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Actual_Route_Arrival_Time"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver Click Score",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_Click_Score"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Customers Clicked",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Customers_Clicked"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Visits Clicked with Distance Measured",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Visits_Clicked_With_Distance_Measured"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Clicks at Customer",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Clicks_At_Customer"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Sequence Adhered Clicks",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Sequence_Adhered_Clicks"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Sequence Not Adhered Clicks",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Sequence_Not_Adhered_Clicks"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Sequence Adhered Clicks with No Decision",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Sequence_Adhered_Clicks_With_No_Decision"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Sequence Forgiven Clicks",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Sequence_Forgiven_Clicks"
+														}
+													},
+													{
+														"source": {
+															"name": "Sequence Adherence",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Sequence_Adherence"
+														}
+													},
+													{
+														"source": {
+															"name": "Planned Foxtrot Driving Meters",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Planned_Foxtrot_Driving_Meters"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Driven Meters",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Driven_Meters"
+														}
+													},
+													{
+														"source": {
+															"name": "Planned Foxtrot Driving Seconds",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Planned_Foxtrot_Driving_Seconds"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Driven Seconds",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Driven_Seconds"
+														}
+													},
+													{
+														"source": {
+															"name": "Planned Foxtrot Journey Seconds",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Planned_Foxtrot_Journey_Seconds"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Journey Seconds",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Journey_Seconds"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Stops Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Stops_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Stop Time Seconds",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Stop_Time_Seconds"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Authorized Stops Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Authorized_Stops_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Authorized Stops Seconds",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Authorized_Stops_Seconds"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Unauthorized Stops Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Unauthorized_Stops_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Unauthorized Stops Seconds",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Unauthorized_Stops_Seconds"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Data Gaps Count",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Data_Gaps_Count"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Data Gaps Seconds",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Data_Gaps_Seconds"
+														}
+													},
+													{
+														"source": {
+															"name": "Customers with Additional Visits",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Customers_With_Additional_Visits"
+														}
+													},
+													{
+														"source": {
+															"name": "Total Additional Visits",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Total_Additional_Visits"
+														}
+													},
+													{
+														"source": {
+															"name": "Additional Visits With Final Result Success",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Additional_Visits_With_Final_Result_Success"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver Marked Route Start Timestamp",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_Marked_Route_Start_Timestamp"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver Marked Route Start Latitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_Marked_Route_Start_Latitude"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver Marked Route Start Longitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_Marked_Route_Start_Longitude"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver Marked Route End Timestamp",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_Marked_Route_End_Timestamp"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver Marked Route End Latitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_Marked_Route_End_Latitude"
+														}
+													},
+													{
+														"source": {
+															"name": "Driver Marked Route End Longitude",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Driver_Marked_Route_End_Longitude"
+														}
+													},
+													{
+														"source": {
+															"name": "End Terminus Changed",
+															"type": "String"
+														},
+														"sink": {
+															"name": "End_Terminus_Changed"
+														}
+													},
+													{
+														"source": {
+															"name": "Planned Total Waiting Time Seconds",
+															"type": "String"
+														},
+														"sink": {
+															"name": "Planned_Total_Waiting_Time_Seconds"
+														}
+													}
+												]
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "Source_API_PZ_Foxtrot_DTS",
+												"type": "DatasetReference",
+												"parameters": {
+													"relativeUrl": {
+														"value": "@variables('downloadLink')",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "Sink_API_PZ_Foxtrot_DTS",
+												"type": "DatasetReference",
+												"parameters": {
+													"country": {
+														"value": "@pipeline().parameters.country",
+														"type": "Expression"
+													},
+													"tableName": {
+														"value": "@pipeline().parameters.tableName",
+														"type": "Expression"
+													},
+													"date": {
+														"value": "@concat(pipeline().parameters.anio, '-', pipeline().parameters.mes, '-01')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "PassageBetweenZones",
+										"type": "ExecutePipeline",
+										"dependsOn": [
+											{
+												"activity": "Copy Analytics Routes Files",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"pipeline": {
+												"referenceName": "Passage_Between_Zones_Routes_Repro_PPL",
+												"type": "PipelineReference"
+											},
+											"waitOnCompletion": true,
+											"parameters": {
+												"rowsCopied": {
+													"value": "@concat(activity('Copy Analytics Routes Files').output.rowsCopied)",
+													"type": "Expression"
+												},
+												"country": {
+													"value": "@pipeline().parameters.country",
+													"type": "Expression"
+												},
+												"keys": {
+													"value": "@pipeline().parameters.keys",
+													"type": "Expression"
+												},
+												"originSystem": {
+													"value": "@pipeline().parameters.originSystem",
+													"type": "Expression"
+												},
+												"scope": {
+													"value": "@pipeline().parameters.scope",
+													"type": "Expression"
+												},
+												"tableName": {
+													"value": "@pipeline().parameters.tableName",
+													"type": "Expression"
+												},
+												"partitionByField": {
+													"value": "@pipeline().parameters.partitionByField",
+													"type": "Expression"
+												},
+												"month": {
+													"value": "@pipeline().parameters.mes",
+													"type": "Expression"
+												},
+												"year": {
+													"value": "@pipeline().parameters.anio",
+													"type": "Expression"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"outputGetter": {
+				"type": "array"
+			},
+			"country": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"originSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string"
+			},
+			"mes": {
+				"type": "string"
+			},
+			"anio": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"downloadLink": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "LAS/Foxtrot/Routes/Reproceso"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

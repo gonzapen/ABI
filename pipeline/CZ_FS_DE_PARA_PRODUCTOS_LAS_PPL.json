@@ -1,0 +1,318 @@
+{
+	"name": "CZ_FS_DE_PARA_PRODUCTOS_LAS_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Delete old fIles",
+				"type": "Delete",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_DE_PARA_Output_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true
+					}
+				}
+			},
+			{
+				"name": "CONTROL DP PRODUCTOS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Delete old fIles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/LakeHouse/DePara/ControlDePara/CONTROL_DP_PRODUCTOS",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy DP PRODUCTOS",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Validation Output DE_PARA_PRODUCTOS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat(pipeline().parameters.country,'/Public/Manual/DE_PARA/Output/',pipeline().parameters.tableName)",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_DE_PARA_Output_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_DE_PARA_Output_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Validation Output DE_PARA_PRODUCTOS",
+				"type": "Validation",
+				"dependsOn": [
+					{
+						"activity": "CONTROL DP PRODUCTOS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_DE_PARA_Output_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					},
+					"timeout": "0.00:02:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "IfRegistrosNuevos",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Copy DP PRODUCTOS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('CONTROL DP PRODUCTOS').output.runOutput, 0)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Enviar mail",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Mail_LAS_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"equipo": {
+										"value": "@pipeline().parameters.equipo",
+										"type": "Expression"
+									},
+									"pais": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"tema": {
+										"value": "@pipeline().parameters.tema",
+										"type": "Expression"
+									},
+									"subTema": {
+										"value": "@pipeline().parameters.subTema",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"context": {
+				"type": "string",
+				"defaultValue": "Public"
+			},
+			"country": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"tableFinal": {
+				"type": "string"
+			},
+			"equipo": {
+				"type": "string"
+			},
+			"tema": {
+				"type": "string"
+			},
+			"subTema": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/DE_PARA/Template/Control"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-23T21:05:24Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

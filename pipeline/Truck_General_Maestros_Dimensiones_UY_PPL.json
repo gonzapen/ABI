@@ -1,0 +1,46 @@
+{
+	"name": "Truck_General_Maestros_Dimensiones_UY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Replica Maestros",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_Replica_Maestros_UY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMENSIONES",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Replica Maestros",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_General_Dimensiones_UY_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Uruguay/Truck"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-26T19:25:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

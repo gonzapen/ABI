@@ -1,0 +1,129 @@
+{
+	"name": "00_CZ_CZ_COMMERCIAL_EMBOTELLADORA_ORQUESTADOR_FT_CL_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_VENTAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CREACION_FT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_CZ_CZ_COMMERCIAL_EMBOTELLADORA_VENTAS_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "CREACION_FT",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Chile/Embotelladora/Tablas_Externas/TABLAS_EXTERNAS_EMBOTELLADORA_FACTS"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Mail Alerta Ventas",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "FT_VENTAS",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						},
+						"tema": "Fact",
+						"subTema": "Ventas"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"ambiente": {
+				"type": "string",
+				"defaultValue": "Desarrollo"
+			}
+		},
+		"folder": {
+			"name": "Chile/Commercial/Embotelladora_DW/Fact"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

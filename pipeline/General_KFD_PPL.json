@@ -1,0 +1,113 @@
+{
+	"name": "General_KFD_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "General_KFD_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_KFD_Views_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"descripcion": {
+							"value": "@pipeline().parameters.descripcion",
+							"type": "Expression"
+						},
+						"subscriptos": {
+							"value": "@pipeline().parameters.subscriptos",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"viewName": {
+							"value": "@pipeline().parameters.viewName",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "KFD"
+			},
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Public"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "KFD"
+			},
+			"descripcion": {
+				"type": "string",
+				"defaultValue": "None"
+			},
+			"subscriptos": {
+				"type": "string",
+				"defaultValue": "santiagobalay1997@gmail.com"
+			},
+			"runId": {
+				"type": "string"
+			},
+			"viewName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/KFD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

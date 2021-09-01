@@ -1,0 +1,42 @@
+{
+	"name": "A_LASCommercial_Argentina_Foxtrot_Replica",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "00_Foxtrot_Routes_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"country": "Argentina",
+					"keys": "route_id",
+					"originSystem": "Foxtrot",
+					"scope": "KeyVault",
+					"tableName": "RoutesAr",
+					"schema": "-",
+					"partitionByField": "planned_route_start_timestamp",
+					"description": "Carga diaria"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-06-15T16:43:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						4
+					]
+				}
+			}
+		}
+	}
+}

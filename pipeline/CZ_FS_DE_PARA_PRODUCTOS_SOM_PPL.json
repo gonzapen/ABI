@@ -1,0 +1,339 @@
+{
+	"name": "CZ_FS_DE_PARA_PRODUCTOS_SOM_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Delete old fIles",
+				"type": "Delete",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_LAS_DE_PARA_CommAn_Output_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true
+					}
+				}
+			},
+			{
+				"name": "CONTROL DP PRODUCTOS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Delete old fIles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/LakeHouse/Som/ControlDp/CONTROL_DP_PRODUCTOS_DB",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"countryCode": {
+							"value": "@pipeline().parameters.countryCode",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Copy DP PRODUCTOS",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Validation Output DE_PARA_PRODUCTOS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat(pipeline().parameters.country,'/Commercial/Manual/DePara/Output/',pipeline().parameters.tableName)",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_LAS_DE_PARA_CommAn_Output_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_LAS_DE_PARA_Strategy_Output_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "DE_PARA_PRODUCTOS_SOM",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"equipoFS": {
+								"value": "@pipeline().parameters.equipoFS",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Validation Output DE_PARA_PRODUCTOS",
+				"type": "Validation",
+				"dependsOn": [
+					{
+						"activity": "CONTROL DP PRODUCTOS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_LAS_DE_PARA_CommAn_Output_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							}
+						}
+					},
+					"timeout": "0.00:04:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "IfProductosNuevos",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Copy DP PRODUCTOS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('CONTROL DP PRODUCTOS').output.runOutput, 0)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Enviar mail",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Mail_LAS_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"equipo": {
+										"value": "@pipeline().parameters.equipo",
+										"type": "Expression"
+									},
+									"pais": {
+										"value": "@pipeline().parameters.pais",
+										"type": "Expression"
+									},
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"tema": {
+										"value": "@pipeline().parameters.tema",
+										"type": "Expression"
+									},
+									"subTema": {
+										"value": "@pipeline().parameters.subTema",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"country": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"runId": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "DeParaProductosSom"
+			},
+			"equipo": {
+				"type": "string",
+				"defaultValue": "Som"
+			},
+			"pais": {
+				"type": "string"
+			},
+			"tema": {
+				"type": "string",
+				"defaultValue": "Depara"
+			},
+			"subTema": {
+				"type": "string",
+				"defaultValue": "Productos"
+			},
+			"countryCode": {
+				"type": "string"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "DpSomProductos"
+			},
+			"equipoFS": {
+				"type": "string",
+				"defaultValue": "06-CommAn"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM/Control_DP"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,43 @@
+{
+	"name": "Sink_API_PZ_Foxtrot_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "Routes"
+			},
+			"date": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Foxtrot"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat(dataset().tableName,'.avro')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat(dataset().country,'/Foxtrot/',dataset().tableName,'/',string(formatDateTime(dataset().date, 'yyyy')),'/',string(formatDateTime(dataset().date, 'MM')),'/',formatDateTime(dataset().date, 'dd'),'/',dataset().tableName)",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

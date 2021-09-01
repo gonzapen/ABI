@@ -1,0 +1,147 @@
+{
+	"name": "Source_FullDigital_Bajada_Template_DL_Parquet_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"pais": {
+				"type": "string",
+				"defaultValue": "Paraguay"
+			},
+			"entidad": {
+				"type": "string",
+				"defaultValue": "Customer"
+			},
+			"version": {
+				"type": "string",
+				"defaultValue": "v0.2"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": {
+					"value": "@concat(dataset().pais,'/Commercial/FullDigital/',dataset().entidad,'/',dataset().version,'/')",
+					"type": "Expression"
+				},
+				"fileSystem": "consumezone"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "ACCOUNT_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "ACCOUNT_NAME",
+				"type": "UTF8"
+			},
+			{
+				"name": "CHANNEL_TYPE_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "CHANNEL_TYPE_DESC",
+				"type": "UTF8"
+			},
+			{
+				"name": "CHANNEL",
+				"type": "UTF8"
+			},
+			{
+				"name": "SEGMENT_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "SEGMENT_DESC",
+				"type": "UTF8"
+			},
+			{
+				"name": "SUBSEGMENT_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "SUBSEGMENT_DESC",
+				"type": "UTF8"
+			},
+			{
+				"name": "SUBCHANNEL_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "SUBCHANNEL_DESC",
+				"type": "UTF8"
+			},
+			{
+				"name": "ACCOUNT_ADDRESS",
+				"type": "UTF8"
+			},
+			{
+				"name": "ACCOUNT_STATUS",
+				"type": "UTF8"
+			},
+			{
+				"name": "LATITUDE",
+				"type": "UTF8"
+			},
+			{
+				"name": "LONGITUDE",
+				"type": "UTF8"
+			},
+			{
+				"name": "ZIPCODE",
+				"type": "UTF8"
+			},
+			{
+				"name": "DEPARTMENT_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "DEPARTMENT_DESC",
+				"type": "UTF8"
+			},
+			{
+				"name": "CITY_DESC",
+				"type": "UTF8"
+			},
+			{
+				"name": "CREDIT_TOTAL",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "PAYMENT_TERMS_PERIOD_DAYS",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "COUNTRY",
+				"type": "UTF8"
+			},
+			{
+				"name": "PRICE_LIST_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "LIQUOR_LICENSE_NUMBER",
+				"type": "UTF8"
+			},
+			{
+				"name": "LIQUOR_LICENSE_EXPIRATION_DATE",
+				"type": "INT32"
+			},
+			{
+				"name": "LIQUOR_LICENSE_STATUS",
+				"type": "UTF8"
+			},
+			{
+				"name": "UPDATED_AT",
+				"type": "INT32"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

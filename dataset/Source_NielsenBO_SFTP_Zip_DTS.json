@@ -1,0 +1,22 @@
+{
+	"name": "Source_NielsenBO_SFTP_Zip_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_Nielsen",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Bolivia/Nielsen"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "SftpLocation",
+				"fileName": "B082TXT2.zip",
+				"folderPath": "/ABI"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

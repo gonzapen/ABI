@@ -1,0 +1,39 @@
+{
+	"name": "Source_SOM_Bajada_Template_DL_Parquet_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"pais": {
+				"type": "string"
+			},
+			"origen": {
+				"type": "string"
+			},
+			"periodo": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM/BajadaBases"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "*.parquet",
+				"folderPath": {
+					"value": "@concat(dataset().pais,'/Public/Manual/SOM/',dataset().origen,'/','bajada_',toLower(dataset().pais),'_',dataset().periodo)",
+					"type": "Expression"
+				},
+				"fileSystem": "consumezone"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

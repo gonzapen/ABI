@@ -1,0 +1,41 @@
+{
+	"name": "A_LASCommercial_Paraguay_Truck_Replica_Incremental_Fact",
+	"properties": {
+		"description": "Trigger que ejecuta las extracciones desde truck de las tablas de novedades y la carga de las Fact de Paraguay",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Truck_General_Incremental_Fact_PY_PPL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Week",
+				"interval": 1,
+				"startTime": "2020-11-28T07:00:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						7
+					],
+					"weekDays": [
+						"Monday",
+						"Wednesday",
+						"Tuesday",
+						"Thursday",
+						"Friday",
+						"Saturday"
+					]
+				}
+			}
+		}
+	}
+}

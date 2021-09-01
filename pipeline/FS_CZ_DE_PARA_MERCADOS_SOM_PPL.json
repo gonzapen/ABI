@@ -1,0 +1,281 @@
+{
+	"name": "FS_CZ_DE_PARA_MERCADOS_SOM_PPL",
+	"properties": {
+		"description": "Encargado de obtener el DE_PARA de Mercados y replicarlo en las distintas zonas",
+		"activities": [
+			{
+				"name": "Copy data CZ",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Delete DE_PARA en File Server",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AvroSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_LAS_DE_PARA_Strategy_Input_PZ_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"pais": {
+								"value": "@pipeline().parameters.pais",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_LAS_DE_PARA_Strategy_Input_CZ_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"pais": {
+								"value": "@pipeline().parameters.pais",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Copy data PZ",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Validation DE_PARA en File Server",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_LAS_DE_PARA_Strategy_Input_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "DE_PARA_MERCADOS",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"pais": {
+								"value": "@pipeline().parameters.pais",
+								"type": "Expression"
+							},
+							"equipoFS": {
+								"value": "@pipeline().parameters.equipoFS",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_LAS_DE_PARA_Strategy_Input_PZ_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"pais": {
+								"value": "@pipeline().parameters.pais",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Validation DE_PARA en File Server",
+				"type": "Validation",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_LAS_DE_PARA_Strategy_Input_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "DE_PARA_MERCADOS",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"pais": {
+								"value": "@pipeline().parameters.pais",
+								"type": "Expression"
+							},
+							"equipoFS": {
+								"value": "@pipeline().parameters.equipoFS",
+								"type": "Expression"
+							}
+						}
+					},
+					"timeout": "0.00:20:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "Delete DE_PARA en File Server",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "Copy data PZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Delete_LAS_DE_PARA_Strategy_Input",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "DE_PARA_MERCADOS",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"pais": {
+								"value": "@pipeline().parameters.pais",
+								"type": "Expression"
+							},
+							"equipoFS": {
+								"value": "@pipeline().parameters.equipoFS",
+								"type": "Expression"
+							}
+						}
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "FileServerReadSettings",
+						"recursive": true
+					}
+				}
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string",
+				"defaultValue": "DeParaMercados"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"pais": {
+				"type": "string"
+			},
+			"equipoFS": {
+				"type": "string",
+				"defaultValue": "06-CommAn"
+			}
+		},
+		"folder": {
+			"name": "LAS/DE_PARA_SOM"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

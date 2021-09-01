@@ -1,0 +1,33 @@
+{
+	"name": "Create_Tablas_Externas_FullDigital_PY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "CREATE_TABLAS_FDPY",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Paraguay/FullDigital/TablasExternas/Create_Tables_FullDigital_PY"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Paraguay/FullDigital"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:13Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

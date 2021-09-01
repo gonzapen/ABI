@@ -1,0 +1,93 @@
+{
+	"name": "02_Snowflake_HZ_CZ_Template_Maestro_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "HZ_CZ_TEMPLATE_FULL_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Snowflake/Template/HZ_CZ_TEMPLATE_MAESTRO_DB_SNOWFLAKE",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"partitionByField": {
+							"value": "@pipeline().parameters.partitionByField",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"context": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string"
+			},
+			"schema": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Snowflake/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-26T19:25:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,119 @@
+{
+	"name": "Source_PZ_CSV_DTS_HTTP_PrimeraEjecucion",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_Scentia",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Argentina/Scentia"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@concat(string(formatDateTime(getPastTime(2,'Month'),'yyyyMM')),'/','Datos_TSELF_CERV_InBev_',string(formatDateTime(getPastTime(2,'Month'),'yyyyMM')),'.csv')",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ";",
+			"encodingName": "WINDOWS-1252",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Periodo",
+				"type": "String"
+			},
+			{
+				"name": "CANAL",
+				"type": "String"
+			},
+			{
+				"name": "KEY ACCOUNT",
+				"type": "String"
+			},
+			{
+				"name": "REGION",
+				"type": "String"
+			},
+			{
+				"name": "AREA",
+				"type": "String"
+			},
+			{
+				"name": "SUB-REGION",
+				"type": "String"
+			},
+			{
+				"name": "FORMATO",
+				"type": "String"
+			},
+			{
+				"name": "Ean",
+				"type": "String"
+			},
+			{
+				"name": "Desc_2",
+				"type": "String"
+			},
+			{
+				"name": "Manuf",
+				"type": "String"
+			},
+			{
+				"name": "Brand",
+				"type": "String"
+			},
+			{
+				"name": "SUBBRAND",
+				"type": "String"
+			},
+			{
+				"name": "SEGMENTO",
+				"type": "String"
+			},
+			{
+				"name": "TIPO_ENV",
+				"type": "String"
+			},
+			{
+				"name": "SIZE",
+				"type": "String"
+			},
+			{
+				"name": "Calibre",
+				"type": "String"
+			},
+			{
+				"name": "Contenido",
+				"type": "String"
+			},
+			{
+				"name": " Unidades",
+				"type": "String"
+			},
+			{
+				"name": " VolumenLts",
+				"type": "String"
+			},
+			{
+				"name": " Importe_Item",
+				"type": "String"
+			},
+			{
+				"name": "SOM",
+				"type": "String"
+			},
+			{
+				"name": "SOS",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

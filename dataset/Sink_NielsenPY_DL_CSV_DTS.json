@@ -1,0 +1,22 @@
+{
+	"name": "Sink_NielsenPY_DL_CSV_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Paraguay/Nielsen"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Paraguay/Nielsen/PY082TXT",
+				"fileSystem": "prelandingzone"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

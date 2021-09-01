@@ -1,0 +1,88 @@
+{
+	"name": "00_Foxtrot_Routes_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "01_API_PZ_Routes_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_API_PZ_Routes_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"originSystem": {
+							"value": "@pipeline().parameters.originSystem",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"partitionByField": {
+							"value": "@pipeline().parameters.partitionByField",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "RouteId"
+			},
+			"originSystem": {
+				"type": "string",
+				"defaultValue": "Foxtrot"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "RoutesAr"
+			},
+			"schema": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string",
+				"defaultValue": "Planned_Route_Start_Timestamp"
+			},
+			"description": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/Foxtrot/Routes"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-26T14:13:35Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,248 @@
+{
+	"name": "02_Scentia_Mayoristas_PZ_SOM_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data Mayoristas",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"requestMethod": "GET"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "Mes",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Mes",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Categoria",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Categoria",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Bandera",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Bandera",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Descripción",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Descripcion"
+								}
+							},
+							{
+								"source": {
+									"name": "Compañía",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Compania"
+								}
+							},
+							{
+								"source": {
+									"name": "Marca",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Marca",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Etapa",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Etapa",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Formato",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Formato",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Mercado",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Mercado",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBETAPA",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUBETAPA",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Sustancia",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Sustancia",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Unificador",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Unificador",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SKU Analytics",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SKU_Analytics"
+								}
+							},
+							{
+								"source": {
+									"name": "EAN",
+									"type": "String"
+								},
+								"sink": {
+									"name": "EAN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Conversor",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Conversor",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Unidades",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Unidades",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": " Importe ",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Importe"
+								}
+							},
+							{
+								"source": {
+									"name": "Volumen (Kg)",
+									"type": "String"
+								},
+								"sink": {
+									"name": "Volumen_Kg"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Scentia_Mayoristas_PZ_CSV_DTS_HTTP",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Scentia_Mayoristas_PZ_SOM_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": "@pipeline().parameters.tableName"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Scentia/Mayoristas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,187 @@
+{
+	"name": "General_DE_PARA_UY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DP_ESTRUCTURA_COMERCIAL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_DePara_EstructuraComercial_Commercial_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DeParaEstructuraComercialUy",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableFinal": "DpEstructuraComercial",
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": "Estructura Comercial",
+						"tableDimension": "DIM_ESTRUCTURA_COMERCIAL_UY",
+						"archivoOrigen": "DE_PARA_ESTRUCTURA_COMERCIAL_UY"
+					}
+				}
+			},
+			{
+				"name": "DP_CANAL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_DePara_Canal_Commercial_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DeParaCanalUy",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableFinal": "DpCanal",
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": "Canales",
+						"tableDimension": "DIM_CANALES_UY, DIM_SEGMENTOS_UY",
+						"archivoOrigen": "DE_PARA_CANAL_UY"
+					}
+				}
+			},
+			{
+				"name": "DP_PRODUCTOS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_DePara_Productos_Commercial_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DeParaProductosUy",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableFinal": "DpProductos",
+						"equipo": {
+							"value": "@pipeline().parameters.equipo",
+							"type": "Expression"
+						},
+						"tema": {
+							"value": "@pipeline().parameters.tema",
+							"type": "Expression"
+						},
+						"subTema": "Productos",
+						"tableDimension": "DIM_PRODUCTOS_UY",
+						"archivoOrigen": "DE_PARA_PRODUCTOS_UY"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Uruguay"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "01-Produccion"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "Truck"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"equipo": {
+				"type": "string",
+				"defaultValue": "Sales UY"
+			},
+			"tema": {
+				"type": "string",
+				"defaultValue": "DePara"
+			}
+		},
+		"folder": {
+			"name": "Uruguay/DE_PARA"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-23T21:05:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

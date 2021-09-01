@@ -1,0 +1,76 @@
+{
+	"name": "Truck_SALES_FINANCE_BO_PPL",
+	"properties": {
+		"description": "Extracción desde Truck de las tablas de novedades relacionadas a Ventas para Bolivia",
+		"activities": [
+			{
+				"name": "Pclicc",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "Pclicc",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Bolivia",
+						"keys": "EmpId, CliId, CodmovId, CtcSerRef, CtcNroCteR, CtccliIdCu, CtcFchVto, CtcCodMovA, CtcSerMov, CtcNroCte",
+						"context": {
+							"value": "Commercial",
+							"type": "Expression"
+						},
+						"schema": "TRKNULLCBN",
+						"descripcion": "Movimientos de Cuenta Corriente",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PCLICC_DB",
+						"partitionByField": "part_ctcfchemi_mes"
+					}
+				}
+			},
+			{
+				"name": "Pdocln",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "Pdocln",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Bolivia",
+						"keys": "CiaId, EjeID, LpsId, AstpoID, AsiID, AsiNroLine, AsiIDCorr",
+						"context": {
+							"value": "Commercial",
+							"type": "Expression"
+						},
+						"schema": "TRKNULLCBN",
+						"descripcion": "Referencias de Cuenta Corriente",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PDOCLN_DB",
+						"partitionByField": "part_asifch_mes"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/Truck/Replicas/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

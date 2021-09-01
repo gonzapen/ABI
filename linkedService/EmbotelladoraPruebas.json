@@ -1,0 +1,16 @@
+{
+	"name": "EmbotelladoraPruebas",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=abi-las-dev-brs-embonorcl-sql.database.windows.net;initial catalog=EmbonorCL.DB;user id=abimanagement",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI5MDI1OGExMi1lY2U3LTRlYWMtYmEwOC1lZDY5M2JkM2E1ZTkiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTLas",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

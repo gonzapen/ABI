@@ -1,0 +1,38 @@
+{
+	"name": "Source_DE_PARA_Input_PZ_LAS_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"tableName": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/DE_PARA"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat(dataset().tableName,'.avro')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('/',dataset().country,'/Manual/DE_PARA/',dataset().tableName,'/',string(formatDateTime(utcnow(), 'yyyy')),'/',string(formatDateTime(utcnow(), 'MM')),'/',formatDateTime(utcnow(), 'dd'),'/',dataset().tableName)",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

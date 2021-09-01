@@ -1,0 +1,36 @@
+{
+	"name": "Source_GVQ_PROD_AR_DTS",
+	"properties": {
+		"description": "Conexión Producción",
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_Powa",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table": {
+				"type": "string"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "AR_PROD_GVQ "
+			}
+		},
+		"folder": {
+			"name": "Argentina/GVQ/PROD"
+		},
+		"annotations": [],
+		"type": "OracleTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().table",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

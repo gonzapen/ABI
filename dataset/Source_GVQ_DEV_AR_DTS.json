@@ -1,0 +1,35 @@
+{
+	"name": "Source_GVQ_DEV_AR_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_DWA2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table": {
+				"type": "string"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "AR_PROD_GVQ "
+			}
+		},
+		"folder": {
+			"name": "Argentina/GVQ/DEV"
+		},
+		"annotations": [],
+		"type": "OracleTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().table",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

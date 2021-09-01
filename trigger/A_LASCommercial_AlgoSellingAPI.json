@@ -1,0 +1,35 @@
+{
+	"name": "A_LASCommercial_AlgoSellingAPI",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "AlgoSelling_General_AR_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"scope": "KeyVault"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-04-15T06:00:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						4
+					]
+				}
+			}
+		}
+	}
+}

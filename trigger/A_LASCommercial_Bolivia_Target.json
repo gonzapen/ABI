@@ -1,0 +1,40 @@
+{
+	"name": "A_LASCommercial_Bolivia_Target",
+	"properties": {
+		"description": "Bajada de plnas target y Bgt diario, calendario, tasa de cambio y target mensual.",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "General_TGT_BO_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"entorno": "01-Produccion",
+					"country": "Bolivia",
+					"context": "Commercial",
+					"origenSystem": "Manual",
+					"scope": "KeyVault"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-03-31T15:11:00",
+				"timeZone": "E. South America Standard Time",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						9
+					]
+				}
+			}
+		}
+	}
+}

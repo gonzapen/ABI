@@ -1,0 +1,89 @@
+{
+	"name": "02_TempBlob_PZ",
+	"properties": {
+		"description": "Copy activity  from Temp Blob to the PZ (avro files). First it deletes if the file already exist",
+		"activities": [
+			{
+				"name": "TempBlob_To_PZ",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AvroSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat('Argentina/ShpList/',pipeline().parameters.ListName,'/Silver')",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.avro",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_ShpList_TempBlob_Avro",
+						"type": "DatasetReference",
+						"parameters": {
+							"ListName": {
+								"value": "@pipeline().parameters.ListName",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_ShpList_DL_PZ",
+						"type": "DatasetReference",
+						"parameters": {
+							"ListName": {
+								"value": "@pipeline().parameters.ListName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"ListName": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "LAS/Sharepoint/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

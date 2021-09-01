@@ -1,0 +1,36 @@
+{
+	"name": "Sink_ShpList_TempBlob",
+	"properties": {
+		"description": "This dataset is used as sink for shp lists. It is located in the Temporal Blob (LASCommercial_BlobTemporal Linked Service) in path 'source/Argentina/ShpList/[Listname]/[ListName in snake_case].json'.\nIt takes the ListName as parameter.",
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_BlobTemporal",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ListName": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "LAS/Sharepoint"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@if(endswith(dataset().ListName,'Dev'),concat(toLower(substring(dataset().ListName,0,indexof(dataset().ListName,'Dev'))),'_dev.json'),concat(toLower(substring(dataset().ListName,0,indexof(dataset().ListName,'Prod'))),'_prod.json'))",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('Argentina/ShpList/',dataset().ListName,'/Bronze')",
+					"type": "Expression"
+				},
+				"container": "source"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

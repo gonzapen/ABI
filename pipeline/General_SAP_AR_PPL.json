@@ -1,0 +1,455 @@
+{
+	"name": "General_SAP_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "TRUCK",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_ArchivosOrigen_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "TRUCK",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "01-Archivos",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": "KeyVault",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"subscriptos": "santiagobalay1997@gmail.com",
+						"tableNamePZ": "Truck"
+					}
+				}
+			},
+			{
+				"name": "SALESFORCE",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_ArchivosOrigen_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "SALESFORCE",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "01-Archivos",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": "KeyVault",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"subscriptos": "santiagobalay1997@gmail.com",
+						"tableNamePZ": "Salesforce"
+					}
+				}
+			},
+			{
+				"name": "VBAK",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_ArchivosOrigen_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VBAK",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "01-Archivos",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": "KeyVault",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"subscriptos": "santiagobalay1997@gmail.com",
+						"tableNamePZ": "Vbak"
+					}
+				}
+			},
+			{
+				"name": "VBAP",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_ArchivosOrigen_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VBAP",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "01-Archivos",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": "KeyVault",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"subscriptos": "santiagobalay1997@gmail.com",
+						"tableNamePZ": "Vbap"
+					}
+				}
+			},
+			{
+				"name": "DE-PARA_BaseSKUs_Sales",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_DePara_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DE-PARA_BaseSKUs_Sales",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "02-DePara",
+						"runId": "None",
+						"scope": "KeyVault",
+						"keys": "dp_c_prd",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"tableNamePZ": "DpBaseskusSales"
+					}
+				}
+			},
+			{
+				"name": "DE-PARA_Cliente_Region",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_DePara_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DE-PARA_Cliente_Region",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "02-DePara",
+						"runId": "None",
+						"scope": "KeyVault",
+						"keys": "dp_codigo_de_cliente",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"tableNamePZ": "DpClienteRegion"
+					}
+				}
+			},
+			{
+				"name": "DE-PARA_ClienteTruck_ClienteSap",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_DePara_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DE-PARA_ClienteTruck_ClienteSap",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "02-DePara",
+						"runId": "None",
+						"scope": "KeyVault",
+						"keys": "dp_cliente_madre_sap_solicitante, dp_cliente_madre_sap_pay_bill, dp_cliente_sucursal_sap",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"tableNamePZ": "DpClienteTruckClienteSap"
+					}
+				}
+			},
+			{
+				"name": "DE-PARA_Deposito",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_DePara_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DE-PARA_Deposito",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "02-DePara",
+						"runId": "None",
+						"scope": "KeyVault",
+						"keys": "dp_deposito",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"tableNamePZ": "DpDeposito"
+					}
+				}
+			},
+			{
+				"name": "DE-PARA_MatSap_ProductoTruck",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_DePara_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DE-PARA_MatSap_ProductoTruck",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "02-DePara",
+						"runId": "None",
+						"scope": "KeyVault",
+						"keys": "dp_material_sap",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"tableNamePZ": "DpMatSapProductoTruck"
+					}
+				}
+			},
+			{
+				"name": "DE-PARA_Movimiento",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_DePara_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DE-PARA_Movimiento",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "02-DePara",
+						"runId": "None",
+						"scope": "KeyVault",
+						"keys": "dp_movimiento",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"tableNamePZ": "DpMovimiento"
+					}
+				}
+			},
+			{
+				"name": "DE-PARA_Region",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_DePara_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DE-PARA_Region",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "02-DePara",
+						"runId": "None",
+						"scope": "KeyVault",
+						"keys": "dp_cod_region",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"tableNamePZ": "DpRegion"
+					}
+				}
+			},
+			{
+				"name": "DE-PARA_SubRegion",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_DePara_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DE-PARA_SubRegion",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "02-DePara",
+						"runId": "None",
+						"scope": "KeyVault",
+						"keys": "dp_cod_subregion",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"tableNamePZ": "DpSubregion"
+					}
+				}
+			},
+			{
+				"name": "DE-PARA_Depositos_SF_Ignorados",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "0_SAP_DePara_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "DE-PARA_Depositos_SF_Ignorados",
+						"entorno": "02-Desarrollo",
+						"country": "Argentina",
+						"tipo": "02-DePara",
+						"runId": "None",
+						"scope": "KeyVault",
+						"keys": "dp_codigo_deposito",
+						"context": "Commercial",
+						"origenSystem": "Sap",
+						"tableNamePZ": "DpDepositosSfIgnorados"
+					}
+				}
+			},
+			{
+				"name": "HZ_CZ_SAP_IntegracionHistoricoSalidasEstimadas_NB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "TRUCK",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "SALESFORCE",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "VBAK",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "VBAP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "DE-PARA_Cliente_Region",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "DE-PARA_ClienteTruck_ClienteSap",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "DE-PARA_Deposito",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "DE-PARA_BaseSKUs_Sales",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "DE-PARA_Depositos_SF_Ignorados",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "DE-PARA_SubRegion",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "DE-PARA_Region",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "DE-PARA_Movimiento",
+						"dependencyConditions": [
+							"Completed"
+						]
+					},
+					{
+						"activity": "DE-PARA_MatSap_ProductoTruck",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/LakeHouse/Sap/IntegracionSalidasEstimadas/HZ_CZ_SAP_IntegracionHistoricoSalidasEstimadas",
+					"baseParameters": {
+						"context": "Commercial",
+						"country": "Argentina",
+						"origenSystem": "Sap",
+						"scope": "KeyVault"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/SAP"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-26T14:13:37Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

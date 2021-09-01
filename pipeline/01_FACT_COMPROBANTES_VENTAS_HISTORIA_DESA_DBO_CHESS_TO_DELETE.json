@@ -1,0 +1,99 @@
+{
+	"name": "01_FACT_COMPROBANTES_VENTAS_HISTORIA_DESA_DBO_CHESS_TO_DELETE",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach_FACT_COMPROBANTES_VENTAS",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.years",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data FACT_COMPROBANTES_VENTAS historia",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat('SELECT\nCod_Compania\n,Cod_Empresa\n,Cod_Empresa_Factura\n,Cod_Tipo_Docs\n,Letra\n,Serie\n,Nro_Documento\n,Cod_Linea\n,Cod_Producto\n,SK_Producto\n,Cod_Vendedor_Real\n,SK_Cliente\n,Cod_Cliente\n,Cod_Deposito\n,Anulado\n,Cod_Comprobante\n,Cod_Tipo_Comprobante\n,Cod_Linea_Padre\n,Nro_Documento_Padre\n,Explota_Comb_Impres_Comprob\n,Fecha_Factura\n,Fecha_Pedido\n,Fecha_Paga\n,Fecha_Entrega\n,Cantidad\n,Resto\n,Precio\n,Bonificacion\n,Peso\n,Resto_Articulo\n,Valor_Articulo\n,Precio_Bruto\n,Cantidad_Con_Cargo_Bultos\n,Cantidad_Sin_Cargo_Bultos\n,Cantidad_Total_Bultos\n,Cantidad_Con_Cargo_UM\n,Cantidad_Sin_Cargo_UM\n,Cantidad_Total_UM\n,Importe_Bruto\n,Importe_Neto\n,Importe_Final\n,Importe_Bonif_Solo_SC\n,Importe_Bonif_Sin_SC\n,Importe_Bonif_Total\n,Cantidad_Total_Bultos_Rechazo\n,Cantidad_Total_UM_Rechazo\n,Importe_Neto_Rechazo\n,EsComprobantePorInterfaz\n,Fuente\n,Cantidad_Con_Cargo_Paletas\n,Cantidad_Sin_Cargo_Paletas\n,Cantidad_Total_Paletas\n,Tipo_Analisis\n,SK_Distribuidor\n,Cod_Origen_Pedido\n,Cod_Modo_Atencion\n,SK_Modo_Atencion\n,Nro_Pedido\n,SK_Motivo_Rechazo\n,SK_Transporte\n,SK_Chofer\n,Rechazo_Total\n,Importe_Bruto_PNSF\n,Importe_Neto_PNSF\n,Importe_Bruto_PNIT\n,Importe_Neto_PNIT\n,Importe_Bruto_Precio_Lista\n,Importe_Neto_Precio_Lista\n,Precio_Base\n,Cantidad_Total_Bultos_Combo\n,Cantidad_Total_UM_Combo\n,Importe_Bruto_Combo\n,Cod_Tipo_Planilla\n,Serie_Planilla\n,Nro_Planilla\n,Fecha_Actualizacion\n,Accion\nFROM dbo.FACT_COMPROBANTES_VENTAS\n\nWHERE Fecha_Factura >= CONVERT(DATE,CONCAT(',item(),',01),102) AND \nFecha_Factura <= CONVERT(DATE,CONCAT(',item(),',31),102)')",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_Chess_PROD_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "FACT_COMPROBANTES_VENTAS",
+										"schema": "dbo"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_Chess_DESA_DTS_history",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "FACT_COMPROBANTES_VENTAS",
+										"year": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"years": {
+				"type": "array",
+				"defaultValue": [
+					201712,
+					201711
+				]
+			}
+		},
+		"variables": {
+			"years": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Chess/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

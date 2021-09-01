@@ -1,0 +1,257 @@
+{
+	"name": "Truck_TEMPPLANIL_LAS_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "TRUNCATE TMPPLANIL",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "Db2Source",
+						"query": {
+							"value": "@concat('TRUNCATE TABLE ',pipeline().parameters.schema,'.TMPPLANIL')",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Truck_PROD_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "TMPPLANIL",
+							"schema": {
+								"value": "@pipeline().parameters.schema",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Truck_LAS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "TEMPPLANIL",
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"origenSystem": {
+								"value": "@pipeline().parameters.origenSystem",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Domingo",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "TRUNCATE TMPPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(dayOfWeek(utcnow()),0)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "TMPPLANIL",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "Db2Source",
+									"query": {
+										"value": "@concat('INSERT INTO ',pipeline().parameters.schema,'.TMPPLANIL\n(CAJAFCH, CAJAID, EMPID, FLTID, PLACAMTXT, PLACMPMON, PLACMPPSO, PLADISID, PLAFCH, PLAFCHCIE, PLAFCHENT, PLAFCHENTR, PLAFCHING, PLAFCHSAL, PLAFLGCTL, PLAFLGENT, PLAFLGMOD, PLAFLGRETP, PLAFLGSAL, PLAFLGTRAN, PLAFLTFLG, PLAFLTTOT, PLAHORENT, PLAHORSAL, PLAIDCAM, PLAIDDPSDS, PLAIDDPSOR, PLAIDDPSTR, PLAIDFLTCT, PLAIDPTOEM, PLAIDTRRCB, PLAIDTRS, PLAIDUSRCI, PLAIDUSREN, PLAIDUSRSA, PLANRO, PLANROCCOU, PLANROREF, PLANROVJE, PLANROXORI, PLASTS, PLATOTLIQ, PLATOTPSOC, PLATOTPSOI, PLATOTVAL, PLATPO, PLATPOFLT, PLATPOLSTF, PLATPOORI, PLATXT1, PLATXT2, PLAVALSTS, PLAVALTPOF, PLAVALULTN)\nSELECT CAJAFCH, CAJAID, EMPID, FLTID, PLACAMTXT, PLACMPMON, PLACMPPSO, PLADISID, PLAFCH, PLAFCHCIE, PLAFCHENT, PLAFCHENTR, PLAFCHING, PLAFCHSAL, PLAFLGCTL, PLAFLGENT, PLAFLGMOD, PLAFLGRETP, PLAFLGSAL, PLAFLGTRAN, PLAFLTFLG, PLAFLTTOT, PLAHORENT, PLAHORSAL, PLAIDCAM, PLAIDDPSDS, PLAIDDPSOR, PLAIDDPSTR, PLAIDFLTCT, PLAIDPTOEM, PLAIDTRRCB, PLAIDTRS, PLAIDUSRCI, PLAIDUSREN, PLAIDUSRSA, PLANRO, PLANROCCOU, PLANROREF, PLANROVJE, PLANROXORI, PLASTS, PLATOTLIQ, PLATOTPSOC, PLATOTPSOI, PLATOTVAL, PLATPO, PLATPOFLT, PLATPOLSTF, PLATPOORI, PLATXT1, PLATXT2, PLAVALSTS, PLAVALTPOF, PLAVALULTN\nFROM ',pipeline().parameters.schema,'.PLANIL P\nWHERE NOT EXISTS  (SELECT * FROM ',pipeline().parameters.schema,'.CTRLPLANIL T WHERE P.EMPID = T.EMPID AND P.PLANRO = T.CLMNROPLA) AND PLAFCH >= Cast(VarChar_Format((CURRENT_DATE -1 YEAR), ','''','yyyyMMdd','''',') as int)') ",
+										"type": "Expression"
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_Truck_PROD_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "TEMPPLANIL",
+										"schema": {
+											"value": "@pipeline().parameters.schema",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_Truck_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "TEMPPLANIL",
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"origenSystem": {
+											"value": "@pipeline().parameters.origenSystem",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "TMPPLANIL_ALL",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "Db2Source",
+									"query": {
+										"value": "@concat('INSERT INTO ',pipeline().parameters.schema,'.TMPPLANIL\n(CAJAFCH, CAJAID, EMPID, FLTID, PLACAMTXT, PLACMPMON, PLACMPPSO, PLADISID, PLAFCH, PLAFCHCIE, PLAFCHENT, PLAFCHENTR, PLAFCHING, PLAFCHSAL, PLAFLGCTL, PLAFLGENT, PLAFLGMOD, PLAFLGRETP, PLAFLGSAL, PLAFLGTRAN, PLAFLTFLG, PLAFLTTOT, PLAHORENT, PLAHORSAL, PLAIDCAM, PLAIDDPSDS, PLAIDDPSOR, PLAIDDPSTR, PLAIDFLTCT, PLAIDPTOEM, PLAIDTRRCB, PLAIDTRS, PLAIDUSRCI, PLAIDUSREN, PLAIDUSRSA, PLANRO, PLANROCCOU, PLANROREF, PLANROVJE, PLANROXORI, PLASTS, PLATOTLIQ, PLATOTPSOC, PLATOTPSOI, PLATOTVAL, PLATPO, PLATPOFLT, PLATPOLSTF, PLATPOORI, PLATXT1, PLATXT2, PLAVALSTS, PLAVALTPOF, PLAVALULTN)\nSELECT CAJAFCH, CAJAID, EMPID, FLTID, PLACAMTXT, PLACMPMON, PLACMPPSO, PLADISID, PLAFCH, PLAFCHCIE, PLAFCHENT, PLAFCHENTR, PLAFCHING, PLAFCHSAL, PLAFLGCTL, PLAFLGENT, PLAFLGMOD, PLAFLGRETP, PLAFLGSAL, PLAFLGTRAN, PLAFLTFLG, PLAFLTTOT, PLAHORENT, PLAHORSAL, PLAIDCAM, PLAIDDPSDS, PLAIDDPSOR, PLAIDDPSTR, PLAIDFLTCT, PLAIDPTOEM, PLAIDTRRCB, PLAIDTRS, PLAIDUSRCI, PLAIDUSREN, PLAIDUSRSA, PLANRO, PLANROCCOU, PLANROREF, PLANROVJE, PLANROXORI, PLASTS, PLATOTLIQ, PLATOTPSOC, PLATOTPSOI, PLATOTVAL, PLATPO, PLATPOFLT, PLATPOLSTF, PLATPOORI, PLATXT1, PLATXT2, PLAVALSTS, PLAVALTPOF, PLAVALULTN\nFROM ',pipeline().parameters.schema,'.PLANIL P\nWHERE NOT EXISTS  (SELECT * FROM ',pipeline().parameters.schema,'.CTRLPLANIL T WHERE P.EMPID = T.EMPID AND P.PLANRO = T.CLMNROPLA) AND PLAFCH >= Cast(VarChar_Format((CURRENT_DATE -1 YEAR), ','''','yyyyMMdd','''',') as int) ')",
+										"type": "Expression"
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_Truck_PROD_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "TEMPPLANIL",
+										"schema": {
+											"value": "@pipeline().parameters.schema",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_Truck_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "TEMPPLANIL",
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"origenSystem": {
+											"value": "@pipeline().parameters.origenSystem",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"schema": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/Truck/Template/PLANIL"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

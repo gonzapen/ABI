@@ -1,0 +1,85 @@
+{
+	"name": "2_PZ_HZ_SAP_DePara_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PZ_HZ_SAP_DePara_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/SAP/Shared/Template/PZ_HZ_TEMPLATE_DB",
+					"baseParameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/SAP/Template"
+		},
+		"annotations": [
+			"02_PZ_HZ_Template_PPL",
+			"Prelanding",
+			"History",
+			"GVQ",
+			"Argentina"
+		],
+		"lastPublishTime": "2021-08-19T17:51:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

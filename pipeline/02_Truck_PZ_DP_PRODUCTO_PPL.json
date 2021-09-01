@@ -1,0 +1,423 @@
+{
+	"name": "02_Truck_PZ_DP_PRODUCTO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data DP_PRODUCTO",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "DE_SOCIEDAD",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_SOCIEDAD",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_ESTADISTICO_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_ESTADISTICO_FLAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_ESTADO_PRODUCTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_ESTADO_PRODUCTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_CODIGO_PRODUCTO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_CODIGO_PRODUCTO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "NEGOCIO_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NEGOCIO_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DIVISION_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIVISION_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_MARCA_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_MARCA_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_CALIBRE_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_CALIBRE_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_PRODUCTO_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_PRODUCTO_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_ENVASE_RETORNABLE_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_ENVASE_RETORNABLE_FLAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SOCIEDAD_CODE",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SOCIEDAD_CODE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PRODUCTO_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PRODUCTO_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "BUSINESS",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BUSINESS",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DIVISION_I",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIVISION_I",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "NEGOCIO",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NEGOCIO",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DIVISION_II",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DIVISION_II",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PRODUCTO_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PRODUCTO_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "BRAND_FAMILY",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BRAND_FAMILY",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "BRAND",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BRAND",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PACK_SICKE_I",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PACK_SICKE_I",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PACK_SICKE_II",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PACK_SICKE_II",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PACK_SICKE_III",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PACK_SICKE_III",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "BRAND_SEGMENT_I",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BRAND_SEGMENT_I",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "BRAND_SEGMENT_II",
+									"type": "String"
+								},
+								"sink": {
+									"name": "BRAND_SEGMENT_II",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TASTE_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "TASTE_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PACKAGING",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PACKAGING",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HIGH_END_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "HIGH_END_FLAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "GLOBAL_BRANDS_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "GLOBAL_BRANDS_FLAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUGAR_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUGAR_FLAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "RETURNABLE_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RETURNABLE_FLAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SPARKLING_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SPARKLING_FLAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ZX_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ZX_FLAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "NIB_FLAG",
+									"type": "String"
+								},
+								"sink": {
+									"name": "NIB_FLAG"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_DE_PARA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_DE_PARA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA/DP_PRODUCTO"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

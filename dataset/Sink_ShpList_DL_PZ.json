@@ -1,0 +1,35 @@
+{
+	"name": "Sink_ShpList_DL_PZ",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ListName": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "LAS/Sharepoint"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@if(endswith(dataset().ListName,'Dev'),concat(toLower(substring(dataset().ListName,0,indexof(dataset().ListName,'Dev'))),'_dev.avro'),concat(toLower(substring(dataset().ListName,0,indexof(dataset().ListName,'Prod'))),'_prod.avro'))",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('Las/',dataset().ListName,'/',string(formatDateTime(utcnow(), 'yyyy')),'/',string(formatDateTime(utcnow(), 'MM')),'/',string(formatDateTime(utcnow(), 'dd')),'/',dataset().ListName)",
+					"type": "Expression"
+				},
+				"fileSystem": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

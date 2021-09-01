@@ -1,0 +1,64 @@
+{
+	"name": "Truck_PEDIDOS_PY_PPL",
+	"properties": {
+		"description": "Extracción desde truck de las tablas de novedades relacionadas a Pedidos para PY",
+		"activities": [
+			{
+				"name": "PPEDCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PPEDCB",
+						"origenSystem": "Truck",
+						"country": "Paraguay",
+						"keys": "EmpId, CodmovId, Pednro, Pedcor",
+						"context": "Public",
+						"schema": "TRKNULLCPA",
+						"descripcion": "Cabecera de pedido",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PPEDCB_DB",
+						"partitionByField": "part_pedfchped_mes"
+					}
+				}
+			},
+			{
+				"name": "PPEDLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PPEDLN",
+						"origenSystem": "Truck",
+						"country": "Paraguay",
+						"keys": "EmpId, CodmovId, Pednro, Pedcor, PrdId",
+						"context": "Public",
+						"schema": "TRKNULLCPA",
+						"descripcion": "Detalle de la cabecera de pedido",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PPEDLN_DB",
+						"partitionByField": "part_pedfchped_mes"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Paraguay/Truck/Replicas/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

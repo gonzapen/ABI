@@ -1,0 +1,181 @@
+{
+	"name": "Truck_Replica_Incremental_BO_PPL",
+	"properties": {
+		"description": "Extracción general desde truck de las tablas de novedades para Bolivia",
+		"activities": [
+			{
+				"name": "VENTAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TEMPPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_VENTAS_MENSUAL_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Paraguay"
+					}
+				}
+			},
+			{
+				"name": "TEMPPLANIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_TEMPPLANIL_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "TRKNULLCBN",
+						"country": "Bolivia",
+						"origenSystem": "Truck"
+					}
+				}
+			},
+			{
+				"name": "PLANIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TEMPPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PLANIL",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "EmpId, PlaNro",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Tabla de planillas",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PLANIL_DB",
+						"partitionByField": "part_plafch_mes"
+					}
+				}
+			},
+			{
+				"name": "AVANCEVTAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TEMPPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_AVANCE_VENTAS_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "FT_AVANCE_VENTAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VENTAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "PLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "AVANCEVTAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_General_Fact_Avance_Ventas_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "SALES FINANCE",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "TEMPPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_SALES_FINANCE_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/Truck/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:59Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

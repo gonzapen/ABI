@@ -1,0 +1,6 @@
+{
+	"name": "IntegrationRTLas",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

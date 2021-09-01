@@ -1,0 +1,589 @@
+{
+	"name": "00_FS_DW_DE_PARA_PRODUCTOS_ORQUESTADOR_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "SELECT_PIVOT_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:03:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT_ALL_PARAMETERS",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Existe el archivo",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Validation DE_PARA en File Server",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Validation DE_PARA en File Server').output.exists",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "PZ",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "FileServerReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_DE_PARA_Template_Input_FS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"directory": {
+											"value": "@activity('SELECT_PIVOT_DB').output.runOutput.query",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_DE_PARA_Template_Output_PZ_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										},
+										"pais": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "INSERT_PIVOT_DB",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "PZ",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+								"baseParameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"descripcion": {
+										"value": "@pipeline().parameters.descripcion",
+										"type": "Expression"
+									},
+									"cantidadLeido": {
+										"value": "@concat(activity('PZ').output.rowsRead)",
+										"type": "Expression"
+									},
+									"cantidadEscrito": {
+										"value": "@concat(activity('PZ').output.rowsCopied)",
+										"type": "Expression"
+									},
+									"duracionCD": {
+										"value": "@concat(activity('PZ').output.copyDuration)",
+										"type": "Expression"
+									},
+									"fechaFin": {
+										"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+										"type": "Expression"
+									},
+									"schema": {
+										"value": "@pipeline().parameters.schema",
+										"type": "Expression"
+									},
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"bytesLeido": {
+										"value": "@concat(activity('PZ').output.dataRead)",
+										"type": "Expression"
+									},
+									"bytesEscrito": {
+										"value": "@concat(activity('PZ').output.dataWritten)",
+										"type": "Expression"
+									},
+									"ultimoValorPivot": {
+										"value": "@activity('SELECT_PIVOT_DB').output.runOutput.ultimovalorpivot",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_DatabricksLowPriority",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Delete DE_PARA en File Server",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "INSERT_PIVOT_DB",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Source_DE_PARA_Template_Input_FS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"directory": {
+											"value": "@activity('SELECT_PIVOT_DB').output.runOutput.query",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							}
+						},
+						{
+							"name": "PZ to CZ - Copy Data",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "Delete DE_PARA en File Server",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/LAS/Template/PZ_CZ_TEMPLATE_DB",
+								"baseParameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_DatabricksLowPriority",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "CZ_CZ_DP_PRODUCTOS",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "PZ to CZ - Copy Data",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "01_CZ_DW_DE_PARA_PRODUCTOS_AR_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableFinal": "DP_SOM_PRODUCTOS",
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "MAIL CARGA DP CZ CZ PRODUCTOS AR",
+							"description": "",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "CZ_CZ_DP_PRODUCTOS",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Mail_LAS_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"equipo": "SOM",
+									"pais": "Argentina",
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"tema": "Depara",
+									"subTema": "Carga a DW Productos"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Validation DE_PARA en File Server",
+				"type": "Validation",
+				"dependsOn": [
+					{
+						"activity": "SELECT_PIVOT_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_DE_PARA_Template_Input_FS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": {
+								"value": "@activity('SELECT_PIVOT_DB').output.runOutput.query",
+								"type": "Expression"
+							},
+							"fileName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					},
+					"timeout": "0.00:02:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "Control Novedades De Para",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Existe el archivo",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_CZ_FS_DE_PARA_PRODUCTOS_AR_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"runId": "AR",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"equipo": "Som",
+						"origenSystem": "DePara",
+						"subTema": "Productos",
+						"countryCode": "AR",
+						"equipoFS": "02-Strategy",
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"tema": "Depara"
+					}
+				}
+			},
+			{
+				"name": "MAIL CARGA DP FS CZ PRODUCTOS AR",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Existe el archivo",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": "SOM",
+						"pais": "Argentina",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": "Depara",
+						"subTema": "Carga a CZ Productos"
+					}
+				}
+			},
+			{
+				"name": "MAIL CONTROL DP",
+				"description": "",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Control Novedades De Para",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": "SOM",
+						"pais": "Argentina",
+						"entorno": {
+							"value": "@pipeline().parameters.entorno",
+							"type": "Expression"
+						},
+						"tema": "Control DP",
+						"subTema": "Control DP Productos"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "DeParaProductosSom"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "DePara"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"descripcion": {
+				"type": "string",
+				"defaultValue": "De Para Productos Argentina"
+			},
+			"partitionByField": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"entorno": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA/SOM/DP_PRODUCTOS"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:46Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

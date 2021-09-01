@@ -1,0 +1,132 @@
+{
+	"name": "TRUCK_TEMPPLANIL_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "TRUNCATE TMPPLANIL",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "Db2Source",
+						"query": "TRUNCATE TABLE TRK35NULL.TMPPLANIL"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Truck_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "TMPPLANIL",
+							"schema": "TRK35NULL"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Truck_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "TEMPPLANIL"
+						}
+					}
+				]
+			},
+			{
+				"name": "TMPPLANIL",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "TRUNCATE TMPPLANIL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "Db2Source",
+						"query": "INSERT INTO TRK35NULL.TMPPLANIL\n(CAJAFCH, CAJAID, EMPID, FLTID, PLACAMTXT, PLACMPMON, PLACMPPSO, PLADISID, PLAFCH, PLAFCHCIE, PLAFCHENT, PLAFCHENTR, PLAFCHING, PLAFCHSAL, PLAFLGCTL, PLAFLGENT, PLAFLGMOD, PLAFLGRETP, PLAFLGSAL, PLAFLGTRAN, PLAFLTFLG, PLAFLTTOT, PLAHORENT, PLAHORSAL, PLAIDCAM, PLAIDDPSDS, PLAIDDPSOR, PLAIDDPSTR, PLAIDFLTCT, PLAIDPTOEM, PLAIDTRRCB, PLAIDTRS, PLAIDUSRCI, PLAIDUSREN, PLAIDUSRSA, PLANRO, PLANROCCOU, PLANROREF, PLANROVJE, PLANROXORI, PLASTS, PLATOTLIQ, PLATOTPSOC, PLATOTPSOI, PLATOTVAL, PLATPO, PLATPOFLT, PLATPOLSTF, PLATPOORI, PLATXT1, PLATXT2, PLAVALSTS, PLAVALTPOF, PLAVALULTN)\nSELECT CAJAFCH, CAJAID, EMPID, FLTID, PLACAMTXT, PLACMPMON, PLACMPPSO, PLADISID, PLAFCH, PLAFCHCIE, PLAFCHENT, PLAFCHENTR, PLAFCHING, PLAFCHSAL, PLAFLGCTL, PLAFLGENT, PLAFLGMOD, PLAFLGRETP, PLAFLGSAL, PLAFLGTRAN, PLAFLTFLG, PLAFLTTOT, PLAHORENT, PLAHORSAL, PLAIDCAM, PLAIDDPSDS, PLAIDDPSOR, PLAIDDPSTR, PLAIDFLTCT, PLAIDPTOEM, PLAIDTRRCB, PLAIDTRS, PLAIDUSRCI, PLAIDUSREN, PLAIDUSRSA, PLANRO, PLANROCCOU, PLANROREF, PLANROVJE, PLANROXORI, PLASTS, PLATOTLIQ, PLATOTPSOC, PLATOTPSOI, PLATOTVAL, PLATPO, PLATPOFLT, PLATPOLSTF, PLATPOORI, PLATXT1, PLATXT2, PLAVALSTS, PLAVALTPOF, PLAVALULTN\nFROM TRK35NULL.PLANIL P\nWHERE NOT EXISTS  (SELECT * FROM TRK35NULL.CTRLPLANIL T WHERE P.EMPID = T.EMPID AND P.PLANRO = T.CLMNROPLA) AND PLAFCH >= 20170101"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Truck_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "TEMPPLANIL",
+							"schema": "TRK35NULL"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Truck_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "TEMPPLANIL"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Argentina/Truck"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

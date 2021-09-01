@@ -1,0 +1,106 @@
+{
+	"name": "01_CZ_DW_DP_SOM_AREAS_PPL",
+	"properties": {
+		"description": "Encargado de subir al DW y DL el DE_PARA_AREAS_MAPA",
+		"activities": [
+			{
+				"name": "DP_SOM_AREAS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/SOM/DW/DE_PARA/CZ_DW_DP_SOM_AREAS_DB",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"countryCode": {
+							"value": "@pipeline().parameters.countryCode",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "Periodo, CANAL, KEY_ACCOUNT, REGION, AREA, FORMATO, Ean, SOURCE_FILE"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "SOM"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "DP_SOM_AREAS_MAPA"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "DE_PARA_AREAS_MAPA"
+			},
+			"countryCode": {
+				"type": "string",
+				"defaultValue": "AR"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM/DW/DE_PARA"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

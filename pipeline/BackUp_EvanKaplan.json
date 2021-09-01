@@ -1,0 +1,291 @@
+{
+	"name": "BackUp_EvanKaplan",
+	"properties": {
+		"activities": [
+			{
+				"name": "BackUp_KFD",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "Paraguay/Commercial/FullDigital/KFD/v0.4/",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_FullDigital_Bajada_Template_DL_Parquet_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"pais": "Paraguay",
+							"entidad": "KFD",
+							"version": "v0.4"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DTS_FullDigital_PY",
+						"type": "DatasetReference",
+						"parameters": {
+							"entityFS": "04-VILC"
+						}
+					}
+				]
+			},
+			{
+				"name": "BackUp_Product",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "Paraguay/Commercial/FullDigital/Product/v0.5/",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_FullDigital_Bajada_Template_DL_Parquet_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"pais": "Paraguay",
+							"entidad": "Product",
+							"version": "v0.5"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DTS_FullDigital_PY",
+						"type": "DatasetReference",
+						"parameters": {
+							"entityFS": "01-Products"
+						}
+					}
+				]
+			},
+			{
+				"name": "BackUp_Customer",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "Paraguay/Commercial/FullDigital/Customer/v0.7/",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_FullDigital_Bajada_Template_DL_Parquet_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"pais": "Paraguay",
+							"entidad": "Customer",
+							"version": "v0.7"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DTS_FullDigital_PY",
+						"type": "DatasetReference",
+						"parameters": {
+							"entityFS": "02-Customers"
+						}
+					}
+				]
+			},
+			{
+				"name": "BackUp_Invoice",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "Paraguay/Commercial/FullDigital/Invoice/v0.3/",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_FullDigital_Bajada_Template_DL_Parquet_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"pais": "Paraguay",
+							"entidad": "Invoice",
+							"version": "v0.3"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DTS_FullDigital_PY",
+						"type": "DatasetReference",
+						"parameters": {
+							"entityFS": "03-Invoices"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"pais": {
+				"type": "string",
+				"defaultValue": "country"
+			},
+			"entidad": {
+				"type": "string",
+				"defaultValue": "entity"
+			},
+			"version": {
+				"type": "string",
+				"defaultValue": "path"
+			}
+		},
+		"folder": {
+			"name": "Paraguay/FullDigital"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

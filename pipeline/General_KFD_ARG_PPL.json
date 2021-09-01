@@ -1,0 +1,152 @@
+{
+	"name": "General_KFD_ARG_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "VmMacoBgt",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "General_KFD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VmMacoBgt",
+						"country": "Argentina",
+						"keys": "SKU, ID_Pais, ID_Sociedad, Anio_Mes, ID_Region, ID_Sub_Region, ID_Segmento_VTA, ID_Segmento_MKT",
+						"subscriptos": "federico.quinoy@datalytics.com, santiago.balay@datalytics.com, rocio.klan@datalytics.com",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"viewName": "VM_MACO_BGT"
+					}
+				}
+			},
+			{
+				"name": "VmMacoLas",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "General_KFD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VmMacoLas",
+						"country": "Argentina",
+						"keys": "SKU, ID_Sociedad, Anio_Mes, ID_Region, ID_Sub_Region, ID_Segmento_VTA, ID_Segmento_MKT",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"viewName": "VM_MACO_LAS"
+					}
+				}
+			},
+			{
+				"name": "VmMacoLasH",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "General_KFD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VmMacoLasH",
+						"country": "Argentina",
+						"keys": "SKU, ID_Sociedad, Anio_Mes, ID_Sub_Region, ID_Segmento_MKT",
+						"viewName": "VM_MACO_LAS_H"
+					}
+				}
+			},
+			{
+				"name": "VmMacoLasA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "General_KFD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VmMacoLasA",
+						"country": "Argentina",
+						"keys": "SKU, ID_Sociedad, Anio_Mes, ID_Region, ID_Sub_Region, ID_Segmento_VTA, ID_Segmento_MKT",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"viewName": "VM_MACO_LAS_A"
+					}
+				}
+			},
+			{
+				"name": "FactKfd",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VmMacoBgt",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FACT_KFD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Public",
+						"scope": "KeyVault",
+						"country": "Argentina",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"origenSystem": "KFD",
+						"tableName": "VmMacoBgt"
+					}
+				}
+			},
+			{
+				"name": "VmMacoBgtH",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "General_KFD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VmMacoBgtH",
+						"country": "Argentina",
+						"keys": "SKU, ID_Pais, ID_Sociedad, Anio_Mes, ID_Region, ID_Sub_Region, ID_Segmento_VTA, ID_Segmento_MKT",
+						"viewName": "VM_MACO_BGT_H"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/KFD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

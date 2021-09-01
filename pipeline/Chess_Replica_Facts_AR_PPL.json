@@ -1,0 +1,72 @@
+{
+	"name": "Chess_Replica_Facts_AR_PPL",
+	"properties": {
+		"description": "Extracción general desde truck de las tablas de maestros para Argentina",
+		"activities": [
+			{
+				"name": "FACT_COMPROBANTES_VTAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "FACT_TRADE_SPEND",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FACT_COMPROBANTES_VENTAS_HISTORIA_DESA_DBO_CHESS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Chess",
+						"country": "Argentina"
+					}
+				}
+			},
+			{
+				"name": "FACT_TRADE_SPEND",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FACT_TRADE_SPEND_PTR_HISTORIA_DESA_DBO_CHESS",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Chess/Carga_Historica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

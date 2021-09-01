@@ -1,0 +1,164 @@
+{
+	"name": "02_Chess_Maestros_AR_PPL",
+	"properties": {
+		"description": "Se ejecutan todas las tablas maestro en paralelos y las tablas de movimientos luego",
+		"activities": [
+			{
+				"name": "RESU_FACT_KPI_POP_CHOPP",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nFecha,Cod_Empresa,Cod_Distribuidor,Cod_Agrupa_12,Cod_Agrupa_4,POCs_CON_INVERSION,PARQUE_CHOPPERAS,PARQUE_COLUMNAS,POCS_con_BARRIL_SIN_INVERSION_CMQ,REPAGO,PDV_CON_INVERSION_CORRECTA,PDV_CON_INVERSION_INCORRECTA,POCs_CON_INVERSION_Y_VENTA_CERO,POCs_CON_INVERSION_Y_VENTA_CERO_3_MESES,VTA_CERO,VTA_CERO_3_MESES,FRESCURA,CUMPLEN_FRESCURA,NO_CUMPLEN_FRESCURA,CUMPLEN_FRESCURA_3M,NO_CUMPLEN_FRESCURA_3M,FRESCURA_ULTIMOS_TRES_MESES,CONVIVENCIA,POCs_CON_CONVIVENCIA,POCs_CON_CONVIVENCIA_POCs_CON_INVERSION,POCs_CON_CONVIVENCIA_Y_NO_REPAGAN,INSTALACIONES,REINSTALACIONES,ADHESIONES,STOCK,Stock_Buen_Estado,Stock_Mal_Estado,BAJA_REPARACION,FRESCURA_MES_ANTERIOR,DIFERENCIA_Vs_MA,REPAGO_MES_ANTERIOR,Fecha_Actualizacion,Fecha_Desde,Fecha_Hasta,CUMPLEN_FRESCURA_MARCA,NO_CUMPLEN_FRESCURA_MARCA,CUMPLEN_FRESCURA_3M_MARCA,NO_CUMPLEN_FRESCURA_3M_MARCA,INSTALACIONES_GENERICO,INSTALACIONES_MARCA,PARQUE_PICOS,Accion\nFROM dbo.RESU_FACT_KPI_POP_CHOPP",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_KPI_POP_CHOPP",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "RESU_FACT_KPI_POP_CHOPP"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_DISTRIBUIDORES",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nCod_Compania\n,Cod_Empresa\n,Cod_Sucursal\n,Cod_Distribuidor\n,Cod_Zona\n,Cod_Sub_Region\n,Cod_Region\n,Cod_Area\n,Cod_Nodo\n,Cod_Grupo_Consolidado\n,Cod_Casa_Matriz\n,Desc_Compania\n,Desc_Distribuidor\n,Desc_Grupo_Consolidado\n,Desc_Casa_Matriz\n,Desc_Nodo\n,Desc_Zona\n,Desc_Sub_Region\n,Desc_Region\n,Desc_Area\n,Desc_Sucursal\n,Desc_Empresa\n,Factura_Dia_Mas_Uno\n,Pav_Bultos\n,DetalleIP\n,Factor_Bultos_Aguas\n,Factor_Bultos_Cervezas\n,Factor_Bultos_Gaseosas\n,Clientes_Foco_PAV\n,Clientes_Foco_PAV_GP\n,Cod_Desc_Compania\n,Cod_Desc_Distribuidor\n,Cod_Desc_Sucursal\n,Cod_Desc_Empresa\n,Cod_Desc_Grupo_Consolidado\n,Cod_Desc_Casa_Matriz\n,Cod_Desc_Nodo\n,Cod_Desc_Zona\n,Cod_Desc_Sub_Region\n,Cod_Desc_Region\n,Cod_Desc_Area\n,Interfaz\n,Pav_Filtra_Ventas\n,Slim\n,Aplica_Consistencia\n,Desc_Localidad\n,Codigo_Postal\n,Latitud\n,Longitud\n,Desc_Provincia\n,Cod_Grupo_Economico\n,Desc_Grupo_Economico\n,Cod_Desc_Grupo_Economico\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_DISTRIBUIDORES",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_DISTRIBUIDORES",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_DISTRIBUIDORES"
+						}
+					}
+				]
+			},
+			{
+				"name": "DIM_ACCIONES_TS",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT \nSk_Accion\n,Cod_Empresa\n,Cod_Tipo_Linea\n,Cod_Tipo_Accion\n,Desc_Accion\n,Cod_Desc_Accion\n,Cod_Promocion\n,Desc_Promoción as Desc_Promocion\n,Cod_Desc_Promocion\n,Categoria_TS\n,Cod_Promocion_Cia\n,Desc_Promoción_Cia as Desc_Promocion_Cia\n,Cod_Desc_Promocion_Cia\n,Cod_TipificacionTruck\n,Desc_TipificacionTrunk\n,Presupuesto_Limite\n,Fecha_Actualizacion\n,Accion\nFROM dbo.DIM_ACCIONES_TS",
+						"queryTimeout": "24:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Chess_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_ACCIONES_TS",
+							"schema": "dbo"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Chess_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "DIM_ACCIONES_Ts"
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "Argentina/Chess/Carga_Historica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

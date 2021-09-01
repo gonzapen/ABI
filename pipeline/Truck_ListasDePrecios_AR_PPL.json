@@ -1,0 +1,76 @@
+{
+	"name": "Truck_ListasDePrecios_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PLISPR",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "PLISCB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PLISPR",
+						"origenSystem": {
+							"value": "Truck",
+							"type": "Expression"
+						},
+						"country": "Argentina",
+						"keys": "LprIdVer, MonID, TpolprId, PrdId",
+						"context": {
+							"value": "Commercial",
+							"type": "Expression"
+						},
+						"schema": "TRK35NULL",
+						"descripcion": "Lista de precios",
+						"pathDBPZHZ": "/Argentina/LakeHouse/Truck/Template/PZ_HZ_PLISPR_DB",
+						"partitionByField": "part_lpridver"
+					}
+				}
+			},
+			{
+				"name": "PLISCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PLISCB",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "LprIdVer",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Versiones de lista de precios",
+						"pathDBPZHZ": "/LAS/Templates/PZ_HZ_TEMPLATE_DB",
+						"partitionByField": "-"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Truck/Replicas/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

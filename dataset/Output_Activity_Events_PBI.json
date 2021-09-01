@@ -1,0 +1,140 @@
+{
+	"name": "Output_Activity_Events_PBI",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_BlobTemporal",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Argentina/Power BI"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "Activity_Logs_PBI.json",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('PowerBI','/',string(formatDateTime(utcnow(), 'yyyy')),'/',string(formatDateTime(utcnow(), 'MM')),'/',formatDateTime(utcnow(), 'dd'),'/')",
+					"type": "Expression"
+				},
+				"container": "argentina"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"activityEventEntities": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"Id": {
+								"type": "string"
+							},
+							"RecordType": {
+								"type": "integer"
+							},
+							"CreationTime": {
+								"type": "string"
+							},
+							"Operation": {
+								"type": "string"
+							},
+							"OrganizationId": {
+								"type": "string"
+							},
+							"UserType": {
+								"type": "integer"
+							},
+							"UserKey": {
+								"type": "string"
+							},
+							"Workload": {
+								"type": "string"
+							},
+							"UserId": {
+								"type": "string"
+							},
+							"ClientIP": {
+								"type": "string"
+							},
+							"UserAgent": {
+								"type": "string"
+							},
+							"Activity": {
+								"type": "string"
+							},
+							"ItemName": {
+								"type": "string"
+							},
+							"WorkSpaceName": {
+								"type": "string"
+							},
+							"CapacityId": {
+								"type": "string"
+							},
+							"CapacityName": {
+								"type": "string"
+							},
+							"WorkspaceId": {
+								"type": "string"
+							},
+							"ObjectId": {
+								"type": "string"
+							},
+							"DataflowId": {
+								"type": "string"
+							},
+							"DataflowName": {
+								"type": "string"
+							},
+							"DataflowAccessTokenRequestParameters": {
+								"type": "object",
+								"properties": {
+									"tokenLifetimeInMinutes": {
+										"type": "integer"
+									},
+									"permissions": {
+										"type": "integer"
+									},
+									"entityName": {
+										"type": "string"
+									},
+									"partitionUri": {
+										"type": "string"
+									}
+								}
+							},
+							"IsSuccess": {
+								"type": "boolean"
+							},
+							"DataflowType": {
+								"type": "string"
+							},
+							"RequestId": {
+								"type": "string"
+							},
+							"ActivityId": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"continuationUri": {
+					"type": "string"
+				},
+				"continuationToken": {
+					"type": "string"
+				},
+				"lastResultSet": {
+					"type": "boolean"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

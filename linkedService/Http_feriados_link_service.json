@@ -1,0 +1,18 @@
+{
+	"name": "Http_feriados_link_service",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"Anio": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"type": "HttpServer",
+		"typeProperties": {
+			"url": "@{concat('http://nolaborables.com.ar/api/v2/feriados/',linkedService().Anio,'')}",
+			"enableServerCertificateValidation": true,
+			"authenticationType": "Anonymous"
+		}
+	}
+}

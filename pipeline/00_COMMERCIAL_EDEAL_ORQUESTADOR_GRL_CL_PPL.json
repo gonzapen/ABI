@@ -1,0 +1,864 @@
+{
+	"name": "00_COMMERCIAL_EDEAL_ORQUESTADOR_GRL_CL_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Lookup",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Cargar Vistas en DL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT\n\t proceso_venta_si_id\n\t,proceso_venta_si_condicion\nFROM dbo.proceso_venta_si pvs \nWHERE \n\t\t proceso_venta_si_fecha_proceso <= GETDATE()\n\tAND proceso_venta_si_eliminado           = 0\n\tAND proceso_venta_si_estado                = 0\n\tAND proceso_venta_si_origen                 = 2\nORDER BY proceso_venta_si_id ASC",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "Source_EDeal_DB_DTS",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "ForEach",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Generar Vista Condicionada",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "Borra Vista antigua",
+									"dependencyConditions": [
+										"Completed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/Chile/E-Deal/Vistas/CZ_CZ_VW_EDEAL_VENTAS_CONDICION_DB",
+								"baseParameters": {
+									"id": {
+										"value": "@string(item().proceso_venta_si_id)",
+										"type": "Expression"
+									},
+									"condicion": {
+										"value": "@string(item().proceso_venta_si_condicion)",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Cantidad Rows 0",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "Update Procesos",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(activity('Generar Vista Condicionada').output.runOutput.cantidadRows,'0')",
+									"type": "Expression"
+								},
+								"ifFalseActivities": [
+									{
+										"name": "DL a EDeal DB",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "ParquetSource",
+												"storeSettings": {
+													"type": "AzureBlobFSReadSettings",
+													"recursive": true,
+													"wildcardFileName": "*.parquet",
+													"enablePartitionDiscovery": false
+												}
+											},
+											"sink": {
+												"type": "AzureSqlSink",
+												"disableMetricsCollection": false
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"mappings": [
+													{
+														"source": {
+															"name": "PROCESO_ID",
+															"type": "Int32",
+															"physicalType": "INT32"
+														},
+														"sink": {
+															"name": "venta_dw_io_proceso_id",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "FK_EMBOTELLADORA",
+															"type": "Int32",
+															"physicalType": "INT32"
+														},
+														"sink": {
+															"name": "venta_dw_io_embotelladora_id",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "NOMBRE_DESC",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "venta_dw_io_embotelladora_desc",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "FK_TIEMPO_DIA",
+															"type": "Int32",
+															"physicalType": "INT32"
+														},
+														"sink": {
+															"name": "venta_dw_io_fecha",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "CLUSTER_VENTA_DESCUENTO_DESC",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "venta_dw_io_cuenta_emb",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "CLIENTE_ID",
+															"type": "Int32",
+															"physicalType": "INT32"
+														},
+														"sink": {
+															"name": "venta_dw_io_cliente_ext",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "CLIENTE_ABINBEV_ID",
+															"type": "Int32",
+															"physicalType": "INT32"
+														},
+														"sink": {
+															"name": "venta_dw_io_cliente_abi",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "NOMBRE",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "venta_dw_io_razon_social",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "SKU_ABINBEV_ID",
+															"type": "Int32",
+															"physicalType": "INT32"
+														},
+														"sink": {
+															"name": "venta_dw_io_sku_abi",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "PRD_DESC",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "venta_dw_io_producto",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "MARCA_DESC",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "venta_dw_io_marca",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "CALIBRE",
+															"type": "String",
+															"physicalType": "UTF8"
+														},
+														"sink": {
+															"name": "venta_dw_io_calibre",
+															"type": "String",
+															"physicalType": "nvarchar"
+														}
+													},
+													{
+														"source": {
+															"name": "UNIDADES_X_CAJA",
+															"type": "Int32",
+															"physicalType": "INT32"
+														},
+														"sink": {
+															"name": "venta_dw_io_uni_x_caja",
+															"type": "Int32",
+															"physicalType": "int"
+														}
+													},
+													{
+														"source": {
+															"name": "VOLUMEN_CAJAS",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_cant_cajas_vendidas",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 8,
+															"precision": 10
+														}
+													},
+													{
+														"source": {
+															"name": "VOLUMEN_HL",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_vta_htl",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 6,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "TOTAL_BRUTO_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_total_bruto",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 2,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "TOTAL_NETO_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_total_neto",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 2,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "IMPORTE_DESCUENTO_1_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_dto1",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 6,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "IMPORTE_DESCUENTO_2_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_dto2",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 6,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "IMPORTE_DESCUENTO_3_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_dto3",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 6,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "IMPORTE_DESCUENTO_4_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_dto4",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 6,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "IMPORTE_DESCUENTO_5_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_dto5",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 6,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "IMPORTE_DESCUENTO_XX_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_nc",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 6,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "IMPORTE_PRECIO_LIQUIDO_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_precio_liquido",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 2,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "IMPORTE_FLETE_RECUPERO_CLP",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_flete_recupero",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 6,
+															"precision": 18
+														}
+													},
+													{
+														"source": {
+															"name": "VOLUMEN_HL_POR_CAJA",
+															"type": "Decimal",
+															"physicalType": "DECIMAL"
+														},
+														"sink": {
+															"name": "venta_dw_io_hl_x_caja",
+															"type": "Decimal",
+															"physicalType": "decimal",
+															"scale": 8,
+															"precision": 10
+														}
+													},
+													{
+														"source": {
+															"name": "REGION_ID",
+															"type": "Int16",
+															"physicalType": "INT_16"
+														},
+														"sink": {
+															"name": "venta_dw_io_region_id",
+															"type": "Int16",
+															"physicalType": "smallint"
+														}
+													}
+												],
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "Source_EDeal_DL_Parquet_DTS",
+												"type": "DatasetReference",
+												"parameters": {
+													"origenSystem": {
+														"value": "@pipeline().parameters.origenSystem",
+														"type": "Expression"
+													},
+													"fileName": {
+														"value": "@pipeline().parameters.fileName",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "Sink_EDeal_DB_DTS",
+												"type": "DatasetReference"
+											}
+										]
+									},
+									{
+										"name": "Post cant row",
+										"type": "WebActivity",
+										"dependsOn": [
+											{
+												"activity": "Verificacion Insert Datos",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.00:02:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"url": {
+												"value": "@concat('https://abi-api-providerle',pipeline().parameters.urlAPI,'abinbev-las.com/api/SaleProcess/NotifyEnd')",
+												"type": "Expression"
+											},
+											"connectVia": {
+												"referenceName": "IntegrationRTLas",
+												"type": "IntegrationRuntimeReference"
+											},
+											"method": "POST",
+											"body": {
+												"value": "@json(concat('{\"proccessId\": ', string(item().proceso_venta_si_id), ',\"rowsCount\": ', concat(activity('DL a EDeal DB').output.rowsCopied), ',\"state\": 2}'))",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Verificacion Insert Datos",
+										"type": "Lookup",
+										"dependsOn": [
+											{
+												"activity": "DL a EDeal DB",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": "select count(*)\nfrom dbo.venta_dw_io vdi \n;",
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"dataset": {
+												"referenceName": "Source_EDeal_DB_DTS",
+												"type": "DatasetReference"
+											},
+											"firstRowOnly": false
+										}
+									},
+									{
+										"name": "Post Fallo_2",
+										"type": "WebActivity",
+										"dependsOn": [
+											{
+												"activity": "DL a EDeal DB",
+												"dependencyConditions": [
+													"Failed"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "0.00:02:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"url": {
+												"value": "@concat('https://abi-api-providerle',pipeline().parameters.urlAPI,'abinbev-las.com/api/SaleProcess/NotifyEnd')",
+												"type": "Expression"
+											},
+											"connectVia": {
+												"referenceName": "IntegrationRTLas",
+												"type": "IntegrationRuntimeReference"
+											},
+											"method": "POST",
+											"body": {
+												"value": "@json(concat('{\"proccessId\": ', string(item().proceso_venta_si_id), ',\"rowsCount\": 0,\"state\": 3}'))",
+												"type": "Expression"
+											}
+										}
+									}
+								],
+								"ifTrueActivities": [
+									{
+										"name": "Post si cant rows 0",
+										"type": "WebActivity",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "0.00:02:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"url": {
+												"value": "@concat('https://abi-api-providerle',pipeline().parameters.urlAPI,'abinbev-las.com/api/SaleProcess/NotifyEnd')",
+												"type": "Expression"
+											},
+											"connectVia": {
+												"referenceName": "IntegrationRTLas",
+												"type": "IntegrationRuntimeReference"
+											},
+											"method": "POST",
+											"body": {
+												"value": "@json(concat('{\"proccessId\": ', string(item().proceso_venta_si_id), ',\"rowsCount\": 0,\"state\": 2}'))",
+												"type": "Expression"
+											}
+										}
+									}
+								]
+							}
+						},
+						{
+							"name": "Update Procesos",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Generar Vista Condicionada",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "@concat('UPDATE dbo.proceso_venta_si SET proceso_venta_si_estado = 1, proceso_venta_si_fecha_inicio_ejecucion = GETDATE(), proceso_venta_si_nombre_usuario_ultima_modificacion = ', pipeline().parameters.userName,', proceso_venta_si_fecha_ultima_modificacion = GETDATE() WHERE proceso_venta_si_id = ', string(item().proceso_venta_si_id), '; ', 'SELECT * FROM dbo.proceso_venta_si WHERE proceso_venta_si_id = ', string(item().proceso_venta_si_id),' ;')",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "Source_EDeal_DB_DTS",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "Verificacion de datos",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "Cantidad Rows 0",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "@concat('SELECT * FROM dbo.proceso_venta_si WHERE proceso_venta_si_id = ', string(item().proceso_venta_si_id),' ;')",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "Source_EDeal_DB_DTS",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "Post Fallo",
+							"type": "WebActivity",
+							"dependsOn": [
+								{
+									"activity": "Update Procesos",
+									"dependencyConditions": [
+										"Failed"
+									]
+								},
+								{
+									"activity": "Generar Vista Condicionada",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.00:02:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": {
+									"value": "@concat('https://abi-api-providerle',pipeline().parameters.urlAPI,'abinbev-las.com/api/SaleProcess/NotifyEnd')",
+									"type": "Expression"
+								},
+								"connectVia": {
+									"referenceName": "IntegrationRTLas",
+									"type": "IntegrationRuntimeReference"
+								},
+								"method": "POST",
+								"body": {
+									"value": "@json(concat('{\"proccessId\": ', string(item().proceso_venta_si_id), ',\"rowsCount\": 0,\"state\": 3}'))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Borra Vista antigua",
+							"type": "Delete",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Source_EDeal_DL_Parquet_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"origenSystem": {
+											"value": "@pipeline().parameters.origenSystem",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@pipeline().parameters.fileName",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Cargar Vistas en DL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_CZ_CZ_COMMERCIAL_EDEAL_ORQUESTADOR_VISTAS_CL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"country": "Chile",
+						"context": "Commercial",
+						"ambiente": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "EDeal"
+			},
+			"fileName": {
+				"type": "string",
+				"defaultValue": "VwVentasEdealCondicion"
+			},
+			"userName": {
+				"type": "string",
+				"defaultValue": "'Datalake'"
+			},
+			"urlAPI": {
+				"type": "string",
+				"defaultValue": "-dev.dev."
+			},
+			"ambiente": {
+				"type": "string",
+				"defaultValue": "Desarrollo"
+			}
+		},
+		"folder": {
+			"name": "Chile/E-Deal"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

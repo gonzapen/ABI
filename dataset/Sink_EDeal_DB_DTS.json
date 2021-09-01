@@ -1,0 +1,160 @@
+{
+	"name": "Sink_EDeal_DB_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_EDeal_prd",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Chile/E-Deal"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "venta_dw_io_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "venta_dw_io_proceso_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "venta_dw_io_embotelladora_id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "venta_dw_io_embotelladora_desc",
+				"type": "nvarchar"
+			},
+			{
+				"name": "venta_dw_io_fecha",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "venta_dw_io_cuenta_emb",
+				"type": "nvarchar"
+			},
+			{
+				"name": "venta_dw_io_cliente_ext",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "venta_dw_io_cliente_abi",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "venta_dw_io_razon_social",
+				"type": "nvarchar"
+			},
+			{
+				"name": "venta_dw_io_region",
+				"type": "nvarchar"
+			},
+			{
+				"name": "venta_dw_io_sku_abi",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "venta_dw_io_producto",
+				"type": "nvarchar"
+			},
+			{
+				"name": "venta_dw_io_marca",
+				"type": "nvarchar"
+			},
+			{
+				"name": "venta_dw_io_calibre",
+				"type": "nvarchar"
+			},
+			{
+				"name": "venta_dw_io_uni_x_empaque",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "venta_dw_io_cont_x_uni",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "venta_dw_io_vta_htl",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 6
+			},
+			{
+				"name": "venta_dw_io_total_bruto",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "venta_dw_io_total_neto",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "venta_dw_io_dto1",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 6
+			},
+			{
+				"name": "venta_dw_io_dto2",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 6
+			},
+			{
+				"name": "venta_dw_io_dto3",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 6
+			},
+			{
+				"name": "venta_dw_io_dto4",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 6
+			},
+			{
+				"name": "venta_dw_io_dto5",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 6
+			},
+			{
+				"name": "venta_dw_io_nc",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 6
+			},
+			{
+				"name": "venta_dw_io_precio_liquido",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 2
+			},
+			{
+				"name": "venta_dw_io_flete_recupero",
+				"type": "decimal",
+				"precision": 18,
+				"scale": 6
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "venta_dw_io"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,40 @@
+{
+	"name": "A_LASCommercial_Paraguay_Truck_Fact_Ventas_Historico",
+	"properties": {
+		"description": "Trigger que ejecuta la carga de la Fact de Ventas Historicas mensual de Paraguay",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Truck_General_Fact_Ventas_Mensual_PY_PPL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Month",
+				"interval": 1,
+				"startTime": "2020-12-14T08:00:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						8
+					],
+					"monthDays": [
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			}
+		}
+	}
+}

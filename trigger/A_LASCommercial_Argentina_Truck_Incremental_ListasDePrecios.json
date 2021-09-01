@@ -1,0 +1,29 @@
+{
+	"name": "A_LASCommercial_Argentina_Truck_Incremental_ListasDePrecios",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Truck_ListasDePrecios_AR_PPL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-03-29T21:06:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"hours": [
+						5
+					]
+				}
+			}
+		}
+	}
+}

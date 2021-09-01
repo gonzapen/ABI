@@ -1,0 +1,109 @@
+{
+	"name": "Truck_PEDIDOS_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PPEDCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PPEDCB",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, CodmovId, Pednro, Pedcor",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Cabecera de pedido",
+						"partitionByField": "part_pedfchped_mes"
+					}
+				}
+			},
+			{
+				"name": "PPEDLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PPEDLN",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "EmpId, CodmovId, Pednro, Pedcor, PrdId",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Detalle de la cabecera de pedido",
+						"partitionByField": "part_pedfchped_mes"
+					}
+				}
+			},
+			{
+				"name": "ORETCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "ORETCB",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "ORetNroInt, ORetCor",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Cabecera de orden de retiro",
+						"partitionByField": "part_oretfch_mes"
+					}
+				}
+			},
+			{
+				"name": "ORETLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_Truck_Commercial_Template_Incremental_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "ORETLN",
+						"origenSystem": "Truck",
+						"country": "Argentina",
+						"keys": "ORetNroInt, ORetCor, PrdId, ORetIdUbi",
+						"context": "Commercial",
+						"schema": "TRK35NULL",
+						"descripcion": "Detalle de la orden de retiro",
+						"partitionByField": "part_oretfch_mes"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Truck/Replicas/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:57Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,70 @@
+{
+	"name": "Truck_General_Fact_Avance_Ventas_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT_AVANCE_VENTAS_CZ_DL_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FT_AVANCE_VENTAS_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"origenSystem": "Truck",
+						"country": "Bolivia"
+					}
+				}
+			},
+			{
+				"name": "FT_AVANCE_VENTAS_CZ_DW_BO",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "FT_AVANCE_VENTAS_CZ_DL_BO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FT_AVANCE_VENTAS_CZ_DW_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/DW"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

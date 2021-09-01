@@ -1,0 +1,34 @@
+{
+	"name": "Sink_Chess_DESA_DTS_history",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatformChess",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table": {
+				"type": "string"
+			},
+			"year": {
+				"type": "int"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Chess"
+		},
+		"annotations": [],
+		"type": "Avro",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@concat('/Argentina/Chess/',dataset().table,'/',substring(string(dataset().year),0,4),'/',substring(string(dataset().year),4,2),'/',dataset().table)\n",
+					"type": "Expression"
+				},
+				"container": "prelandingzone"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

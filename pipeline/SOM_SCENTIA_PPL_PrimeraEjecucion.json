@@ -1,0 +1,46 @@
+{
+	"name": "SOM_SCENTIA_PPL_PrimeraEjecucion",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_DIM_SOM_PPL_SCENTIA",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "FACT",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIM",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_CZ_DW_FT_SOM_PPL_SCENTIA",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/SOM"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

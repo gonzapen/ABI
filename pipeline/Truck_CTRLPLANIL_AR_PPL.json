@@ -1,0 +1,77 @@
+{
+	"name": "Truck_CTRLPLANIL_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "INSERT CTRLPLANIL",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "Db2Source",
+						"query": {
+							"value": "@concat('INSERT INTO ',pipeline().parameters.schema,'.CTRLPLANIL\n(EMPID, CLMNROPLA, PLAFCHCIE, FCHPRO)\nSELECT DISTINCT EMPID, PLANRO, PLAFCHCIE, Cast(VarChar_Format((CURRENT_DATE),','''','yyyyMMdd','''',') as int) AS FCHPRO\nFROM  ',pipeline().parameters.schema,'.TMPPLANIL P\nWHERE PLASTS = ','''','CER','''','\nAND  NOT EXISTS  (SELECT * FROM ',pipeline().parameters.schema,'.CTRLPLANIL T WHERE P.EMPID = T.EMPID AND P.PLANRO = T.CLMNROPLA)')",
+							"type": "Expression"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Truck_PROD_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "CTRLPLANIL",
+							"schema": "TRK35NULL"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Truck_DESA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": "CTRLPLANIL"
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"schema": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/Truck/Template/PLANIL"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:40Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

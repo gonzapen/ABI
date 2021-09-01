@@ -1,0 +1,98 @@
+{
+	"name": "Sink_DTS_SmartCredit",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakePlatform",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Bolivia/Commercial/SalesFinance/Gar_smartcredit/",
+				"fileSystem": "consumezone"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "DEPOSITO",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "AREA",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "DESC_AREA",
+				"type": "UTF8"
+			},
+			{
+				"name": "GERENCIA",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "DESC_GERENCIA",
+				"type": "UTF8"
+			},
+			{
+				"name": "REGION",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "DESC_REGION",
+				"type": "UTF8"
+			},
+			{
+				"name": "ZONA",
+				"type": "UTF8"
+			},
+			{
+				"name": "DESC_ZONA",
+				"type": "UTF8"
+			},
+			{
+				"name": "TERRITORIO",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "CODIGO",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "NOMBRE",
+				"type": "UTF8"
+			},
+			{
+				"name": "ESTATUS",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "CATEGORIA",
+				"type": "UTF8"
+			},
+			{
+				"name": "FORMA_PAGO",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "PLAZO",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "MONEDA",
+				"type": "UTF8"
+			},
+			{
+				"name": "IMPORTE",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "FECHA_CIERRE",
+				"type": "UTF8"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

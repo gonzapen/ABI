@@ -1,0 +1,52 @@
+{
+	"name": "Truck_General_Incremental_Fact_BO_PPL",
+	"properties": {
+		"description": "Extracción general desde truck de las tablas de novedades y carga de las fact para Bolivia",
+		"activities": [
+			{
+				"name": "Carga Incremental",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_Replica_Incremental_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CTRLPLANIL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Carga Incremental",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_CTRLPLANIL_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "TRKNULLCBN",
+						"country": "Bolivia",
+						"origenSystem": "Truck"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/Truck/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

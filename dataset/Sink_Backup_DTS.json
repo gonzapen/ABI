@@ -1,0 +1,33 @@
+{
+	"name": "Sink_Backup_DTS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LASCommercial_BlobDatalakebksa",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"directory": {
+				"type": "string"
+			},
+			"zone": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/Backup"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@concat(string(convertFromUtc(utcnow(),'Argentina Standard Time','yyyyMMdd')),'/',dataset().zone,'/',dataset().directory)",
+					"type": "Expression"
+				},
+				"container": "backup"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

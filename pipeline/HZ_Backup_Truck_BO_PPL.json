@@ -1,0 +1,83 @@
+{
+	"name": "HZ_Backup_Truck_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Init_LAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"origenSystem": "Truck",
+						"country": "Bolivia"
+					}
+				}
+			},
+			{
+				"name": "01_Truck",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_HZ_Backup_Truck_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"zone": "historyzone"
+					}
+				}
+			},
+			{
+				"name": "02_Truck",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init_LAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_HZ_Backup_Truck_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"zone": "historyzone"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"zone": {
+				"type": "string",
+				"defaultValue": "historyzone"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/Backup/Historyzone"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:03Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

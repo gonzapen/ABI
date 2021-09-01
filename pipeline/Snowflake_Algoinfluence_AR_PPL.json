@@ -1,0 +1,128 @@
+{
+	"name": "Snowflake_Algoinfluence_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy query to FS",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "CZ_DW",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "Argentina/Commercial/Snowflake/ArAlgoInfluence/AlgoInfluence",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet",
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings",
+							"copyBehavior": "MergeFiles"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Query_Output_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_QueryAlgoInfluence_Output_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Algoinfluence",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Snowflake_Template_Maestro_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"schema": "ArAlgoInfluence",
+						"tableOrigen": "AlgoInfluence",
+						"partitionByField": "-",
+						"keys": "month, poc_id",
+						"tipoCarga": "1"
+					}
+				}
+			},
+			{
+				"name": "CZ_DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Algoinfluence",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_Snowflake_CZ_DW_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": "Commercial",
+						"country": "Argentina",
+						"keys": "KEY",
+						"origenSystem": "Snowflake",
+						"scope": "KeyVault"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Snowflake"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-26T19:25:17Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

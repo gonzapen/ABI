@@ -1,0 +1,42 @@
+{
+	"name": "A_LASCommercial_Uruguay_Manual_DePara",
+	"properties": {
+		"description": "DePara Productos, Estructura Comercial, Canal\nSistema: Truck",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "General_DE_PARA_UY_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"country": "Uruguay",
+					"context": "Commercial",
+					"entorno": "01-Produccion",
+					"origenSystem": "Truck",
+					"scope": "KeyVault",
+					"equipo": "Sales UY",
+					"tema": "DePara"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-08-17T20:08:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						9
+					]
+				}
+			}
+		}
+	}
+}

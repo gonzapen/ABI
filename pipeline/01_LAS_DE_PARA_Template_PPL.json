@@ -1,0 +1,563 @@
+{
+	"name": "01_LAS_DE_PARA_Template_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "SELECT_PIVOT_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:03:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT_ALL_PARAMETERS",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Existe el archivo",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Validation DE_PARA en File Server",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@activity('Validation DE_PARA en File Server').output.exists",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "GENERATE_FLAG_FILE_TEMP",
+							"description": "Encargado de generar un directorio temporal de FlagFile",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/LAS/Template/CZ_CZ_GENERATE_FLAG_FILE",
+								"baseParameters": {
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Generate FlagFile Single",
+							"description": "Encargado de generar un unico .parquet como FlagFile",
+							"type": "Copy",
+							"dependsOn": [
+								{
+									"activity": "GENERATE_FLAG_FILE_TEMP",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"wildcardFileName": "*.parquet",
+										"enablePartitionDiscovery": false
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_LAS_FlagFile_DL_Parquet_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										},
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"origenSystem": {
+											"value": "@pipeline().parameters.origenSystem",
+											"type": "Expression"
+										},
+										"context": {
+											"value": "@pipeline().parameters.context",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_LAS_FlagFile_DL_Parquet_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"context": {
+											"value": "@pipeline().parameters.context",
+											"type": "Expression"
+										},
+										"origenSystem": {
+											"value": "@pipeline().parameters.origenSystem",
+											"type": "Expression"
+										},
+										"tableName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "Delete_FlagFile_Temp",
+							"description": "Encargado de borrar el directorio temporal del FlagFile",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "Generate FlagFile Single",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Sink_LAS_FlagFile_DL_Parquet_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"country": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										},
+										"context": {
+											"value": "@pipeline().parameters.context",
+											"type": "Expression"
+										},
+										"origenSystem": {
+											"value": "@pipeline().parameters.origenSystem",
+											"type": "Expression"
+										},
+										"tableName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "PZ",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "FileServerReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_DE_PARA_Template_Input_FS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"directory": {
+											"value": "@activity('SELECT_PIVOT_DB').output.runOutput.query",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_DE_PARA_Template_Output_PZ_LAS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"tableName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										},
+										"pais": {
+											"value": "@pipeline().parameters.country",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						},
+						{
+							"name": "INSERT_PIVOT_DB",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "PZ",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+								"baseParameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"descripcion": {
+										"value": "@pipeline().parameters.descripcion",
+										"type": "Expression"
+									},
+									"cantidadLeido": {
+										"value": "@concat(activity('PZ').output.rowsRead)",
+										"type": "Expression"
+									},
+									"cantidadEscrito": {
+										"value": "@concat(activity('PZ').output.rowsCopied)",
+										"type": "Expression"
+									},
+									"duracionCD": {
+										"value": "@concat(activity('PZ').output.copyDuration)",
+										"type": "Expression"
+									},
+									"fechaFin": {
+										"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+										"type": "Expression"
+									},
+									"schema": {
+										"value": "@pipeline().parameters.schema",
+										"type": "Expression"
+									},
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"bytesLeido": {
+										"value": "@concat(activity('PZ').output.dataRead)",
+										"type": "Expression"
+									},
+									"bytesEscrito": {
+										"value": "@concat(activity('PZ').output.dataWritten)",
+										"type": "Expression"
+									},
+									"ultimoValorPivot": {
+										"value": "@activity('SELECT_PIVOT_DB').output.runOutput.ultimovalorpivot",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						},
+						{
+							"name": "Delete DE_PARA en File Server",
+							"type": "Delete",
+							"dependsOn": [
+								{
+									"activity": "INSERT_PIVOT_DB",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"dataset": {
+									"referenceName": "Source_DE_PARA_Template_Input_FS_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"directory": {
+											"value": "@activity('SELECT_PIVOT_DB').output.runOutput.query",
+											"type": "Expression"
+										},
+										"fileName": {
+											"value": "@pipeline().parameters.tableName",
+											"type": "Expression"
+										}
+									}
+								},
+								"enableLogging": false,
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							}
+						},
+						{
+							"name": "PZ to CZ - Copy Data",
+							"type": "DatabricksNotebook",
+							"dependsOn": [
+								{
+									"activity": "Delete DE_PARA en File Server",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/LAS/Template/PZ_CZ_TEMPLATE_DB",
+								"baseParameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"origenSystem": "DE_PARA",
+									"scope": "KeyVault",
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Validation DE_PARA en File Server",
+				"type": "Validation",
+				"dependsOn": [
+					{
+						"activity": "SELECT_PIVOT_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_DE_PARA_Template_Input_FS_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"directory": {
+								"value": "@activity('SELECT_PIVOT_DB').output.runOutput.query",
+								"type": "Expression"
+							},
+							"fileName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					},
+					"timeout": "0.00:02:00",
+					"sleep": 10
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "SOM"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"descripcion": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string",
+				"defaultValue": "-"
+			}
+		},
+		"folder": {
+			"name": "LAS/DE_PARA/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

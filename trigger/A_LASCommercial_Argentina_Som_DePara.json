@@ -1,0 +1,58 @@
+{
+	"name": "A_LASCommercial_Argentina_Som_DePara",
+	"properties": {
+		"description": "Ejecuta el proceso DE_PARA Argentina desde el 20 hasta el fin de cada mes en los horarios 13hs y 16hs ",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "00_SOM_ORQUESTADOR_DE_PARA_AR_SOM_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"entorno": "01-Produccion",
+					"scope": "KeyVault",
+					"equipo": "Som",
+					"tema": "Depara",
+					"context": "Commercial",
+					"country": "Argentina",
+					"origenSystem": "DePara"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Month",
+				"interval": 1,
+				"startTime": "2021-08-09T14:51:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						13,
+						16
+					],
+					"monthDays": [
+						20,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27,
+						28,
+						29,
+						30,
+						31,
+						-1
+					]
+				}
+			}
+		}
+	}
+}

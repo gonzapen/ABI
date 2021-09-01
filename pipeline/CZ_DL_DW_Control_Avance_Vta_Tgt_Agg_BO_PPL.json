@@ -1,0 +1,270 @@
+{
+	"name": "CZ_DL_DW_Control_Avance_Vta_Tgt_Agg_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "CONTROL_TGT_DIARIO",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Bolivia/Truck/TARGET/Template/Control_TGT/CONTROL_BD",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"tableFinal": "FtTgtDiarioBo",
+						"Field": "FK_TIEMPO_DIA",
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "IfExistenRegistrosMesActual",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "CONTROL_TGT_DIARIO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "CONTROL_BGT_DIARIO",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@and(greater(activity('CONTROL_TGT_DIARIO').output.runOutput,0), greater(activity('CONTROL_BGT_DIARIO').output.runOutput,0))",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Enviar mail",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Mail_LAS_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"scope": "KeyVault",
+									"equipo": "Sales Andina BO",
+									"pais": "Bolivia",
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"tema": "Plana_Avance_Vta",
+									"subTema": "TGT_BGT_DIARIO"
+								}
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "AVANCE_VENTAS_TGT_AGG_CZ_DL_BO",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "INIT",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "CZ_DL_AVANCE_VENTAS_TGT_AGG_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"tableFinal": "AVANCE_VENTAS_TGT_AGG_BO",
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": "KEY",
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"tableName": "AvanceVentasTgtAggBo"
+								}
+							}
+						},
+						{
+							"name": "AVANCE_VENTAS_TGT_AGG_CZ_DW_BO",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "AVANCE_VENTAS_TGT_AGG_CZ_DL_BO",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "CZ_DW_AVANCE_VENTAS_TGT_AGG_BO_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": "KEY",
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableFinal": "AVANCE_VENTAS_TGT_AGG_BO",
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"tableName": "AvanceVentasTgtAggBo"
+								}
+							}
+						},
+						{
+							"name": "INIT",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Init_LAS_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"origenSystem": "Truck",
+									"country": "Bolivia"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "CONTROL_BGT_DIARIO",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Bolivia/Truck/TARGET/Template/Control_TGT/CONTROL_BD",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"tableFinal": "FtBgtDiarioBo",
+						"Field": "FK_TIEMPO_DIA",
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"entorno": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/TGT/Control"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

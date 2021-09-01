@@ -1,0 +1,80 @@
+{
+	"name": "DIM_TRUCK_BO_CZ_DW_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM_TRUCK_BO_CZ_DW_PPL",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 3,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Bolivia/Truck/Dimensiones/Replicas_CZ_DWH/CZ_DW_Replica_dimensional",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Bolivia"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Bolivia/DW/Dimensiones"
+		},
+		"annotations": [
+			"DIM_TRUCK_BO_CZ_DW_PPL",
+			"Consume",
+			"Data_Warehouse",
+			"Truck",
+			"Ventas",
+			"Bolivia"
+		],
+		"lastPublishTime": "2021-08-19T17:51:19Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

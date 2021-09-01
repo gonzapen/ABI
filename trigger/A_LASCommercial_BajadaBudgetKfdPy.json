@@ -1,0 +1,35 @@
+{
+	"name": "A_LASCommercial_BajadaBudgetKfdPy",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "General_KFD_PY_PPL",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Month",
+				"interval": 1,
+				"startTime": "2021-01-05T08:00:00",
+				"timeZone": "E. South America Standard Time",
+				"schedule": {
+					"minutes": [
+						10
+					],
+					"hours": [
+						8
+					],
+					"monthDays": [
+						5
+					]
+				}
+			}
+		}
+	}
+}

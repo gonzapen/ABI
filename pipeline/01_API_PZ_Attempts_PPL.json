@@ -1,0 +1,642 @@
+{
+	"name": "01_API_PZ_Attempts_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Post Analytics Attempts",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Switch Country",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://apiv1.foxtrotsystems.com/analytics/download-requests",
+					"method": "POST",
+					"headers": {
+						"Content-Type": "application/json",
+						"Authorization": "Bearer 8d652039-f2f5-4e15-81e3-f2eb3048e28e"
+					},
+					"body": {
+						"value": "@json(concat('{\"analytics_types\":[\"ATTEMPT_ANALYTICS\"],\"dc_ids\":[\"',replace(string(variables('dcIds')),',','\",\"'), '\"],\"from_date\":\"',adddays(activity('Switch Country').output.runOutput.ultimovalorpivot,1),'\",\"to_date\":\"',replace(utcnow(),'.0000000',''),'\"}'))",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Lookup Delivery Centers Ids",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "Copy data Delivery Centers Ids",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AvroSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"dataset": {
+						"referenceName": "Sink_FS_PZ_Foxtrot_DTS",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "For Each Row DC Ids File",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Lookup Delivery Centers Ids",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup Delivery Centers Ids').output.value",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "If is not null",
+							"type": "IfCondition",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@not(equals(item()[pipeline().parameters.country],null))",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Append variable Delivery Center Id",
+										"type": "AppendVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "dcIdsArray",
+											"value": {
+												"value": "@item()[pipeline().parameters.country]",
+												"type": "Expression"
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Set variable DC Ids",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "For Each Row DC Ids File",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "dcIds",
+					"value": {
+						"value": "@join(variables('dcIdsArray'),',')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Copy data Delivery Centers Ids",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "FileServerReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_FS_PZ_Foxtrot_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_FS_PZ_Foxtrot_DTS",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Switch Country",
+				"type": "Switch",
+				"dependsOn": [
+					{
+						"activity": "Set variable DC Ids",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"on": {
+						"value": "@pipeline().parameters.country",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "Bolivia",
+							"activities": [
+								{
+									"name": "SELECT_PIVOT_BO_DB",
+									"type": "DatabricksNotebook",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT",
+										"baseParameters": {
+											"country": {
+												"value": "@pipeline().parameters.country",
+												"type": "Expression"
+											},
+											"origenSystem": {
+												"value": "@pipeline().parameters.originSystem",
+												"type": "Expression"
+											},
+											"tableName": "ATTEMPTS_BO",
+											"schema": {
+												"value": "@pipeline().parameters.schema",
+												"type": "Expression"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LASCommercial_Databricks",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						},
+						{
+							"value": "Paraguay",
+							"activities": [
+								{
+									"name": "SELECT_PIVOT_PY_DB",
+									"type": "DatabricksNotebook",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT",
+										"baseParameters": {
+											"country": {
+												"value": "@pipeline().parameters.country",
+												"type": "Expression"
+											},
+											"origenSystem": {
+												"value": "@pipeline().parameters.originSystem",
+												"type": "Expression"
+											},
+											"tableName": "ATTEMPTS_PY",
+											"schema": {
+												"value": "@pipeline().parameters.schema",
+												"type": "Expression"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LASCommercial_Databricks",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						},
+						{
+							"value": "Uruguay",
+							"activities": [
+								{
+									"name": "SELECT_PIVOT_UY_DB",
+									"type": "DatabricksNotebook",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT",
+										"baseParameters": {
+											"country": {
+												"value": "@pipeline().parameters.country",
+												"type": "Expression"
+											},
+											"origenSystem": {
+												"value": "@pipeline().parameters.originSystem",
+												"type": "Expression"
+											},
+											"tableName": "ATTEMPTS_UY",
+											"schema": {
+												"value": "@pipeline().parameters.schema",
+												"type": "Expression"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "LASCommercial_Databricks",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					],
+					"defaultActivities": [
+						{
+							"name": "SELECT_PIVOT_AR_DB",
+							"type": "DatabricksNotebook",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT",
+								"baseParameters": {
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.originSystem",
+										"type": "Expression"
+									},
+									"tableName": "ATTEMPTS_AR",
+									"schema": {
+										"value": "@pipeline().parameters.schema",
+										"type": "Expression"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "LASCommercial_Databricks",
+								"type": "LinkedServiceReference"
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "ForEachFile",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Web Get Response",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Web Get Response').output.data.download_request_files",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "If CSV",
+							"type": "IfCondition",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@equals(item().file_type,'CSV')",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Set variable",
+										"type": "SetVariable",
+										"dependsOn": [],
+										"userProperties": [],
+										"typeProperties": {
+											"variableName": "downloadLink",
+											"value": {
+												"value": "@item().download_link",
+												"type": "Expression"
+											}
+										}
+									},
+									{
+										"name": "Copy Analytics Attempts Files",
+										"type": "Copy",
+										"dependsOn": [
+											{
+												"activity": "Set variable",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 4,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "DelimitedTextSource",
+												"storeSettings": {
+													"type": "HttpReadSettings",
+													"requestMethod": "GET"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextReadSettings"
+												}
+											},
+											"sink": {
+												"type": "AvroSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												},
+												"formatSettings": {
+													"type": "AvroWriteSettings"
+												}
+											},
+											"enableStaging": false
+										},
+										"inputs": [
+											{
+												"referenceName": "Source_API_PZ_Foxtrot_DTS",
+												"type": "DatasetReference",
+												"parameters": {
+													"relativeUrl": {
+														"value": "@variables('downloadLink')",
+														"type": "Expression"
+													}
+												}
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "Sink_API_PZ_Foxtrot_DTS",
+												"type": "DatasetReference",
+												"parameters": {
+													"country": {
+														"value": "@pipeline().parameters.country",
+														"type": "Expression"
+													},
+													"tableName": {
+														"value": "@pipeline().parameters.tableName",
+														"type": "Expression"
+													},
+													"date": {
+														"value": "@activity('Switch Country').output.ultimovalorpivot",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"name": "Passage_Between_Zones_PPL",
+										"type": "ExecutePipeline",
+										"dependsOn": [
+											{
+												"activity": "Copy Analytics Attempts Files",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"userProperties": [],
+										"typeProperties": {
+											"pipeline": {
+												"referenceName": "Passage_Between_Zones_Attempts_PPL",
+												"type": "PipelineReference"
+											},
+											"waitOnCompletion": true,
+											"parameters": {
+												"rowsCopied": {
+													"value": "@activity('Copy Analytics Attempts Files').output.rowsCopied",
+													"type": "Expression"
+												},
+												"country": {
+													"value": "@pipeline().parameters.country",
+													"type": "Expression"
+												},
+												"keys": {
+													"value": "@pipeline().parameters.keys",
+													"type": "Expression"
+												},
+												"originSystem": {
+													"value": "@pipeline().parameters.originSystem",
+													"type": "Expression"
+												},
+												"scope": {
+													"value": "@pipeline().parameters.scope",
+													"type": "Expression"
+												},
+												"tableName": {
+													"value": "@pipeline().parameters.tableName",
+													"type": "Expression"
+												},
+												"partitionByField": {
+													"value": "@pipeline().parameters.partitionByField",
+													"type": "Expression"
+												},
+												"bytesLeido": {
+													"value": "@concat(activity('Copy Analytics Attempts Files').output.dataRead)",
+													"type": "Expression"
+												},
+												"bytesEscrito": {
+													"value": "@concat(activity('Copy Analytics Attempts Files').output.dataWritten)",
+													"type": "Expression"
+												},
+												"duracionCD": {
+													"value": "@concat(activity('Copy Analytics Attempts Files').output.copyDuration)",
+													"type": "Expression"
+												},
+												"cantidadLeido": {
+													"value": "@concat(activity('Copy Analytics Attempts Files').output.rowsRead)",
+													"type": "Expression"
+												},
+												"cantidadEscrito": {
+													"value": "@concat(activity('Copy Analytics Attempts Files').output.rowsCopied)",
+													"type": "Expression"
+												},
+												"ultimoValorPivot": {
+													"value": "@activity('Switch Country').output.runOutput.ultimovalorpivot",
+													"type": "Expression"
+												}
+											}
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "Web Get Response",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Post Analytics Attempts",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 4,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://apiv1.foxtrotsystems.com/analytics/download-requests/',activity('Post Analytics Attempts').output.downloadRequestTxid,'/files')",
+						"type": "Expression"
+					},
+					"method": "GET",
+					"headers": {
+						"Content-Type": "application/json",
+						"Authorization": "Bearer 8d652039-f2f5-4e15-81e3-f2eb3048e28e"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"date": {
+				"type": "string",
+				"defaultValue": "2021-01-20 00:00:00"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"schema": {
+				"type": "string"
+			},
+			"description": {
+				"type": "string"
+			},
+			"originSystem": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"partitionByField": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"dcIdsArray": {
+				"type": "Array"
+			},
+			"dcIds": {
+				"type": "String"
+			},
+			"downloadLink": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "LAS/Foxtrot/Attempts"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

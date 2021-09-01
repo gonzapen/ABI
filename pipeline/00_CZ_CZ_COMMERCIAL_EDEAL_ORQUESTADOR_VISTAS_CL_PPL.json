@@ -1,0 +1,129 @@
+{
+	"name": "00_CZ_CZ_COMMERCIAL_EDEAL_ORQUESTADOR_VISTAS_CL_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "VW VENTAS",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "CREACION_VW",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_CZ_CZ_COMMERCIAL_EDEAL_VENTAS_EMBOTELLADORA_VW_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "CREACION_VW",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Chile/E-Deal/Tablas_Externas/TABLAS_EXTERNAS_EDEAL_VIEWS"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Mail Alerta VW Ventas",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "VW VENTAS",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Mail_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"equipo": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pais": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"entorno": {
+							"value": "@pipeline().parameters.ambiente",
+							"type": "Expression"
+						},
+						"tema": "Vista",
+						"subTema": "Ventas"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"context": {
+				"type": "string"
+			},
+			"ambiente": {
+				"type": "string",
+				"defaultValue": "Desarrollo"
+			}
+		},
+		"folder": {
+			"name": "Chile/Commercial/E-Deal_DW/Vistas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:24Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

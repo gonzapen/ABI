@@ -1,0 +1,39 @@
+{
+	"name": "00_FS_CZ_Teleperformance_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "01_FS_CZ_CSAT_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "01_FS_CZ_CSAT_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "02_FS_CZ_ECH_PPL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_FS_CZ_ECH_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Teleperformance/Diario"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-30T21:13:12Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

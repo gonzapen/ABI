@@ -1,0 +1,40 @@
+{
+	"name": "A_LASCommercial_Paraguay_Manual_DE_PARA",
+	"properties": {
+		"description": "Proceso de extraccion y carga de los depara de Paraguay",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "General_DE_PARA_PY_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"country": "Paraguay",
+					"context": "Public",
+					"entorno": "01-Produccion",
+					"origenSystem": "Manual",
+					"scope": "KeyVault"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-01-26T08:00:00",
+				"timeZone": "E. South America Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						9
+					]
+				}
+			}
+		}
+	}
+}

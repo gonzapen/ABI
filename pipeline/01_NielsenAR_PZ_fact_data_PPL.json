@@ -1,0 +1,344 @@
+{
+	"name": "01_NielsenAR_PZ_fact_data_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data PZ",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": "Argentina/Nielsen/M82ABI2T/M82ABI2T.zip",
+							"wildcardFileName": {
+								"value": "@concat(pipeline().parameters.initFileName,'*.csv')",
+								"type": "Expression"
+							}
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "MKT_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "MKT_TAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PROD_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PROD_TAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PER_TAG",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PER_TAG",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "USALES",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "USALES",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SALES",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SALES",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "VALUE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "VALUE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PURU",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PURU",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PUR",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PUR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FWDSTU",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FWDSTU",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FWDST",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "FWDST",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "STOCKU",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "STOCKU",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "STOCK",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "STOCK",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HNDW",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HNDW",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "HNDN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "HNDN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "OOSN",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OOSN",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "OOSW",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OOSW",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DIRPURU",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DIRPURU",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DIRPUR",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "DIRPUR",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PRICE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "PRICE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CPRICE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "CPRICE",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SHUSALES",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SHUSALES",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SHSALES",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SHSALES",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SHVALUE",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "SHVALUE",
+									"type": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_Nielsen_CSV_DTS",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_Nielsen_DL_Avro_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"initFileName": {
+				"type": "string",
+				"defaultValue": "M82ABI2T_fact_data"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "fact_data"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Nielsen/fact_data"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:25Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,24 @@
+{
+	"name": "Source_feriado_http",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Http_feriados_link_service",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"Anio": {
+					"value": "@string(formatDateTime(utcnow(), 'yyyy'))",
+					"type": "Expression"
+				}
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

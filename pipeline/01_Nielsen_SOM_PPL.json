@@ -1,0 +1,104 @@
+{
+	"name": "01_Nielsen_SOM_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Init",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_Nielsen_Init_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"runId": {
+							"value": "@pipeline().parameters.runId",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "COPY_ZIP",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Nielsen_COPY_ZIP_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "CARGA_DL",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "COPY_ZIP",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_Nielsen_CARGA_DL_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "TABLAS_EXTERNAS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "CARGA_DL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Nielsen/TABLAS_EXTERNAS_NIELSEN"
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Nielsen"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:00Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

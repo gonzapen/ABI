@@ -1,0 +1,110 @@
+{
+	"name": "General_VMas_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Init",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Init_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"origenSystem": "AzureApplicationInsights",
+						"country": "Argentina"
+					}
+				}
+			},
+			{
+				"name": "DIMENSIONES",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "AppInsights",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "General_VMas_Dimensiones_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "FACT",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "DIMENSIONES",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "FACT_VMAS_EVENTOS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Replica DW",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "FACT",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "CZ_DW_VMAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "AppInsights",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Init",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_AppInsights_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/AzureApplicationInsights"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

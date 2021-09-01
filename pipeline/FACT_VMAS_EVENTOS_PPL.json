@@ -1,0 +1,45 @@
+{
+	"name": "FACT_VMAS_EVENTOS_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "FT EVENTOS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/LakeHouse/FullDigital/AzureApplicationInsights/Fact/CZ_CZ_FT_EVENTOS_DB",
+					"baseParameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			}
+		},
+		"folder": {
+			"name": "Argentina/AzureApplicationInsights/Fact"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:13Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

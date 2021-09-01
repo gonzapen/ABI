@@ -1,0 +1,350 @@
+{
+	"name": "02_CZ_FS_DE_PARA_AREAS_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Delete old fIles",
+				"type": "Delete",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_LAS_DE_PARA_Strategy_Output_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"contexto": {
+								"value": "@pipeline().parameters.context",
+								"type": "Expression"
+							}
+						}
+					},
+					"enableLogging": false,
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true
+					}
+				}
+			},
+			{
+				"name": "Copy DP AREAS",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Validation Output DE_PARA_AREAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ParquetSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"wildcardFolderPath": {
+								"value": "@concat(pipeline().parameters.country,'/Commercial/Manual/DePara/Output/',pipeline().parameters.tableName)",
+								"type": "Expression"
+							},
+							"wildcardFileName": "*.parquet"
+						}
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "FileServerWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_LAS_DE_PARA_Strategy_Output_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"contexto": {
+								"value": "@pipeline().parameters.context",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_LAS_DE_PARA_Strategy_Output_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"entorno": {
+								"value": "@pipeline().parameters.entorno",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"equipoFS": {
+								"value": "@pipeline().parameters.equipoFS",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "Validation Output DE_PARA_AREAS",
+				"type": "Validation",
+				"dependsOn": [
+					{
+						"activity": "CONTROL DP AREAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "Source_LAS_DE_PARA_Strategy_Output_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"country": {
+								"value": "@pipeline().parameters.country",
+								"type": "Expression"
+							},
+							"contexto": {
+								"value": "@pipeline().parameters.context",
+								"type": "Expression"
+							}
+						}
+					},
+					"timeout": "0.00:04:00",
+					"sleep": 10
+				}
+			},
+			{
+				"name": "IfAreasNuevos",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Copy DP AREAS",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@greater(activity('CONTROL DP AREAS').output.runOutput, 0)",
+						"type": "Expression"
+					},
+					"ifTrueActivities": [
+						{
+							"name": "Enviar mail",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Mail_LAS_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"equipo": {
+										"value": "@pipeline().parameters.equipo",
+										"type": "Expression"
+									},
+									"pais": {
+										"value": "@pipeline().parameters.pais",
+										"type": "Expression"
+									},
+									"entorno": {
+										"value": "@pipeline().parameters.entorno",
+										"type": "Expression"
+									},
+									"tema": {
+										"value": "@pipeline().parameters.tema",
+										"type": "Expression"
+									},
+									"subTema": {
+										"value": "@pipeline().parameters.subTema",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "CONTROL DP AREAS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Delete old fIles",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/SOM/Control_DP/CONTROL_DP_AREAS_DB",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"countryCode": {
+							"value": "@pipeline().parameters.countryCode",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_DatabricksLowPriority",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"runId": {
+				"type": "string"
+			},
+			"entorno": {
+				"type": "string",
+				"defaultValue": "02-Desarrollo"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "DeParaAreasMapa"
+			},
+			"equipo": {
+				"type": "string",
+				"defaultValue": "Som"
+			},
+			"tema": {
+				"type": "string",
+				"defaultValue": "Depara"
+			},
+			"subTema": {
+				"type": "string",
+				"defaultValue": "Areas"
+			},
+			"countryCode": {
+				"type": "string",
+				"defaultValue": "AR"
+			},
+			"equipoFS": {
+				"type": "string",
+				"defaultValue": "02-Strategy"
+			},
+			"pais": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "DePara"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA/SOM/DP_AREAS"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

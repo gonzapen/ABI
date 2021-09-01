@@ -1,0 +1,27 @@
+{
+	"name": "LASCommercial_Nielsen",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "Sftp",
+		"typeProperties": {
+			"host": "namft.nielsen.com",
+			"port": "22",
+			"skipHostKeyValidation": true,
+			"authenticationType": "Basic",
+			"userName": "mft@abi.ar",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "KeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "LASCommercialNielsenPassword"
+			}
+		},
+		"connectVia": {
+			"referenceName": "IntegrationRTPlatform",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

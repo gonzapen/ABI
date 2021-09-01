@@ -1,0 +1,349 @@
+{
+	"name": "03_AppInsights_Template_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "IfCantidadLeidoIgual0",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "INSERT_PIVOT_DB",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(concat(activity('PZ').output.runOutput.cantEscritos),'0')",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "CZ",
+							"type": "ExecutePipeline",
+							"dependsOn": [
+								{
+									"activity": "HZ",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "02_AppInsights_HZ_CZ_Template_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"context": {
+										"value": "@pipeline().parameters.context",
+										"type": "Expression"
+									},
+									"partitionByField": {
+										"value": "@pipeline().parameters.partitionByField",
+										"type": "Expression"
+									}
+								}
+							}
+						},
+						{
+							"name": "HZ",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "01_AppInsights_PZ_HZ_Template_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"runId": {
+										"value": "@pipeline().RunId",
+										"type": "Expression"
+									},
+									"scope": {
+										"value": "@pipeline().parameters.scope",
+										"type": "Expression"
+									},
+									"tableName": {
+										"value": "@pipeline().parameters.tableName",
+										"type": "Expression"
+									},
+									"origenSystem": {
+										"value": "@pipeline().parameters.origenSystem",
+										"type": "Expression"
+									},
+									"country": {
+										"value": "@pipeline().parameters.country",
+										"type": "Expression"
+									},
+									"keys": {
+										"value": "@pipeline().parameters.keys",
+										"type": "Expression"
+									},
+									"partitionByField": {
+										"value": "@pipeline().parameters.partitionByField",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "INSERT_PIVOT_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "PZ",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PIVOT/INSERT_PIVOT",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableOrigen",
+							"type": "Expression"
+						},
+						"descripcion": {
+							"value": "@pipeline().parameters.descripcion",
+							"type": "Expression"
+						},
+						"cantidadLeido": {
+							"value": "@concat(activity('PZ').output.runOutput.cantLeidos)",
+							"type": "Expression"
+						},
+						"cantidadEscrito": {
+							"value": "@concat(activity('PZ').output.runOutput.cantEscritos)",
+							"type": "Expression"
+						},
+						"duracionCD": {
+							"value": "@concat(activity('PZ').output.executionDuration)",
+							"type": "Expression"
+						},
+						"fechaFin": {
+							"value": "@convertFromUtc(utcnow(),'Argentina Standard Time','yyyy-MM-dd HH:mm:ss')",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"bytesLeido": {
+							"value": "@concat(activity('PZ').output.runOutput.bytesLeidos)",
+							"type": "Expression"
+						},
+						"bytesEscrito": {
+							"value": "@concat(activity('PZ').output.runOutput.bytesEscritos)",
+							"type": "Expression"
+						},
+						"ultimoValorPivot": {
+							"value": "@activity('SELECT_PIVOT_DB').output.runOutput.ultimovalorpivot",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "PZ",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "SELECT_PIVOT_DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/LakeHouse/FullDigital/AzureApplicationInsights/Template/AAI_PZ_Template_DB",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"fechaDesde": {
+							"value": "@activity('SELECT_PIVOT_DB').output.runOutput.ultimovalorpivot",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"pivot": {
+							"value": "@activity('SELECT_PIVOT_DB').output.runOutput.campoPivot",
+							"type": "Expression"
+						},
+						"query": {
+							"value": "@activity('SELECT_PIVOT_DB').output.runOutput.query",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@activity('SELECT_PIVOT_DB').output.runOutput.tablaPivot",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "SELECT_PIVOT_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/PIVOT/SELECT_PIVOT_ALL_PARAMETERS",
+					"baseParameters": {
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableOrigen",
+							"type": "Expression"
+						},
+						"schema": {
+							"value": "@pipeline().parameters.schema",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string",
+				"defaultValue": "Argentina"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "CustomEvents"
+			},
+			"origenSystem": {
+				"type": "string",
+				"defaultValue": "AzureApplicationInsights"
+			},
+			"context": {
+				"type": "string",
+				"defaultValue": "Commercial"
+			},
+			"keys": {
+				"type": "string",
+				"defaultValue": "itemId"
+			},
+			"partitionByField": {
+				"type": "string",
+				"defaultValue": "part_timestamp_mes"
+			},
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			},
+			"tableOrigen": {
+				"type": "string",
+				"defaultValue": "CustomEvents"
+			},
+			"schema": {
+				"type": "string",
+				"defaultValue": "-"
+			},
+			"descripcion": {
+				"type": "string",
+				"defaultValue": "Eventos registrados en el uso de aplicacion"
+			}
+		},
+		"folder": {
+			"name": "Argentina/AzureApplicationInsights/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

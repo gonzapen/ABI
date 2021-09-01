@@ -1,0 +1,45 @@
+{
+	"name": "05_SOM_Init_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "Init_DB",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 5,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Template/Init_TEMPLATE_DB",
+					"baseParameters": {
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string",
+				"defaultValue": "KeyVault"
+			}
+		},
+		"folder": {
+			"name": "LAS/SOM/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

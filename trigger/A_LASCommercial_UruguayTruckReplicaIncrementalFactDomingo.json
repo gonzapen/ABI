@@ -1,0 +1,41 @@
+{
+	"name": "A_LASCommercial_UruguayTruckReplicaIncrementalFactDomingo",
+	"properties": {
+		"description": "Trigger de replicas incrementales Uruguay para los Domingos",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Truck_General_Incremental_Fact_PPL_UY",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"scope": "KeyVault",
+					"origenSystem": "Truck",
+					"country": "Uruguay"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Week",
+				"interval": 1,
+				"startTime": "2021-08-02T21:00:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						30
+					],
+					"hours": [
+						18
+					],
+					"weekDays": [
+						"Sunday"
+					]
+				}
+			}
+		}
+	}
+}

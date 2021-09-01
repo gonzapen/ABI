@@ -1,0 +1,9 @@
+{
+	"name": "abi-las-dev-uee-comercialdatalake-df",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "922bf254-ef24-4211-a794-0b93a952accd",
+		"tenantId": "cef04b19-7776-4a94-b89b-375c77a8f936"
+	}
+}

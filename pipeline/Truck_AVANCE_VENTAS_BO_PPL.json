@@ -1,0 +1,288 @@
+{
+	"name": "Truck_AVANCE_VENTAS_BO_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "PPEDCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PPEDCB",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "EmpId, CodmovId, Pednro, Pedcor",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Cabecera de pedido",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PPEDCB_DB",
+						"partitionByField": "part_pedfchped_mes"
+					}
+				}
+			},
+			{
+				"name": "PPEDLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PPEDLN",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "EmpId, CodmovId, Pednro, Pedcor, PrdId",
+						"context": "Publiv",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Detalle de la cabecera de pedidos",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PPEDLN_DB",
+						"partitionByField": "part_pedfchped_mes"
+					}
+				}
+			},
+			{
+				"name": "PCLAT",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PCLAT",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "ClmNroInt, UsrAttId",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Datos adicionales del movimiento",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PCLAT_DB",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			},
+			{
+				"name": "PFICLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PFICLN",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "MovstkNro, PrdId, LinstkIdDp, LinstkIdUb, LinstkIdLo, LinstkTpoR",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Detalle de mov stock",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PFICLN_DB",
+						"partitionByField": "part_movstkfchv_mes"
+					}
+				}
+			},
+			{
+				"name": "PCLAD",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PCLAD",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "ClmNroInt, PrdId, TpocodId",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Codigo adicional de producto",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PCLAD_DB",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			},
+			{
+				"name": "PFICHA",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PFICHA",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "MovstkNro",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Cabecera inventarios",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PFICHA_DB",
+						"partitionByField": "part_movstkfchv_mes"
+					}
+				}
+			},
+			{
+				"name": "PCLSIN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PCLSIN",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "SINClmInt",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Datos fiscales fact",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PCLSIN_DB",
+						"partitionByField": "part_clmfchemi_mes"
+					}
+				}
+			},
+			{
+				"name": "ORETCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "ORETCB",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "ORetNroInt, ORetCor",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Tabla maestro orden de retiro",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_ORETCB_DB",
+						"partitionByField": "part_oretfch_mes"
+					}
+				}
+			},
+			{
+				"name": "ORETLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVaulr",
+						"tableName": "ORETLN",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "ORetNroInt, ORetCor, PrdId, ORetIdUbi",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Tabla maestro detalle orden de retiro",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_ORETLN_DB",
+						"partitionByField": "part_oretfch_mes"
+					}
+				}
+			},
+			{
+				"name": "PRCHCB",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PRCHCB",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "RchNroInt",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Tabla maestro comprobantes anulados",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PRCHCB_DB",
+						"partitionByField": "part_rchfch_mes"
+					}
+				}
+			},
+			{
+				"name": "PRCHLN",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_Truck_Template_LAS_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"scope": "KeyVault",
+						"tableName": "PRCHLN",
+						"origenSystem": "Truck",
+						"country": "Bolivia",
+						"keys": "RchNroInt, PrdId",
+						"context": "Public",
+						"schema": "TRKNULLCBN",
+						"descripcion": "Tabla maestro detalle de facturas anuladas",
+						"pathDBPZHZ": "/LAS/Truck/Template/PZ_HZ_PRCHLN_DB",
+						"partitionByField": "part_rchfch_mes"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/Truck/Replicas/Incrementales"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

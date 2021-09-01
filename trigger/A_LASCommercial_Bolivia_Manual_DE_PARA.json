@@ -1,0 +1,39 @@
+{
+	"name": "A_LASCommercial_Bolivia_Manual_DE_PARA",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "General_DE_PARA_BO_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"entorno": "01-Produccion",
+					"country": "Bolivia",
+					"context": "Public",
+					"origenSystem": "Manual",
+					"scope": "KeyVault"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2021-01-26T05:00:00",
+				"timeZone": "E. South America Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						9
+					]
+				}
+			}
+		}
+	}
+}

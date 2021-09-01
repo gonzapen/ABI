@@ -1,0 +1,87 @@
+{
+	"name": "CZ_DL_DP_ESTRUCTURA_COMERCIAL_LAS_PPL",
+	"properties": {
+		"description": "Encargado de subir al DW y DL el DE_PARA_ESTRUCTURA_COMERCIAL",
+		"activities": [
+			{
+				"name": "DP ESTRUCTURA COMERCIAL",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/DE-PARA/CZ_DW_DE_PARA_ESTRUCTURA_COMERCIAL_BD",
+					"baseParameters": {
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"tableDimension": {
+							"value": "@pipeline().parameters.tableDimension",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"context": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableFinal": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"tableDimension": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/DE_PARA/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:22Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

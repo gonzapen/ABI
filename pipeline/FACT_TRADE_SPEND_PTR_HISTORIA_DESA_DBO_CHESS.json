@@ -1,0 +1,98 @@
+{
+	"name": "FACT_TRADE_SPEND_PTR_HISTORIA_DESA_DBO_CHESS",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach_FACT_TRADE_SPED_PTR",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.years",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data FACT_TRADE_SPEND_PTR HISTORIA",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat('SELECT \n Fecha_Factura, Cod_Empresa, Cod_Tipo_Linea, Cod_Promocion, Cod_Tipo_Accion, SK_Cliente, SK_Producto, Cod_Tipo_Descuento, Trade_Spend_PRT, Trade_Spend_Bultos, Trade_Spend_PSNF, Tipo_Analisis, Fuente, Cod_Supera_Tope, Cod_Modo_Atencion, Fecha_Desde_Vigencia_CMQ, Fecha_Hasta_Vigencia_CMQ, Fecha_Desde_Vigencia_Distribuidor, Fecha_Hasta_Vigencia_Distribuidor, PNSF, Fecha_Actualizacion, Accion\nFROM dbo.FACT_TRADE_SPEND_PTR\nWHERE YEAR(Fecha_Factura)*100+MONTH(Fecha_Factura) =', item())",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_Chess_PROD_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "FACT_TRADE_SPEND_PTR HISTORIA",
+										"schema": "dbo"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_Chess_DESA_DTS_history",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "FACT_TRADE_SPEND_PTR",
+										"year": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"years": {
+				"type": "array",
+				"defaultValue": [
+					201401
+				]
+			}
+		},
+		"variables": {
+			"years": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Chess/Carga_Historica"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

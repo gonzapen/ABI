@@ -1,0 +1,95 @@
+{
+	"name": "05_DIM_TRUCK_PEDIDOS_ESTADOS",
+	"properties": {
+		"activities": [
+			{
+				"name": "DIM_ESTADOS",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/Truck/DIMENSIONES/CZ_DW_DIM_TRUCK_ESTADOS_DB",
+					"baseParameters": {
+						"tableFinal": {
+							"value": "@pipeline().parameters.tableFinal",
+							"type": "Expression"
+						},
+						"country": {
+							"value": "@pipeline().parameters.country",
+							"type": "Expression"
+						},
+						"keys": {
+							"value": "@pipeline().parameters.keys",
+							"type": "Expression"
+						},
+						"origenSystem": {
+							"value": "@pipeline().parameters.origenSystem",
+							"type": "Expression"
+						},
+						"scope": {
+							"value": "@pipeline().parameters.scope",
+							"type": "Expression"
+						},
+						"tableName": {
+							"value": "@pipeline().parameters.tableName",
+							"type": "Expression"
+						},
+						"context": {
+							"value": "@pipeline().parameters.context",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"country": {
+				"type": "string"
+			},
+			"keys": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "PPEDLN"
+			},
+			"tableFinal": {
+				"type": "string",
+				"defaultValue": "DIM_TRUCK_ESTADOS"
+			},
+			"context": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DW_orig/Dimensiones"
+		},
+		"annotations": [
+			"05_DIM_TRUCK_PEDIDOS_ESTADOS",
+			"Consume",
+			"Data_Warehouse",
+			"Truck",
+			"Pedidos",
+			"Argentina"
+		],
+		"lastPublishTime": "2021-08-19T17:51:20Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

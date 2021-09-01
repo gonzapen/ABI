@@ -1,0 +1,22 @@
+{
+	"name": "01_Chess_Fede_test",
+	"properties": {
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"folder": {
+			"name": "Argentina/Chess/Templates"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:07Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

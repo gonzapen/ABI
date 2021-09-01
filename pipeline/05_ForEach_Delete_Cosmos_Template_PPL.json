@@ -1,0 +1,60 @@
+{
+	"name": "05_ForEach_Delete_Cosmos_Template_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@split(pipeline().parameters.days, ', ')",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Borrar Cosmos",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "06_Delete_Cosmos_Template_PPL",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true,
+								"parameters": {
+									"container": {
+										"value": "@pipeline().parameters.container",
+										"type": "Expression"
+									},
+									"day": {
+										"value": "@item()",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"days": {
+				"type": "string",
+				"defaultValue": "1, 2, 3, 4, 5, 6, 7"
+			},
+			"container": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/ALGOSellingAPI/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:08Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,300 @@
+{
+	"name": "AlgoSelling_General_AR_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "upsell - Blob to DL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_AlgoSelling_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"country": "Argentina",
+						"tableName": "Upsell",
+						"origenSystem": "FullDigital-AlgoSelling",
+						"context": "Commercial",
+						"keys": "poc_code, preferred_pid, recommendation_ts",
+						"partitionByField": "part_recommendation_ts",
+						"scope": "KeyVault",
+						"tableOrigen": "upsell",
+						"schema": "-",
+						"descripcion": "Base de upsell de Full Digital"
+					}
+				}
+			},
+			{
+				"name": "quick_order - Blob to DL",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "03_AlgoSelling_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"country": "Argentina",
+						"tableName": "QuickOrder",
+						"origenSystem": "FullDigital-AlgoSelling",
+						"context": "Commercial",
+						"keys": "poc_code, preferred_pid, recommendation_ts",
+						"partitionByField": "part_recommendation_ts",
+						"scope": "KeyVault",
+						"tableOrigen": "quick_order",
+						"schema": "-",
+						"descripcion": "Base de quick_order de Full Digital"
+					}
+				}
+			},
+			{
+				"name": "Dataset upsell",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "upsell - Blob to DL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/AlgoSelling/CZ_CZ_AlgoSelling_Upsell_DB",
+					"baseParameters": {
+						"scope": "KeyVault"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Dataset QuickOrder",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "quick_order - Blob to DL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/AlgoSelling/CZ_CZ_AlgoSelling_QuickOrder_DB",
+					"baseParameters": {
+						"scope": "KeyVault"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "upsell - DL to CosmosDB",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Dataset upsell",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_AlgoSelling_DL_Cosmos_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableFinal": "UpsellAPI",
+						"country": "Argentina",
+						"context": "Commercial",
+						"origenSystem": "FullDigital/AlgoSelling",
+						"collection": "upsell"
+					}
+				}
+			},
+			{
+				"name": "quick_order - DL to CosmosDB",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Dataset QuickOrder",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "04_AlgoSelling_DL_Cosmos_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableFinal": "QuickOrderAPI",
+						"country": "Argentina",
+						"context": "Commercial",
+						"origenSystem": "FullDigital/AlgoSelling",
+						"collection": "algoselling"
+					}
+				}
+			},
+			{
+				"name": "Borrar algoselling",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "quick_order - DL to CosmosDB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "05_ForEach_Delete_Cosmos_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"days": "1, 2, 3, 4, 5, 6, 7",
+						"container": "algoselling"
+					}
+				}
+			},
+			{
+				"name": "Borrar upsell",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "upsell - DL to CosmosDB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "05_ForEach_Delete_Cosmos_Template_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"days": "1, 2, 3, 4, 5, 6, 7",
+						"container": "upsell"
+					}
+				}
+			},
+			{
+				"name": "Upsell Metabase",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "upsell - Blob to DL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/AlgoSelling/CZ_CZ_AlgoSelling_Upsell_Metabase_DB",
+					"baseParameters": {
+						"scope": "KeyVault",
+						"context": "Commercial",
+						"country": "Argentina",
+						"origenSystem": "FullDigital/AlgoSelling",
+						"partitionByField": "part_recommendation_ts",
+						"tableName": "Upsell"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "QuickOrder Metabase",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "quick_order - Blob to DL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Argentina/AlgoSelling/CZ_CZ_AlgoSelling_QuickOrder_Metabase_DB",
+					"baseParameters": {
+						"scope": "KeyVault",
+						"context": "Commercial",
+						"country": "Argentina",
+						"origenSystem": "FullDigital/AlgoSelling",
+						"partitionByField": "part_recommendation_ts",
+						"tableName": "QuickOrder"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"scope": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/ALGOSellingAPI"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

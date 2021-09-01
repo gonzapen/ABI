@@ -1,0 +1,966 @@
+{
+	"name": "PCLMOV_HISTORIA_DESA_TRKNULLBA1_copy1",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach_PCLMOV",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.years",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data PCLMOV historia",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "Db2Source",
+									"query": {
+										"value": "@concat('SELECT * FROM TRKNULLBA1.PCLMOV WHERE ClmFchVal>= ',item(),'01 AND ClmFchVal<= ',item(),'31 FOR FETCH ONLY')",
+										"type": "Expression"
+									}
+								},
+								"sink": {
+									"type": "AvroSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "AvroWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "CLIID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLIID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLIIDLOC",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLIIDLOC",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLIIMPIM1T",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLIIMPIM1T",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLIMOVFLGC",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLIMOVFLGC",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMCODHIS",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMCODHIS",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMCODPEDO",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMCODPEDO",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMCODPEDR",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMCODPEDR",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMCODREM",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMCODREM",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMCODVDRR",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMCODVDRR",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMCORPEDO",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMCORPEDO",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMCORPEDR",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMCORPEDR",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFCHEMI",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFCHEMI",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFCHENTR",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFCHENTR",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFCHVAL",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFCHVAL",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFCHVTOI",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFCHVTOI",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFCRCOD",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMFCRCOD",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFCRFCH",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFCRFCH",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFCRNRO",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMFCRNRO",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFCRSER",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFCRSER",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFCRSTS",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFCRSTS",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFLGANUL",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFLGANUL",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFLGFLT",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFLGFLT",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMFLGLIQF",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMFLGLIQF",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIDCIC",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIDCIC",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIDCICEN",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIDCICEN",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIDDPS",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIDDPS",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIDNUM",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMIDNUM",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIDPRFIM",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIDPRFIM",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIDPTOEM",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMIDPTOEM",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIDTPOIM",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIDTPOIM",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIDTPOIV",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIDTPOIV",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIDUSRAU",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMIDUSRAU",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPACRB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPACRB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPACRT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPACRT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPBONB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPBONB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPBONT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPBONT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPBTOB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPBTOB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPBTOT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPBTOT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPCTEB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPCTEB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPCTET",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPCTET",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPDFIB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPDFIB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPDFIT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPDFIT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPFLEB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPFLEB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPFLET",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPFLET",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPIM1B",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPIM1B",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPIM2B",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPIM2B",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPIM2T",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPIM2T",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPIVAB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPIVAB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPIVAT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPIVAT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPODEB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPODEB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPODET",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPODET",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPPERB",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPPERB",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMIMPPERT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMIMPPERT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROCTE",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROCTE",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROHIS",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROHIS",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROINT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROINT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROLOTE",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROLOTE",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROORDC",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROORDC",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROORDL",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROORDL",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROPEDO",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROPEDO",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROPEDR",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROPEDR",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROPLA",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROPLA",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROPLAE",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROPLAE",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMNROREM",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMNROREM",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMPRJBON",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMPRJBON",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMPRJDTOE",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMPRJDTOE",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMPRJDTOR",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMPRJDTOR",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMSER",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMSER",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMSERHIS",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMSERHIS",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMSTSAUTE",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMSTSAUTE",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMTOTAUTR",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMTOTAUTR",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMTOTBASA",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMTOTBASA",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMTOTVTOS",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMTOTVTOS",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMTXT",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMTXT",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMTXTOBSA",
+												"type": "String"
+											},
+											"sink": {
+												"name": "CLMTXTOBSA",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "CLMVALCOT",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CLMVALCOT",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CNLID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CNLID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CODCTBID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CODCTBID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "CODMOVID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "CODMOVID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "EMPID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "EMPID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "FMAPGOID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "FMAPGOID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "LPRIDVER",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "LPRIDVER",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "MONID",
+												"type": "String"
+											},
+											"sink": {
+												"name": "MONID",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "MOTTRNID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "MOTTRNID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "PZOID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "PZOID",
+												"type": "Decimal"
+											}
+										},
+										{
+											"source": {
+												"name": "TRRID",
+												"type": "Decimal"
+											},
+											"sink": {
+												"name": "TRRID",
+												"type": "Decimal"
+											}
+										}
+									]
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "Source_Truck_DESA_DTS",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "PCLMOV",
+										"schema": "TRKARGDB"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Sink_Truck_PROD_DTS_HISTORIA",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": "PCLMOV",
+										"year": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"years": {
+				"type": "array",
+				"defaultValue": [
+					201203,
+					201204,
+					201205,
+					201206,
+					201207,
+					201208
+				]
+			}
+		},
+		"variables": {
+			"years": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "Argentina/Truck/PCLMOV_HISTORIA"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:41Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,53 @@
+{
+	"name": "A_LASCommercial_Argentina_Som_General",
+	"properties": {
+		"description": "Ejecuta Som general desde el 20 de cada mes hasta el fin de mes todos los días a las 9hs",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "00_COMMERCIAL_SOM_ORQUESTADOR_GRL_AR_PPL",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"scope": "KeyVault",
+					"equipo": "Som",
+					"entorno": "01-Produccion"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Month",
+				"interval": 1,
+				"startTime": "2021-08-09T14:32:00",
+				"timeZone": "Argentina Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						9
+					],
+					"monthDays": [
+						20,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27,
+						28,
+						29,
+						30,
+						31,
+						-1
+					]
+				}
+			}
+		}
+	}
+}

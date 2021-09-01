@@ -1,0 +1,47 @@
+{
+	"name": "Truck_General_Maestros_Dimensiones_BO_PPL",
+	"properties": {
+		"description": "Extracción general desde truck de las tablas de maestros y carga de las dimensiones para Bolivia",
+		"activities": [
+			{
+				"name": "Replica Maestros",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_Replica_Maestros_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DIMENSIONES",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Replica Maestros",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Truck_General_Dimensiones_BO_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"folder": {
+			"name": "Bolivia/Truck/Replicas"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

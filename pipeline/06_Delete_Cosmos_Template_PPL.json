@@ -1,0 +1,62 @@
+{
+	"name": "06_Delete_Cosmos_Template_PPL",
+	"properties": {
+		"description": "Ejecuta el SP de borrado de Cosmos",
+		"activities": [
+			{
+				"name": "Hasta",
+				"description": "Ejecuta el SP de borrado hasta que deleted = 0 o hasta que continuation = false",
+				"type": "Until",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@or(equals(activity('Borrar Cosmos').output.deleted,0),equals(activity('Borrar Cosmos').output.continuation,false))",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Borrar Cosmos",
+							"type": "WebActivity",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 2,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"url": "https://prod-21.brazilsouth.logic.azure.com:443/workflows/eea42ffcbdfd4c049b2517a02cb05c94/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=i4rV26ONjB2-v7g4bpDKoHSYuungCkXp0yCxfLDYFEY",
+								"method": "POST",
+								"headers": {
+									"Content-Type": "Application/json"
+								},
+								"body": {
+									"value": "@concat('{\"created_date\":',string(formatDateTime(getPastTime(int(pipeline().parameters.day),'Day'),'yyyyMMdd')),',\"container\":\"',pipeline().parameters.container,'\"}')",
+									"type": "Expression"
+								}
+							}
+						}
+					],
+					"timeout": "7.00:00:00"
+				}
+			}
+		],
+		"parameters": {
+			"container": {
+				"type": "string"
+			},
+			"day": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/ALGOSellingAPI/Template"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:07Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

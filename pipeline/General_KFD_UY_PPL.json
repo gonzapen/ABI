@@ -1,0 +1,67 @@
+{
+	"name": "General_KFD_UY_PPL",
+	"properties": {
+		"activities": [
+			{
+				"name": "VmMacoBgt",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "General_KFD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VmMacoBgt",
+						"origenSystem": "KFD",
+						"country": "Uruguay",
+						"keys": "SKU, ID_Pais, ID_Sociedad, Anio_Mes, ID_Region, ID_Sub_Region, ID_Segmento_VTA, ID_Segmento_MKT",
+						"context": "Commercial",
+						"schema": "KFD",
+						"subscriptos": "guido.bitonte@datalytics.com",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"viewName": "VM_MACO_BGT"
+					}
+				}
+			},
+			{
+				"name": "VmMacoBgtH",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "General_KFD_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableName": "VmMacoBgtH",
+						"origenSystem": "KFD",
+						"country": "Uruguay",
+						"keys": "SKU, ID_Pais, ID_Sociedad, Anio_Mes, ID_Region, ID_Sub_Region, ID_Segmento_VTA, ID_Segmento_MKT",
+						"context": "Commercial",
+						"schema": "KFD",
+						"subscriptos": "guido.bitonte@datalytics.com",
+						"runId": {
+							"value": "@pipeline().RunId",
+							"type": "Expression"
+						},
+						"viewName": "VM_MACO_BGT_H"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Uruguay/KFD"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:52:01Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

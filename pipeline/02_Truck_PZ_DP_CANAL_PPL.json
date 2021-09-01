@@ -1,0 +1,325 @@
+{
+	"name": "02_Truck_PZ_DP_CANAL_PPL",
+	"properties": {
+		"description": "aaa",
+		"activities": [
+			{
+				"name": "Copy data DP_CANAL",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "AvroSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "AvroWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "DE_TERRITORIO_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_TERRITORIO_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_TERRITORIO_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_TERRITORIO_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_ZONA_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_ZONA_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_ZONA_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_ZONA_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_REGION_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_REGION_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_REGION_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_REGION_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_SUBREGION_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_SUBREGION_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_SUBREGION_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_SUBREGION_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_AREA_ID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_AREA_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "DE_AREA_DESC",
+									"type": "String"
+								},
+								"sink": {
+									"name": "DE_AREA_DESC",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "AREA_I",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AREA_I",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "AREA_II",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AREA_II",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "REGION_I",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REGION_I",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "REGION_II",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REGION_II",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "REGION_III",
+									"type": "String"
+								},
+								"sink": {
+									"name": "REGION_III",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBREGION_I",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUBREGION_I",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBREGION_II",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUBREGION_II",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SUBREGION_III",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SUBREGION_III",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CHANNEL_I",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CHANNEL_I",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CHANNEL_II",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CHANNEL_II",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CHANNEL_III",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CHANNEL_III",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SALES_TYPE_I",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SALES_TYPE_I",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "SALES_TYPE_II",
+									"type": "String"
+								},
+								"sink": {
+									"name": "SALES_TYPE_II",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Source_DE_PARA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "Sink_DE_PARA_DTS",
+						"type": "DatasetReference",
+						"parameters": {
+							"tableName": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"runId": {
+				"type": "string"
+			},
+			"scope": {
+				"type": "string"
+			},
+			"tableName": {
+				"type": "string"
+			},
+			"origenSystem": {
+				"type": "string"
+			},
+			"country": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Argentina/DE_PARA/DP_CANAL"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

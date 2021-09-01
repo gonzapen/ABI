@@ -1,0 +1,139 @@
+{
+	"name": "Get_ConfigPivot_List_General_PPL",
+	"properties": {
+		"description": "This PPL gets the ConfigPivot List to the ADLS Temp and then stores it somewhere else with databricks.",
+		"activities": [
+			{
+				"name": "ConfigPivot - Shp to Temp",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "00_ShpLists_AdlsTemp_PPL",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ListName": {
+							"value": "@concat('ConfigPivot',pipeline().parameters.environment)",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "01_JSON_To_Avro_DF_ConfigPivot",
+				"description": "This Pipeline executes a notebook that reads a JSON file with ConfigPivot list's schema and stores the dataframe as avro in a sink folder.",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "ConfigPivot - Shp to Temp",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Sharepoint/01_JSON_To_Avro_DF_Template",
+					"baseParameters": {
+						"ListName": {
+							"value": "@concat('ConfigPivot',pipeline().parameters.environment)",
+							"type": "Expression"
+						},
+						"Environment": {
+							"value": "@pipeline().parameters.environment",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Temp_To_PZ_ConfigPivot",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "01_JSON_To_Avro_DF_ConfigPivot",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "02_TempBlob_PZ",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"ListName": {
+							"value": "@concat('ConfigPivot',pipeline().parameters.environment)",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "03_PZ_CZ_ConfigPivot",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Temp_To_PZ_ConfigPivot",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/LAS/Sharepoint/03_PZ_CZ_Template",
+					"baseParameters": {
+						"ListName": {
+							"value": "@concat('ConfigPivot',pipeline().parameters.environment)",
+							"type": "Expression"
+						},
+						"Environment": {
+							"value": "@pipeline().parameters.environment",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LASCommercial_Databricks",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"environment": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "LAS/Sharepoint"
+		},
+		"annotations": [],
+		"lastPublishTime": "2021-08-19T17:51:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
